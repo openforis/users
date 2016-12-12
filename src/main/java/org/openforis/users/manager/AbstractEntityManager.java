@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -44,6 +45,19 @@ public abstract class AbstractEntityManager<E extends Object> {
 				return session.createQuery( criteria ).getSingleResult();
 			}
 			
+		});
+	}
+	
+	public boolean deleteById(BigInteger id) {
+		return runInTransaction(new TransactionRunnable<Boolean>() {
+			public Boolean run(Session session) {
+				CriteriaBuilder builder = session.getCriteriaBuilder();
+				CriteriaDelete<E> criteriaDelete = builder.createCriteriaDelete(type);
+				Root<E> root = criteriaDelete.from(type);
+				criteriaDelete.where(builder.equal(root.get("id"), id));
+				int result = session.createQuery(criteriaDelete).executeUpdate();
+				return result > 0;
+			}
 		});
 	}
 

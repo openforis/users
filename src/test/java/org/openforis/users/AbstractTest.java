@@ -21,7 +21,7 @@ import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
-public class AbstractTest {
+public abstract class AbstractTest {
 
 	private static final String DB_URL = "jdbc:h2:mem:test";
 	private static final String SCHEMA = "of_users";
@@ -68,7 +68,7 @@ public class AbstractTest {
 		org.h2.jdbc.JdbcConnection h2Conn = new org.h2.jdbc.JdbcConnection(DB_URL, info);
 		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(h2Conn));
 		database.setDefaultSchemaName(SCHEMA);
-		Liquibase liquibase = new Liquibase("org/openforis/users/db/db.changelog-0000.xml",
+		Liquibase liquibase = new Liquibase("org/openforis/users/db/db.changelog-master.xml",
 				new ClassLoaderResourceAccessor(), database);
 		String ctx = null;
 		liquibase.update(ctx);

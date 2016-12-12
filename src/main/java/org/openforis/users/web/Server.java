@@ -2,8 +2,10 @@ package org.openforis.users.web;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.delete;
 import static spark.Spark.staticFileLocation;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 import org.openforis.users.manager.EntityManagerFactory;
@@ -38,6 +40,8 @@ public class Server implements SparkApplication {
 		get("/users/all", listAllUsers, new JsonTransformer());
 		
 		post("/users/", addUser, new JsonTransformer());
+		
+		delete("/users/:id", deleteUser, new JsonTransformer());
 
 	}
 	
@@ -58,4 +62,11 @@ public class Server implements SparkApplication {
 		EntityManagerFactory.getUserManager().save(user);
 		return user;
 	};
+	
+	private Route deleteUser = (Request req, Response rsp) -> {
+		String idStr = req.params("id");
+		BigInteger id = new BigInteger(idStr);
+		return EntityManagerFactory.getUserManager().deleteById(id);
+	};
+		
 }
