@@ -17,6 +17,7 @@ import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
@@ -34,21 +35,9 @@ public class AbstractTest {
 
 	@Before
 	public void before() throws SQLException, LiquibaseException {
-		Connection conn = DriverManager.getConnection(DB_URL, null, null);
-		Statement stmt = conn.createStatement();
-		stmt.execute(String.format("CREATE SCHEMA %s", SCHEMA));
-		conn.commit();
+		createDbSchema();
 		
-		Properties info = new Properties();
-		// info.setProperty("user", "liquibase");
-		// info.setProperty("password", "test");
-		org.h2.jdbc.JdbcConnection h2Conn = new org.h2.jdbc.JdbcConnection(DB_URL, info);
-		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(h2Conn));
-		database.setDefaultSchemaName(SCHEMA);
-		Liquibase liquibase = new Liquibase("org/openforis/users/db/db.changelog-0000.xml",
-				new ClassLoaderResourceAccessor(), database);
-		String ctx = null;
-		liquibase.update(ctx);
+		initLiquibase();
 
 		// setup the session factory
 		Configuration cfg = new Configuration().addAnnotatedClass(User.class)
@@ -63,6 +52,26 @@ public class AbstractTest {
 		sessionFactory = cfg.buildSessionFactory();
 		session = sessionFactory.openSession();
 
+	}
+
+	private void createDbSchema() throws SQLException {
+		Connection conn = DriverManager.getConnection(DB_URL, null, null);
+		Statement stmt = conn.createStatement();
+		stmt.execute(String.format("CREATE SCHEMA %s", SCHEMA));
+		conn.commit();
+	}
+
+	private void initLiquibase() throws SQLException, DatabaseException, LiquibaseException {
+		Properties info = new Properties();
+		// info.setProperty("user", "liquibase");
+		// info.setProperty("password", "test");
+		org.h2.jdbc.JdbcConnection h2Conn = new org.h2.jdbc.JdbcConnection(DB_URL, info);
+		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(h2Conn));
+		database.setDefaultSchemaName(SCHEMA);
+		Liquibase liquibase = new Liquibase("org/openforis/users/db/db.changelog-0000.xml",
+				new ClassLoaderResourceAccessor(), database);
+		String ctx = null;
+		liquibase.update(ctx);
 	}
 
 	@After

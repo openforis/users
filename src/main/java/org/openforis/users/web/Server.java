@@ -42,9 +42,11 @@ public class Server implements SparkApplication {
 	private Route addUser = (Request req, Response rsp) -> {
 		String username = req.queryParams("username");
 		String password = req.queryParams("password");
+		
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
+		
 		EntityManagerFactory.getUserManager().save(user);
 		return user;
 	};
