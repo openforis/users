@@ -4,6 +4,8 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
+import java.util.Map;
+
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.model.User;
 
@@ -22,8 +24,12 @@ public class Server implements SparkApplication {
 
 	private static final String JSON_CONTENT_TYPE = "application/json";
 
+	private JsonTransformer jsonTransformer;
+
 	@Override
 	public void init() {
+
+		jsonTransformer = new JsonTransformer();
 
 		staticFileLocation("/public");
 
@@ -40,9 +46,11 @@ public class Server implements SparkApplication {
 	};
 
 	private Route addUser = (Request req, Response rsp) -> {
-		String username = req.queryParams("username");
-		String password = req.queryParams("password");
-		
+		String body = req.body();
+		Map<String, Object> bodyMap = jsonTransformer.parse(body);
+		String username = bodyMap.get("username").toString();
+		String password = bodyMap.get("password").toString();
+
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
