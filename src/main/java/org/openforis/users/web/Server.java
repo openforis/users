@@ -6,15 +6,20 @@ import static spark.Spark.delete;
 import static spark.Spark.staticFileLocation;
 
 import java.math.BigInteger;
+import java.io.File;
+import java.net.URL;
 import java.util.Map;
 
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.model.User;
 
+import freemarker.template.Configuration;
+import freemarker.template.TemplateExceptionHandler;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.servlet.SparkApplication;
+import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * 
@@ -28,14 +33,35 @@ public class Server implements SparkApplication {
 
 	private JsonTransformer jsonTransformer;
 
+	private static FreeMarkerEngine getTemplateRenderer() throws Exception {
+		Configuration cfg = new Configuration();
+		URL templateDirectory = Server.class.getResource("/template/freemarker");
+		cfg.setDirectoryForTemplateLoading(new File(templateDirectory.toURI()));
+		cfg.setDefaultEncoding("UTF-8");
+		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+		// cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+		//cfg.setLogTemplateExceptions(false);
+		return new FreeMarkerEngine(cfg);
+	}
+
 	@Override
 	public void init() {
 
 		jsonTransformer = new JsonTransformer();
 
+		FreeMarkerEngine renderer = null;
+		try {
+			renderer = getTemplateRenderer();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		staticFileLocation("/public");
 
 		get("/hello/:name", Views.home);
+
+		get("/hello2/:name", Views.home2, renderer);
 		
 		get("/users/all", listAllUsers, new JsonTransformer());
 		
