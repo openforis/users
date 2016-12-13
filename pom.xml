@@ -13,97 +13,107 @@
 		<temp.database.url>jdbc:h2:file:${project.build.directory}/temp_users</temp.database.url>
 		<db.schema>OF_USERS</db.schema>
 	</properties>
-
+	
+	<profiles>
+		<profile>
+			<id>code-gen</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>sql-maven-plugin</artifactId>
+						<version>1.5</version>
+						<configuration>
+							<driver>org.h2.Driver</driver>
+							<url>${temp.database.url}</url>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<configuration>
+									<sqlCommand>CREATE SCHEMA ${db.schema}</sqlCommand>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>com.h2database</groupId>
+								<artifactId>h2</artifactId>
+								<version>${h2.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+					<plugin>
+						<groupId>org.liquibase</groupId>
+						<artifactId>liquibase-maven-plugin</artifactId>
+						<version>${liquibase.version}</version>
+						<configuration>
+							<changeLogFile>src/main/resources/org/openforis/users/db/db.changelog-full.xml</changeLogFile>
+							<driver>org.h2.Driver</driver>
+							<url>${temp.database.url}</url>
+							<defaultSchemaName>${db.schema}</defaultSchemaName>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>update</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.jooq</groupId>
+						<artifactId>jooq-codegen-maven</artifactId>
+						<version>${jooq.version}</version>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>com.h2database</groupId>
+								<artifactId>h2</artifactId>
+								<version>${h2.version}</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<jdbc>
+								<driver>org.h2.Driver</driver>
+								<url>${temp.database.url}</url>
+							</jdbc>
+							<generator>
+								<database>
+									<name>org.jooq.util.h2.H2Database</name>
+									<inputSchema>${db.schema}</inputSchema>
+									<includes>.*</includes>
+									<excludes>${db.schema}.DATABASECHANGELOG|${db.schema}.DATABASECHANGELOGLOCK</excludes>
+								</database>
+								<generate>
+									<daos>true</daos>
+								</generate>
+								<target>
+									<packageName>org.openforis.users.jooq</packageName>
+									<directory>${basedir}/src/generated/java</directory>
+								</target>
+							</generator>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 	<build>
 		<finalName>of-users</finalName>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>sql-maven-plugin</artifactId>
-				<version>1.5</version>
-				<configuration>
-					<driver>org.h2.Driver</driver>
-					<url>${temp.database.url}</url>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<sqlCommand>CREATE SCHEMA ${db.schema}</sqlCommand>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>com.h2database</groupId>
-						<artifactId>h2</artifactId>
-						<version>${h2.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.liquibase</groupId>
-				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>${liquibase.version}</version>
-				<configuration>
-					<changeLogFile>src/main/resources/org/openforis/users/db/db.changelog-full.xml</changeLogFile>
-					<driver>org.h2.Driver</driver>
-					<url>${temp.database.url}</url>
-					<defaultSchemaName>${db.schema}</defaultSchemaName>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>update</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.jooq</groupId>
-				<artifactId>jooq-codegen-maven</artifactId>
-				<version>${jooq.version}</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>com.h2database</groupId>
-						<artifactId>h2</artifactId>
-						<version>${h2.version}</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<jdbc>
-						<driver>org.h2.Driver</driver>
-						<url>${temp.database.url}</url>
-					</jdbc>
-					<generator>
-						<database>
-							<name>org.jooq.util.h2.H2Database</name>
-							<inputSchema>${db.schema}</inputSchema>
-							<includes>.*</includes>
-							<excludes>${db.schema}.DATABASECHANGELOG|${db.schema}.DATABASECHANGELOGLOCK</excludes>
-						</database>
-						<generate>
-							<daos>true</daos>
-						</generate>
-						<target>
-							<packageName>org.openforis.users.generated</packageName>
-							<directory>target/generated-sources/jooq</directory>
-						</target>
-					</generator>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -116,13 +126,14 @@
 			<plugin>
 			    <groupId>org.codehaus.mojo</groupId>
 			    <artifactId>build-helper-maven-plugin</artifactId>
+			    <version>1.12</version>
 			    <executions>
 			        <execution>
 			            <phase>generate-sources</phase>
 			            <goals><goal>add-source</goal></goals>
 			            <configuration>
 			                <sources>
-			                    <source>${project.build.directory}/generated-sources/jooq</source>
+			                    <source>${basedir}/src/generated/java</source>
 			                </sources>
 			            </configuration>
 			        </execution>
