@@ -13,33 +13,6 @@ public class EntityManagerFactory {
 	private UserDao userDao;
 	private UserManager userManager;
 
-	private ConnectionProvider connectionProvider;
-
-	public EntityManagerFactory(ConnectionProvider connectionProvider) {
-		this.connectionProvider = connectionProvider;
-	}
-
-	public UserManager getUserManager() {
-		if (userManager == null) {
-			userManager = new UserManager(getUserDao());
-		}
-		return userManager;
-	}
-	
-	private UserDao getUserDao() {
-		if (userDao == null) {
-			userDao = new UserDao(getConfiguration());
-		}
-		return userDao;
-	}
-
-	private Configuration getConfiguration() {
-		if (config == null) {
-			config = new DialectAwareJooqConfiguration(connectionProvider);
-		}
-		return config;
-	}
-
 	public static void init(ConnectionProvider connectionProvider) {
 		instance = new EntityManagerFactory(connectionProvider);
 	}
@@ -49,6 +22,20 @@ public class EntityManagerFactory {
 			throw new IllegalStateException("Connection provider not initialized");
 		}
 		return instance;
+	}
+	
+	public EntityManagerFactory(ConnectionProvider connectionProvider) {
+		this.config = new DialectAwareJooqConfiguration(connectionProvider);
+		
+		//DAOs
+		this.userDao = new UserDao(config);
+		
+		//managers
+		this.userManager = new UserManager(userDao);
+	}
+
+	public UserManager getUserManager() {
+		return userManager;
 	}
 	
 }
