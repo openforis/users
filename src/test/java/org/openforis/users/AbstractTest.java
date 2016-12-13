@@ -6,12 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.jooq.impl.DefaultConnectionProvider;
 import org.junit.After;
 import org.junit.Before;
-import org.openforis.users.model.User;
+import org.openforis.users.manager.EntityManagerFactory;
 
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -26,9 +24,6 @@ public abstract class AbstractTest {
 	private static final String DB_URL = "jdbc:h2:mem:test";
 	private static final String SCHEMA = "of_users";
 	
-	SessionFactory sessionFactory;
-	Session session = null;
-
 	public AbstractTest() {
 		super();
 	}
@@ -39,19 +34,18 @@ public abstract class AbstractTest {
 		
 		initLiquibase();
 
-		// setup the session factory
-		Configuration cfg = new Configuration().addAnnotatedClass(User.class)
-				.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect")
-				.setProperty("hibernate.connection.driver_class", "org.h2.Driver")
-				.setProperty("hibernate.connection.url", DB_URL)
-				.setProperty("hibernate.default_schema", SCHEMA)
-				.setProperty("hibernate.order_updates", "true")
-		// .setProperty("hibernate.hbm2ddl.auto", "create")
-		;
-		
-		sessionFactory = cfg.buildSessionFactory();
-		session = sessionFactory.openSession();
+		initEntityManagerFactory();
+	}
 
+	private void initEntityManagerFactory() {
+		try {
+			Class.forName("org.h2.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL);
+			DefaultConnectionProvider connectionProvider = new DefaultConnectionProvider(conn);
+			EntityManagerFactory.init(connectionProvider);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void createDbSchema() throws SQLException {
@@ -63,8 +57,6 @@ public abstract class AbstractTest {
 
 	private void initLiquibase() throws SQLException, DatabaseException, LiquibaseException {
 		Properties info = new Properties();
-		// info.setProperty("user", "liquibase");
-		// info.setProperty("password", "test");
 		org.h2.jdbc.JdbcConnection h2Conn = new org.h2.jdbc.JdbcConnection(DB_URL, info);
 		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(h2Conn));
 		database.setDefaultSchemaName(SCHEMA);
@@ -76,8 +68,6 @@ public abstract class AbstractTest {
 
 	@After
 	public void after() {
-		session.close();
-		sessionFactory.close();
 	}
 
 }

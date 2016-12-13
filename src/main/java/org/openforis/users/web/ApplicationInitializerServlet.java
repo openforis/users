@@ -8,7 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.jooq.impl.DataSourceConnectionProvider;
 import org.openforis.users.db.DbInitializer;
+import org.openforis.users.utils.DbUtils;
 
 public class ApplicationInitializerServlet implements Servlet {
 
@@ -32,6 +34,7 @@ public class ApplicationInitializerServlet implements Servlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		new DbInitializer().init();
+		DataSourceConnectionProvider connectionProvider = new DataSourceConnectionProvider(DbUtils.getDataSource());
+		new DbInitializer().init(connectionProvider);
 	}
 }

@@ -1,16 +1,16 @@
 package org.openforis.users.web;
 
+import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
-import static spark.Spark.delete;
 import static spark.Spark.staticFileLocation;
 
-import java.math.BigInteger;
 import java.io.File;
 import java.net.URL;
 import java.util.Map;
 
 import org.openforis.users.manager.EntityManagerFactory;
+import org.openforis.users.manager.UserManager;
 import org.openforis.users.model.User;
 
 import freemarker.template.Configuration;
@@ -30,6 +30,8 @@ import spark.template.freemarker.FreeMarkerEngine;
 public class Server implements SparkApplication {
 
 	private static final String JSON_CONTENT_TYPE = "application/json";
+	
+	private static final UserManager USER_MANAGER = EntityManagerFactory.getInstance().getUserManager();
 
 	private JsonTransformer jsonTransformer;
 
@@ -46,7 +48,6 @@ public class Server implements SparkApplication {
 
 	@Override
 	public void init() {
-
 		jsonTransformer = new JsonTransformer();
 
 		FreeMarkerEngine renderer = null;
@@ -72,7 +73,7 @@ public class Server implements SparkApplication {
 	}
 	
 	private Route listAllUsers = (Request req, Response rsp) -> {
-		return EntityManagerFactory.getUserManager().listAll();
+		return USER_MANAGER.findAll();
 	};
 
 	private Route addUser = (Request req, Response rsp) -> {
@@ -85,14 +86,14 @@ public class Server implements SparkApplication {
 		user.setUsername(username);
 		user.setPassword(password);
 		
-		EntityManagerFactory.getUserManager().save(user);
+		USER_MANAGER.save(user);
 		return user;
 	};
 	
 	private Route deleteUser = (Request req, Response rsp) -> {
 		String idStr = req.params("id");
-		BigInteger id = new BigInteger(idStr);
-		return EntityManagerFactory.getUserManager().deleteById(id);
+		long id = Long.parseLong(idStr);
+		return USER_MANAGER.deleteById(id);
 	};
 		
 }

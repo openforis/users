@@ -6,9 +6,104 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
+	<properties>
+		<jooq.version>3.6.2</jooq.version>
+		<h2.version>1.4.193</h2.version>
+		<liquibase.version>3.5.3</liquibase.version>
+		<temp.database.url>jdbc:h2:file:${project.build.directory}/temp_users</temp.database.url>
+		<db.schema>OF_USERS</db.schema>
+	</properties>
+
 	<build>
 		<finalName>of-users</finalName>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sql-maven-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<driver>org.h2.Driver</driver>
+					<url>${temp.database.url}</url>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<sqlCommand>CREATE SCHEMA ${db.schema}</sqlCommand>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>${h2.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${liquibase.version}</version>
+				<configuration>
+					<changeLogFile>src/main/resources/org/openforis/users/db/db.changelog-full.xml</changeLogFile>
+					<driver>org.h2.Driver</driver>
+					<url>${temp.database.url}</url>
+					<defaultSchemaName>${db.schema}</defaultSchemaName>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>update</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jooq</groupId>
+				<artifactId>jooq-codegen-maven</artifactId>
+				<version>${jooq.version}</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>${h2.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<jdbc>
+						<driver>org.h2.Driver</driver>
+						<url>${temp.database.url}</url>
+					</jdbc>
+					<generator>
+						<database>
+							<name>org.jooq.util.h2.H2Database</name>
+							<inputSchema>${db.schema}</inputSchema>
+							<includes>.*</includes>
+							<excludes>${db.schema}.DATABASECHANGELOG|${db.schema}.DATABASECHANGELOGLOCK</excludes>
+						</database>
+						<generate>
+							<daos>true</daos>
+						</generate>
+						<target>
+							<packageName>org.openforis.users.generated</packageName>
+							<directory>target/generated-sources/jooq</directory>
+						</target>
+					</generator>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -17,6 +112,21 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+			    <groupId>org.codehaus.mojo</groupId>
+			    <artifactId>build-helper-maven-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <phase>generate-sources</phase>
+			            <goals><goal>add-source</goal></goals>
+			            <configuration>
+			                <sources>
+			                    <source>${project.build.directory}/generated-sources/jooq</source>
+			                </sources>
+			            </configuration>
+			        </execution>
+			    </executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -63,19 +173,29 @@
 			</exclusions>
 		</dependency>
 		<dependency>
+			<groupId>org.jooq</groupId>
+			<artifactId>jooq</artifactId>
+			<version>${jooq.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jooq</groupId>
+			<artifactId>jooq-meta</artifactId>
+			<version>${jooq.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jooq</groupId>
+			<artifactId>jooq-codegen</artifactId>
+			<version>${jooq.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.sparkjava</groupId>
 			<artifactId>spark-template-freemarker</artifactId>
 			<version>2.3</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>5.2.5.Final</version>
-		</dependency>
-		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<version>3.5.3</version>
+			<version>${liquibase.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

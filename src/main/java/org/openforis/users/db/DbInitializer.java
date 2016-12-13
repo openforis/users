@@ -3,10 +3,7 @@ package org.openforis.users.db;
 import java.sql.Connection;
 import java.sql.Statement;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
+import org.jooq.ConnectionProvider;
 import org.openforis.users.utils.DbUtils;
 
 import liquibase.Liquibase;
@@ -16,26 +13,33 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
 public class DbInitializer {
+	
+	private ConnectionProvider connectionProvider;
 
-	public void init() {
+	public void init(ConnectionProvider connectionProvider) {
+		this.connectionProvider = connectionProvider;
 		createDbSchema();
 		initLiquibase();
 	}
 	
 	private void createDbSchema() {
+		Connection conn = null;
 		try {
-			Connection conn = getConnection();
+			conn = connectionProvider.acquire();
 			Statement stmt = conn.createStatement();
 			stmt.execute(String.format("CREATE SCHEMA IF NOT EXISTS %s", DbUtils.SCHEMA_NAME));
 			conn.commit();
 		} catch (Exception e) {
 			throw new RuntimeException("Error creating schema", e);
+		} finally {
+			DbUtils.closeQuietly(conn);
 		}
 	}
 	
 	private void initLiquibase() {
+		Connection conn = null;
 		try {
-			Connection conn = getConnection();
+			conn = connectionProvider.acquire();
 			Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(conn));
 			database.setDefaultSchemaName(DbUtils.SCHEMA_NAME);
 			Liquibase liquibase = new Liquibase("org/openforis/users/db/db.changelog-master.xml",
@@ -44,16 +48,8 @@ public class DbInitializer {
 			liquibase.update(ctx);
 		} catch (Exception e) {
 			throw new RuntimeException("Error initializing Liquibase", e);
-		}
-	}
-	
-	private Connection getConnection() {
-		try {
-			Context initialContext = new InitialContext();
-			DataSource datasource = (DataSource) initialContext.lookup(DbUtils.DB_JNDI_RESOURCE_NAME);
-			return datasource.getConnection();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		} finally {
+			DbUtils.closeQuietly(conn);
 		}
 	}
 
