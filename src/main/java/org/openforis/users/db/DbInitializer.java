@@ -16,8 +16,11 @@ public class DbInitializer {
 	
 	private ConnectionProvider connectionProvider;
 
-	public void init(ConnectionProvider connectionProvider) {
+	public DbInitializer(ConnectionProvider connectionProvider) {
 		this.connectionProvider = connectionProvider;
+	}
+	
+	public void start() {
 		createDbSchema();
 		initLiquibase();
 	}
