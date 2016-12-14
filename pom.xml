@@ -51,7 +51,7 @@
 						<artifactId>liquibase-maven-plugin</artifactId>
 						<version>${liquibase.version}</version>
 						<configuration>
-							<changeLogFile>src/main/resources/org/openforis/users/db/db.changelog-full.xml</changeLogFile>
+							<changeLogFile>/src/main/resources/org/openforis/users/db/db.changelog-codegen-full.xml</changeLogFile>
 							<driver>org.h2.Driver</driver>
 							<url>${temp.database.url}</url>
 							<defaultSchemaName>${db.schema}</defaultSchemaName>

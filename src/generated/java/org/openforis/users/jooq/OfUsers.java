@@ -30,7 +30,7 @@ import org.openforis.users.jooq.tables.User;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUsers extends SchemaImpl {
 
-	private static final long serialVersionUID = 2005578977;
+	private static final long serialVersionUID = 1655699878;
 
 	/**
 	 * The reference instance of <code>OF_USERS</code>
@@ -53,7 +53,7 @@ public class OfUsers extends SchemaImpl {
 
 	private final List<Sequence<?>> getSequences0() {
 		return Arrays.<Sequence<?>>asList(
-			Sequences.SYSTEM_SEQUENCE_F7E161DD_9EC3_4226_A000_A1BD67378FED);
+			Sequences.SYSTEM_SEQUENCE_7C68AB98_C24F_44C2_961B_533AB2C90729);
 	}
 
 	@Override

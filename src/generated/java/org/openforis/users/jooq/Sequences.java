@@ -25,7 +25,7 @@ import org.openforis.users.jooq.OfUsers;
 public class Sequences {
 
 	/**
-	 * The sequence <code>OF_USERS.SYSTEM_SEQUENCE_F7E161DD_9EC3_4226_A000_A1BD67378FED</code>
+	 * The sequence <code>OF_USERS.SYSTEM_SEQUENCE_7C68AB98_C24F_44C2_961B_533AB2C90729</code>
 	 */
-	public static final Sequence<Long> SYSTEM_SEQUENCE_F7E161DD_9EC3_4226_A000_A1BD67378FED = new SequenceImpl<Long>("SYSTEM_SEQUENCE_F7E161DD_9EC3_4226_A000_A1BD67378FED", OfUsers.OF_USERS, org.jooq.impl.SQLDataType.BIGINT);
+	public static final Sequence<Long> SYSTEM_SEQUENCE_7C68AB98_C24F_44C2_961B_533AB2C90729 = new SequenceImpl<Long>("SYSTEM_SEQUENCE_7C68AB98_C24F_44C2_961B_533AB2C90729", OfUsers.OF_USERS, org.jooq.impl.SQLDataType.BIGINT);
 }

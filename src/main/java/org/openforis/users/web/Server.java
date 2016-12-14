@@ -66,7 +66,7 @@ public class Server implements SparkApplication {
 		
 		get("/users/all", listAllUsers, new JsonTransformer());
 		
-		post("/users/", addUser, new JsonTransformer());
+		post("/users", JSON_CONTENT_TYPE, addUser, new JsonTransformer());
 		
 		delete("/users/:id", deleteUser, new JsonTransformer());
 
