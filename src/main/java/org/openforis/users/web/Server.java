@@ -7,6 +7,8 @@ import static spark.Spark.staticFileLocation;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 import org.openforis.users.manager.EntityManagerFactory;
@@ -64,16 +66,26 @@ public class Server implements SparkApplication {
 
 		get("/hello2/:name", Views.home2, renderer);
 		
-		get("/users/all", listAllUsers, new JsonTransformer());
-		
+		get("/users", findUsersByParameters, new JsonTransformer());
+
 		post("/users", JSON_CONTENT_TYPE, addUser, new JsonTransformer());
 		
 		delete("/users/:id", deleteUser, new JsonTransformer());
 
 	}
 	
-	private Route listAllUsers = (Request req, Response rsp) -> {
-		return USER_MANAGER.findAll();
+	private Route findUsersByParameters = (Request req, Response rsp) -> {
+		String username = req.queryParams("username");
+		if (username == null) {
+			return USER_MANAGER.findAll();
+		} else {
+			User user = USER_MANAGER.findByUsername(username);
+			if (user == null) {
+				return Collections.emptyList();
+			} else {
+				return Arrays.asList(user);
+			}
+		}
 	};
 
 	private Route addUser = (Request req, Response rsp) -> {

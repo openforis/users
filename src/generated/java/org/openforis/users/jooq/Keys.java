@@ -38,6 +38,7 @@ public class Keys {
 	// -------------------------------------------------------------------------
 
 	public static final UniqueKey<UserRecord> PK_USER = UniqueKeys0.PK_USER;
+	public static final UniqueKey<UserRecord> UNIQUE_USERNAME = UniqueKeys0.UNIQUE_USERNAME;
 
 	// -------------------------------------------------------------------------
 	// FOREIGN KEY definitions
@@ -54,5 +55,6 @@ public class Keys {
 
 	private static class UniqueKeys0 extends AbstractKeys {
 		public static final UniqueKey<UserRecord> PK_USER = createUniqueKey(User.USER, User.USER.ID);
+		public static final UniqueKey<UserRecord> UNIQUE_USERNAME = createUniqueKey(User.USER, User.USER.USERNAME);
 	}
 }

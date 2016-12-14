@@ -33,7 +33,7 @@ import org.openforis.users.jooq.tables.records.UserRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-	private static final long serialVersionUID = 1793210741;
+	private static final long serialVersionUID = -978292649;
 
 	/**
 	 * The reference instance of <code>OF_USERS.USER</code>
@@ -111,7 +111,7 @@ public class User extends TableImpl<UserRecord> {
 	 */
 	@Override
 	public List<UniqueKey<UserRecord>> getKeys() {
-		return Arrays.<UniqueKey<UserRecord>>asList(Keys.PK_USER);
+		return Arrays.<UniqueKey<UserRecord>>asList(Keys.PK_USER, Keys.UNIQUE_USERNAME);
 	}
 
 	/**

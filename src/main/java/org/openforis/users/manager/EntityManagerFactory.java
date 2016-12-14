@@ -3,7 +3,7 @@ package org.openforis.users.manager;
 import org.jooq.Configuration;
 import org.jooq.ConnectionProvider;
 import org.jooq.impl.DialectAwareJooqConfiguration;
-import org.openforis.users.jooq.tables.daos.UserDao;
+import org.openforis.users.dao.UserDao;
 
 public class EntityManagerFactory {
 

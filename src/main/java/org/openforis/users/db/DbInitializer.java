@@ -14,6 +14,8 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 
 public class DbInitializer {
 	
+	private static final String LIQUIBASE_CHANGELOG_FILE = "org/openforis/users/db/db.changelog-master.xml";
+	
 	private ConnectionProvider connectionProvider;
 
 	public DbInitializer(ConnectionProvider connectionProvider) {
@@ -45,7 +47,7 @@ public class DbInitializer {
 			conn = connectionProvider.acquire();
 			Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(conn));
 			database.setDefaultSchemaName(DbUtils.SCHEMA_NAME);
-			Liquibase liquibase = new Liquibase("org/openforis/users/db/db.changelog-master.xml",
+			Liquibase liquibase = new Liquibase(LIQUIBASE_CHANGELOG_FILE,
 					new ClassLoaderResourceAccessor(), database);
 			String ctx = null;
 			liquibase.update(ctx);

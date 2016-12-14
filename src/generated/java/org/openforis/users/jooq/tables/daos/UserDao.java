@@ -71,6 +71,13 @@ public class UserDao extends DAOImpl<UserRecord, org.openforis.users.jooq.tables
 	}
 
 	/**
+	 * Fetch a unique record that has <code>USERNAME = value</code>
+	 */
+	public org.openforis.users.jooq.tables.pojos.User fetchOneByUsername(String value) {
+		return fetchOne(User.USER.USERNAME, value);
+	}
+
+	/**
 	 * Fetch records that have <code>PASSWORD IN (values)</code>
 	 */
 	public List<org.openforis.users.jooq.tables.pojos.User> fetchByPassword(String... values) {

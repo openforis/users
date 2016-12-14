@@ -18,6 +18,11 @@
             </column>
             <column name="enabled" type="boolean"/>
         </createTable>
+        
+        <addUniqueConstraint 
+        	columnNames="username"
+            constraintName="unique_username"
+            tableName="user" />
     </changeSet>
 
 </databaseChangeLog>
