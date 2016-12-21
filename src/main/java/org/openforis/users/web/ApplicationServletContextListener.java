@@ -13,7 +13,7 @@ public class ApplicationServletContextListener implements ServletContextListener
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		DataSourceConnectionProvider connectionProvider = new DataSourceConnectionProvider(DbUtils.getDataSource());
-		new DbInitializer(connectionProvider).start();;
+		new DbInitializer(connectionProvider).start();
 		EntityManagerFactory.init(connectionProvider);
 	}
 
