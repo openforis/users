@@ -14,7 +14,7 @@ import org.jooq.Sequence;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 import org.openforis.users.jooq.Sequences;
-import org.openforis.users.jooq.tables.User;
+import org.openforis.users.jooq.tables.OfUser;
 
 
 /**
@@ -30,7 +30,7 @@ import org.openforis.users.jooq.tables.User;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUsers extends SchemaImpl {
 
-	private static final long serialVersionUID = 1046550503;
+	private static final long serialVersionUID = 755335344;
 
 	/**
 	 * The reference instance of <code>OF_USERS</code>
@@ -53,7 +53,7 @@ public class OfUsers extends SchemaImpl {
 
 	private final List<Sequence<?>> getSequences0() {
 		return Arrays.<Sequence<?>>asList(
-			Sequences.SYSTEM_SEQUENCE_E61EF32F_ADC6_4DC5_BE68_8355F1E024C0);
+			Sequences.SYSTEM_SEQUENCE_96B4196D_EE86_499F_8991_CD92F9A090FC);
 	}
 
 	@Override
@@ -65,6 +65,6 @@ public class OfUsers extends SchemaImpl {
 
 	private final List<Table<?>> getTables0() {
 		return Arrays.<Table<?>>asList(
-			User.USER);
+			OfUser.OF_USER);
 	}
 }

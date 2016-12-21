@@ -6,7 +6,7 @@ package org.openforis.users.jooq;
 
 import javax.annotation.Generated;
 
-import org.openforis.users.jooq.tables.User;
+import org.openforis.users.jooq.tables.OfUser;
 
 
 /**
@@ -23,7 +23,7 @@ import org.openforis.users.jooq.tables.User;
 public class Tables {
 
 	/**
-	 * The table OF_USERS.USER
+	 * The table OF_USERS.OF_USER
 	 */
-	public static final User USER = org.openforis.users.jooq.tables.User.USER;
+	public static final OfUser OF_USER = org.openforis.users.jooq.tables.OfUser.OF_USER;
 }

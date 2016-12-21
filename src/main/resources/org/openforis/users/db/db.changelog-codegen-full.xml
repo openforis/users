@@ -8,7 +8,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="1" author="admin">
-        <createTable tableName="user">
+        <createTable tableName="of_user">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -19,10 +19,9 @@
             <column name="enabled" type="boolean"/>
         </createTable>
         
-        <addUniqueConstraint 
-        	columnNames="username"
-            constraintName="unique_username"
-            tableName="user" />
+        <addUniqueConstraint constraintName="unique_username"
+        	tableName="of_user"
+        	columnNames="username" />
     </changeSet>
 
 </databaseChangeLog>
