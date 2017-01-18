@@ -22,7 +22,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfGroup implements Serializable {
 
-    private static final long serialVersionUID = -1542581702;
+    private static final long serialVersionUID = -1875993407;
 
     private Long    id;
     private String  name;
@@ -30,7 +30,7 @@ public class OfGroup implements Serializable {
     private String  description;
     private Boolean enabled;
     private Boolean systemDefined;
-    private String  visibility;
+    private String  visibilityCode;
 
     public OfGroup() {}
 
@@ -41,7 +41,7 @@ public class OfGroup implements Serializable {
         this.description = value.description;
         this.enabled = value.enabled;
         this.systemDefined = value.systemDefined;
-        this.visibility = value.visibility;
+        this.visibilityCode = value.visibilityCode;
     }
 
     public OfGroup(
@@ -51,7 +51,7 @@ public class OfGroup implements Serializable {
         String  description,
         Boolean enabled,
         Boolean systemDefined,
-        String  visibility
+        String  visibilityCode
     ) {
         this.id = id;
         this.name = name;
@@ -59,7 +59,7 @@ public class OfGroup implements Serializable {
         this.description = description;
         this.enabled = enabled;
         this.systemDefined = systemDefined;
-        this.visibility = visibility;
+        this.visibilityCode = visibilityCode;
     }
 
     public Long getId() {
@@ -110,12 +110,12 @@ public class OfGroup implements Serializable {
         this.systemDefined = systemDefined;
     }
 
-    public String getVisibility() {
-        return this.visibility;
+    public String getVisibilityCode() {
+        return this.visibilityCode;
     }
 
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
+    public void setVisibilityCode(String visibilityCode) {
+        this.visibilityCode = visibilityCode;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class OfGroup implements Serializable {
         sb.append(", ").append(description);
         sb.append(", ").append(enabled);
         sb.append(", ").append(systemDefined);
-        sb.append(", ").append(visibility);
+        sb.append(", ").append(visibilityCode);
 
         sb.append(")");
         return sb.toString();

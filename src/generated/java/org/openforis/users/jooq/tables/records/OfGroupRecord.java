@@ -27,7 +27,7 @@ import org.openforis.users.jooq.tables.OfGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfGroupRecord extends UpdatableRecordImpl<OfGroupRecord> implements Record7<Long, String, String, String, Boolean, Boolean, String> {
 
-    private static final long serialVersionUID = -860851519;
+    private static final long serialVersionUID = 1751690673;
 
     /**
      * Setter for <code>OF_USERS.OF_GROUP.ID</code>.
@@ -114,16 +114,16 @@ public class OfGroupRecord extends UpdatableRecordImpl<OfGroupRecord> implements
     }
 
     /**
-     * Setter for <code>OF_USERS.OF_GROUP.VISIBILITY</code>. PUB=Public, PRV=Private
+     * Setter for <code>OF_USERS.OF_GROUP.VISIBILITY_CODE</code>. PUB=Public, PRV=Private
      */
-    public void setVisibility(String value) {
+    public void setVisibilityCode(String value) {
         set(6, value);
     }
 
     /**
-     * Getter for <code>OF_USERS.OF_GROUP.VISIBILITY</code>. PUB=Public, PRV=Private
+     * Getter for <code>OF_USERS.OF_GROUP.VISIBILITY_CODE</code>. PUB=Public, PRV=Private
      */
-    public String getVisibility() {
+    public String getVisibilityCode() {
         return (String) get(6);
     }
 
@@ -212,7 +212,7 @@ public class OfGroupRecord extends UpdatableRecordImpl<OfGroupRecord> implements
      */
     @Override
     public Field<String> field7() {
-        return OfGroup.OF_GROUP.VISIBILITY;
+        return OfGroup.OF_GROUP.VISIBILITY_CODE;
     }
 
     /**
@@ -268,7 +268,7 @@ public class OfGroupRecord extends UpdatableRecordImpl<OfGroupRecord> implements
      */
     @Override
     public String value7() {
-        return getVisibility();
+        return getVisibilityCode();
     }
 
     /**
@@ -330,7 +330,7 @@ public class OfGroupRecord extends UpdatableRecordImpl<OfGroupRecord> implements
      */
     @Override
     public OfGroupRecord value7(String value) {
-        setVisibility(value);
+        setVisibilityCode(value);
         return this;
     }
 
@@ -363,7 +363,7 @@ public class OfGroupRecord extends UpdatableRecordImpl<OfGroupRecord> implements
     /**
      * Create a detached, initialised OfGroupRecord
      */
-    public OfGroupRecord(Long id, String name, String label, String description, Boolean enabled, Boolean systemDefined, String visibility) {
+    public OfGroupRecord(Long id, String name, String label, String description, Boolean enabled, Boolean systemDefined, String visibilityCode) {
         super(OfGroup.OF_GROUP);
 
         set(0, id);
@@ -372,6 +372,6 @@ public class OfGroupRecord extends UpdatableRecordImpl<OfGroupRecord> implements
         set(3, description);
         set(4, enabled);
         set(5, systemDefined);
-        set(6, visibility);
+        set(6, visibilityCode);
     }
 }

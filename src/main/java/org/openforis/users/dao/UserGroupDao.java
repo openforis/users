@@ -23,7 +23,7 @@ public class UserGroupDao extends OfUserGroupDao {
 
 	public void updateJoinRequestStatus(Group group, User user, UserGroupRequestStatus status) {
 		dsl().update(OF_USER_GROUP)
-			.set(OF_USER_GROUP.STATUS, status.getCode())
+			.set(OF_USER_GROUP.STATUS_CODE, status.getCode())
 			.where(OF_USER_GROUP.GROUP_ID.eq(group.getId())
 				.and(OF_USER_GROUP.USER_ID.eq(user.getId())))
 			.execute();

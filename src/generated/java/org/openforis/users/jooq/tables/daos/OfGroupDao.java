@@ -99,9 +99,9 @@ public class OfGroupDao extends DAOImpl<OfGroupRecord, org.openforis.users.jooq.
     }
 
     /**
-     * Fetch records that have <code>VISIBILITY IN (values)</code>
+     * Fetch records that have <code>VISIBILITY_CODE IN (values)</code>
      */
-    public List<org.openforis.users.jooq.tables.pojos.OfGroup> fetchByVisibility(String... values) {
-        return fetch(OfGroup.OF_GROUP.VISIBILITY, values);
+    public List<org.openforis.users.jooq.tables.pojos.OfGroup> fetchByVisibilityCode(String... values) {
+        return fetch(OfGroup.OF_GROUP.VISIBILITY_CODE, values);
     }
 }

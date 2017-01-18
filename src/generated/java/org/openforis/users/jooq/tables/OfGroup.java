@@ -34,7 +34,7 @@ import org.openforis.users.jooq.tables.records.OfGroupRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfGroup extends TableImpl<OfGroupRecord> {
 
-    private static final long serialVersionUID = -1572947966;
+    private static final long serialVersionUID = 1588914553;
 
     /**
      * The reference instance of <code>OF_USERS.OF_GROUP</code>
@@ -52,7 +52,7 @@ public class OfGroup extends TableImpl<OfGroupRecord> {
     /**
      * The column <code>OF_USERS.OF_GROUP.ID</code>.
      */
-    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_320D4D17_71E0_4D33_A1CA_7B4D562A4C7D)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_6A687DDC_44B7_4D4F_B919_015B1AB4E0C5)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>OF_USERS.OF_GROUP.NAME</code>.
@@ -80,9 +80,9 @@ public class OfGroup extends TableImpl<OfGroupRecord> {
     public final TableField<OfGroupRecord, Boolean> SYSTEM_DEFINED = createField("SYSTEM_DEFINED", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("FALSE", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>OF_USERS.OF_GROUP.VISIBILITY</code>. PUB=Public, PRV=Private
+     * The column <code>OF_USERS.OF_GROUP.VISIBILITY_CODE</code>. PUB=Public, PRV=Private
      */
-    public final TableField<OfGroupRecord, String> VISIBILITY = createField("VISIBILITY", org.jooq.impl.SQLDataType.CHAR.length(3).nullable(false).defaultValue(org.jooq.impl.DSL.field("'PUB'", org.jooq.impl.SQLDataType.CHAR)), this, "PUB=Public, PRV=Private");
+    public final TableField<OfGroupRecord, String> VISIBILITY_CODE = createField("VISIBILITY_CODE", org.jooq.impl.SQLDataType.CHAR.length(3).nullable(false).defaultValue(org.jooq.impl.DSL.field("'PUB'", org.jooq.impl.SQLDataType.CHAR)), this, "PUB=Public, PRV=Private");
 
     /**
      * Create a <code>OF_USERS.OF_GROUP</code> table reference

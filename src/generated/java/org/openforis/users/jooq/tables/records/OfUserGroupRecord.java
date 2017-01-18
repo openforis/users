@@ -27,7 +27,7 @@ import org.openforis.users.jooq.tables.OfUserGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUserGroupRecord extends UpdatableRecordImpl<OfUserGroupRecord> implements Record4<Long, Long, String, String> {
 
-    private static final long serialVersionUID = 898629370;
+    private static final long serialVersionUID = -718751018;
 
     /**
      * Setter for <code>OF_USERS.OF_USER_GROUP.USER_ID</code>.
@@ -58,30 +58,30 @@ public class OfUserGroupRecord extends UpdatableRecordImpl<OfUserGroupRecord> im
     }
 
     /**
-     * Setter for <code>OF_USERS.OF_USER_GROUP.STATUS</code>. P=Pending, A=Accepted, R=Rejected
+     * Setter for <code>OF_USERS.OF_USER_GROUP.STATUS_CODE</code>. P=Pending, A=Accepted, R=Rejected
      */
-    public void setStatus(String value) {
+    public void setStatusCode(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>OF_USERS.OF_USER_GROUP.STATUS</code>. P=Pending, A=Accepted, R=Rejected
+     * Getter for <code>OF_USERS.OF_USER_GROUP.STATUS_CODE</code>. P=Pending, A=Accepted, R=Rejected
      */
-    public String getStatus() {
+    public String getStatusCode() {
         return (String) get(2);
     }
 
     /**
-     * Setter for <code>OF_USERS.OF_USER_GROUP.ROLE</code>. OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer
+     * Setter for <code>OF_USERS.OF_USER_GROUP.ROLE_CODE</code>. OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer
      */
-    public void setRole(String value) {
+    public void setRoleCode(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>OF_USERS.OF_USER_GROUP.ROLE</code>. OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer
+     * Getter for <code>OF_USERS.OF_USER_GROUP.ROLE_CODE</code>. OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer
      */
-    public String getRole() {
+    public String getRoleCode() {
         return (String) get(3);
     }
 
@@ -138,7 +138,7 @@ public class OfUserGroupRecord extends UpdatableRecordImpl<OfUserGroupRecord> im
      */
     @Override
     public Field<String> field3() {
-        return OfUserGroup.OF_USER_GROUP.STATUS;
+        return OfUserGroup.OF_USER_GROUP.STATUS_CODE;
     }
 
     /**
@@ -146,7 +146,7 @@ public class OfUserGroupRecord extends UpdatableRecordImpl<OfUserGroupRecord> im
      */
     @Override
     public Field<String> field4() {
-        return OfUserGroup.OF_USER_GROUP.ROLE;
+        return OfUserGroup.OF_USER_GROUP.ROLE_CODE;
     }
 
     /**
@@ -170,7 +170,7 @@ public class OfUserGroupRecord extends UpdatableRecordImpl<OfUserGroupRecord> im
      */
     @Override
     public String value3() {
-        return getStatus();
+        return getStatusCode();
     }
 
     /**
@@ -178,7 +178,7 @@ public class OfUserGroupRecord extends UpdatableRecordImpl<OfUserGroupRecord> im
      */
     @Override
     public String value4() {
-        return getRole();
+        return getRoleCode();
     }
 
     /**
@@ -204,7 +204,7 @@ public class OfUserGroupRecord extends UpdatableRecordImpl<OfUserGroupRecord> im
      */
     @Override
     public OfUserGroupRecord value3(String value) {
-        setStatus(value);
+        setStatusCode(value);
         return this;
     }
 
@@ -213,7 +213,7 @@ public class OfUserGroupRecord extends UpdatableRecordImpl<OfUserGroupRecord> im
      */
     @Override
     public OfUserGroupRecord value4(String value) {
-        setRole(value);
+        setRoleCode(value);
         return this;
     }
 
@@ -243,12 +243,12 @@ public class OfUserGroupRecord extends UpdatableRecordImpl<OfUserGroupRecord> im
     /**
      * Create a detached, initialised OfUserGroupRecord
      */
-    public OfUserGroupRecord(Long userId, Long groupId, String status, String role) {
+    public OfUserGroupRecord(Long userId, Long groupId, String statusCode, String roleCode) {
         super(OfUserGroup.OF_USER_GROUP);
 
         set(0, userId);
         set(1, groupId);
-        set(2, status);
-        set(3, role);
+        set(2, statusCode);
+        set(3, roleCode);
     }
 }

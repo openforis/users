@@ -24,7 +24,7 @@ public class GroupDao extends OfGroupDao {
 		return DSL.using(configuration())
 			.selectFrom(OF_GROUP)
 			.where(OF_GROUP.SYSTEM_DEFINED.isFalse()
-				.and(OF_GROUP.VISIBILITY.eq(Visibility.PUBLIC.getCode())))
+				.and(OF_GROUP.VISIBILITY_CODE.eq(Visibility.PUBLIC.getCode())))
 			.fetchInto(Group.class);
 	}
 	

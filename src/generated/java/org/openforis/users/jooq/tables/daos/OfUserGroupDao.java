@@ -65,16 +65,16 @@ public class OfUserGroupDao extends DAOImpl<OfUserGroupRecord, org.openforis.use
     }
 
     /**
-     * Fetch records that have <code>STATUS IN (values)</code>
+     * Fetch records that have <code>STATUS_CODE IN (values)</code>
      */
-    public List<org.openforis.users.jooq.tables.pojos.OfUserGroup> fetchByStatus(String... values) {
-        return fetch(OfUserGroup.OF_USER_GROUP.STATUS, values);
+    public List<org.openforis.users.jooq.tables.pojos.OfUserGroup> fetchByStatusCode(String... values) {
+        return fetch(OfUserGroup.OF_USER_GROUP.STATUS_CODE, values);
     }
 
     /**
-     * Fetch records that have <code>ROLE IN (values)</code>
+     * Fetch records that have <code>ROLE_CODE IN (values)</code>
      */
-    public List<org.openforis.users.jooq.tables.pojos.OfUserGroup> fetchByRole(String... values) {
-        return fetch(OfUserGroup.OF_USER_GROUP.ROLE, values);
+    public List<org.openforis.users.jooq.tables.pojos.OfUserGroup> fetchByRoleCode(String... values) {
+        return fetch(OfUserGroup.OF_USER_GROUP.ROLE_CODE, values);
     }
 }

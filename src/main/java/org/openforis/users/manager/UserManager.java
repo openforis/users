@@ -28,7 +28,7 @@ public class UserManager extends AbstractManager<User, UserDao> {
 		Group privateGroup = new Group();
 		privateGroup.setName(user.getUsername() + "_private_group");
 		privateGroup.setLabel(user.getUsername() + " Private Group");
-		privateGroup.setVisibility(Visibility.PRIVATE.getCode());
+		privateGroup.setVisibility(Visibility.PRIVATE);
 		privateGroup.setSystemDefined(true);
 		privateGroup.setEnabled(true);
 		groupManager.insert(privateGroup);

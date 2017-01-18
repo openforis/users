@@ -22,32 +22,32 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUserGroup implements Serializable {
 
-    private static final long serialVersionUID = 550694771;
+    private static final long serialVersionUID = 998069133;
 
     private Long   userId;
     private Long   groupId;
-    private String status;
-    private String role;
+    private String statusCode;
+    private String roleCode;
 
     public OfUserGroup() {}
 
     public OfUserGroup(OfUserGroup value) {
         this.userId = value.userId;
         this.groupId = value.groupId;
-        this.status = value.status;
-        this.role = value.role;
+        this.statusCode = value.statusCode;
+        this.roleCode = value.roleCode;
     }
 
     public OfUserGroup(
         Long   userId,
         Long   groupId,
-        String status,
-        String role
+        String statusCode,
+        String roleCode
     ) {
         this.userId = userId;
         this.groupId = groupId;
-        this.status = status;
-        this.role = role;
+        this.statusCode = statusCode;
+        this.roleCode = roleCode;
     }
 
     public Long getUserId() {
@@ -66,20 +66,20 @@ public class OfUserGroup implements Serializable {
         this.groupId = groupId;
     }
 
-    public String getStatus() {
-        return this.status;
+    public String getStatusCode() {
+        return this.statusCode;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
 
-    public String getRole() {
-        return this.role;
+    public String getRoleCode() {
+        return this.roleCode;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
     @Override
@@ -88,8 +88,8 @@ public class OfUserGroup implements Serializable {
 
         sb.append(userId);
         sb.append(", ").append(groupId);
-        sb.append(", ").append(status);
-        sb.append(", ").append(role);
+        sb.append(", ").append(statusCode);
+        sb.append(", ").append(roleCode);
 
         sb.append(")");
         return sb.toString();

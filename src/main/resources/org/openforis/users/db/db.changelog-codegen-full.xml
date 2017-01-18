@@ -42,7 +42,7 @@
             <column name="system_defined" type="boolean" defaultValueBoolean="false">
             	<constraints nullable="false"/>
            	</column>
-            <column name="visibility" type="char(3)" defaultValue="PUB"
+            <column name="visibility_code" type="char(3)" defaultValue="PUB"
             	remarks="PUB=Public, PRV=Private">
             	<constraints nullable="false"/>
            	</column>
@@ -59,12 +59,12 @@
         				referencedTableName="of_group" referencedColumnNames="id"
         				nullable="false" />
         	</column>
-        	<column name="status" type="char(1)" 
+        	<column name="status_code" type="char(1)" 
         		defaultValue="P" 
         		remarks="P=Pending, A=Accepted, R=Rejected">
 	           	<constraints nullable="false"/>
            	</column>
-        	<column name="role" type="char(3)" 
+        	<column name="role_code" type="char(3)" 
         		defaultValue="VWR" 
         		remarks="OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer">
             	<constraints nullable="false"/>

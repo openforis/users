@@ -34,7 +34,7 @@ import org.openforis.users.jooq.tables.records.OfUserGroupRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUserGroup extends TableImpl<OfUserGroupRecord> {
 
-    private static final long serialVersionUID = 1849055485;
+    private static final long serialVersionUID = 696265891;
 
     /**
      * The reference instance of <code>OF_USERS.OF_USER_GROUP</code>
@@ -60,14 +60,14 @@ public class OfUserGroup extends TableImpl<OfUserGroupRecord> {
     public final TableField<OfUserGroupRecord, Long> GROUP_ID = createField("GROUP_ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
-     * The column <code>OF_USERS.OF_USER_GROUP.STATUS</code>. P=Pending, A=Accepted, R=Rejected
+     * The column <code>OF_USERS.OF_USER_GROUP.STATUS_CODE</code>. P=Pending, A=Accepted, R=Rejected
      */
-    public final TableField<OfUserGroupRecord, String> STATUS = createField("STATUS", org.jooq.impl.SQLDataType.CHAR.length(1).nullable(false).defaultValue(org.jooq.impl.DSL.field("'P'", org.jooq.impl.SQLDataType.CHAR)), this, "P=Pending, A=Accepted, R=Rejected");
+    public final TableField<OfUserGroupRecord, String> STATUS_CODE = createField("STATUS_CODE", org.jooq.impl.SQLDataType.CHAR.length(1).nullable(false).defaultValue(org.jooq.impl.DSL.field("'P'", org.jooq.impl.SQLDataType.CHAR)), this, "P=Pending, A=Accepted, R=Rejected");
 
     /**
-     * The column <code>OF_USERS.OF_USER_GROUP.ROLE</code>. OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer
+     * The column <code>OF_USERS.OF_USER_GROUP.ROLE_CODE</code>. OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer
      */
-    public final TableField<OfUserGroupRecord, String> ROLE = createField("ROLE", org.jooq.impl.SQLDataType.CHAR.length(3).nullable(false).defaultValue(org.jooq.impl.DSL.field("'VWR'", org.jooq.impl.SQLDataType.CHAR)), this, "OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer");
+    public final TableField<OfUserGroupRecord, String> ROLE_CODE = createField("ROLE_CODE", org.jooq.impl.SQLDataType.CHAR.length(3).nullable(false).defaultValue(org.jooq.impl.DSL.field("'VWR'", org.jooq.impl.SQLDataType.CHAR)), this, "OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer");
 
     /**
      * Create a <code>OF_USERS.OF_USER_GROUP</code> table reference
