@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<jooq.version>3.6.2</jooq.version>
+		<jooq.version>3.9.0</jooq.version>
 		<h2.version>1.4.193</h2.version>
 		<liquibase.version>3.5.3</liquibase.version>
 		<temp.database.url>jdbc:h2:file:${project.build.directory}/temp_users</temp.database.url>

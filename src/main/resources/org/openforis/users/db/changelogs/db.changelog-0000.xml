@@ -16,17 +16,97 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="username" type="varchar(50)"/>
+            <column name="username" type="varchar(64)">
+            	<constraints nullable="false"/>
+           	</column>
             <column name="password" type="varchar(255)">
-                <constraints nullable="false"/>
+            	<constraints nullable="false"/>
+           	</column>
+            <column name="enabled" type="boolean" defaultValueBoolean="false">
+               	<constraints nullable="false"/>
             </column>
-            <column name="enabled" type="boolean"/>
         </createTable>
         
-        <addUniqueConstraint 
+        <createTable tableName="of_group">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(64)">
+            	<constraints nullable="false"/>
+           	</column>
+            <column name="label" type="varchar(255)">
+            	<constraints nullable="false"/>
+           	</column>
+            <column name="description" type="varchar(255)">
+           	    <constraints nullable="true"/>
+            </column>
+            <column name="enabled" type="boolean" defaultValueBoolean="false">
+            	<constraints nullable="false"/>
+           	</column>
+            <column name="system_defined" type="boolean" defaultValueBoolean="false">
+            	<constraints nullable="false"/>
+           	</column>
+            <column name="visibility" type="char(3)" defaultValue="PUB"
+            	remarks="PUB=Public, PRV=Private">
+            	<constraints nullable="false"/>
+           	</column>
+        </createTable>
+
+        <createTable tableName="of_user_group">
+        	<column name="user_id" type="bigint">
+        		<constraints foreignKeyName="of_user_group_user_fk"
+        				referencedTableName="of_user" referencedColumnNames="id"
+        				nullable="false" />
+        	</column>
+        	<column name="group_id" type="bigint">
+        		<constraints foreignKeyName="of_user_group_group_fk"
+        				referencedTableName="of_group" referencedColumnNames="id"
+        				nullable="false" />
+        	</column>
+        	<column name="status" type="char(1)" 
+        		defaultValue="P" 
+        		remarks="P=Pending, A=Accepted, R=Rejected">
+	           	<constraints nullable="false"/>
+           	</column>
+        	<column name="role" type="char(3)" 
+        		defaultValue="VWR" 
+        		remarks="OWN=Owner, ADM=Administrator, OPR=Operator, VWR=Viewer">
+            	<constraints nullable="false"/>
+           	</column>
+        </createTable>
+        
+        <addPrimaryKey 
+        	tableName="of_user_group"
+        	columnNames="user_id,group_id"
+            constraintName="of_user_group_pk"
+            />
+        
+        <createTable tableName="of_resource_group">
+        	<column name="resource_type" type="varchar(64)">
+             	<constraints nullable="false"/>
+           	</column>
+        	<column name="resource_id" type="varchar(64)">
+             	<constraints nullable="false"/>
+           	</column>
+        	<column name="group_id" type="bigint">
+        		<constraints foreignKeyName="of_resource_group_group_fk"
+        				referencedTableName="of_group" referencedColumnNames="id"
+        				nullable="false" />
+        	</column>
+        </createTable>
+        
+        <addPrimaryKey 
+        	tableName="of_resource_group"
+        	columnNames="resource_type,resource_id,group_id"
+            constraintName="of_resource_group_pk"
+            />
+        
+        <addUniqueConstraint
+        	tableName="of_user" 
         	columnNames="username"
-            constraintName="unique_username"
-            tableName="of_user" />
+            constraintName="of_unique_username"
+            />
+            
     </changeSet>
 
 </databaseChangeLog>

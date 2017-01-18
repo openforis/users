@@ -4,4 +4,5 @@ public interface IdentifiableObject {
 
 	Long getId();
 	
+	void setId(Long id);
 }

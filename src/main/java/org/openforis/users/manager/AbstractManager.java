@@ -6,6 +6,7 @@ import org.jooq.Configuration;
 import org.jooq.DAO;
 import org.jooq.TransactionalRunnable;
 import org.jooq.impl.DSL;
+import org.openforis.users.dao.Daos;
 import org.openforis.users.model.IdentifiableObject;
 
 @SuppressWarnings("rawtypes")
@@ -27,17 +28,28 @@ public abstract class AbstractManager<E extends IdentifiableObject, D extends DA
 		return dao.findAll();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void save(E item) {
 		runInTransaction(new Runnable() {
 			public void run() {
 				if (item.getId() == null) {
-					dao.insert(item);
+					insert(item);
 				} else {
-					dao.update(item);
+					update(item);
 				}
 			}
 		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void update(E item) {
+		dao.update(item);
+	}
+
+	protected void insert(E item) {
+		Daos.insertAndSetId(DSL.using(dao.configuration()), 
+				dao.getTable(), 
+				dao.getTable().field("ID"), 
+				item);
 	}
 	
 	@SuppressWarnings("unchecked")
