@@ -17,7 +17,11 @@ public class JsonTransformer implements ResponseTransformer {
 
     @SuppressWarnings("unchecked")
 	public Map<String, Object> parse(String json) {
-        return gson.fromJson(json, Map.class);
+        return parse(json, Map.class);
     }
 
+    public <T> T parse(String json, Class<T> type) {
+    	return gson.fromJson(json, type);
+    }
+    
 }
