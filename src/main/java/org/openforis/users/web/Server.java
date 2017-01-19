@@ -117,7 +117,7 @@ public class Server implements SparkApplication {
 		//
 		User user = new User();
 		user.setUsername(username);
-		user.setPassword(password);
+		user.setPlainPassword(password);
 		//
 		USER_MANAGER.save(user);
 		return user;
@@ -143,7 +143,8 @@ public class Server implements SparkApplication {
 		String idParam = req.params("id");
 		Long id = Long.parseLong(idParam);
 		//
-		return USER_MANAGER.deleteById(id);
+		USER_MANAGER.deleteById(id);
+		return true;
 	};
 
 }

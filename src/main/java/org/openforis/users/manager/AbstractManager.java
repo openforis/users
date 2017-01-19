@@ -1,5 +1,7 @@
 package org.openforis.users.manager;
 
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jooq.Configuration;
@@ -13,19 +15,35 @@ import org.openforis.users.model.IdentifiableObject;
 public abstract class AbstractManager<E extends IdentifiableObject, D extends DAO> {
 	
 	protected D dao;
+	private Class<E> itemType;
 	
-	public AbstractManager(D dao) {
+	public AbstractManager(D dao, Class<E> itemType) {
 		this.dao = dao;
+		this.itemType = itemType;
 	}
 
 	@SuppressWarnings("unchecked")
 	public E findById(Long id) {
-		return (E) dao.findById(id);
+		Object ofItem = dao.findById(id);
+		return convertToItemType(ofItem);
+	}
+
+	private E convertToItemType(Object ofItem) {
+		try {
+			Constructor<E> constructor = itemType.getConstructor(ofItem.getClass());
+			return constructor.newInstance(ofItem);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<E> findAll() {
-		return dao.findAll();
+		List all = dao.findAll();
+		List<E> result = new ArrayList<E>(all.size());
+		for (Object ofItem : all) {
+			result.add(convertToItemType(ofItem));
+		}
+		return result;
 	}
 	
 	public void save(E item) {
@@ -53,22 +71,12 @@ public abstract class AbstractManager<E extends IdentifiableObject, D extends DA
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void delete(E item) {
-		runInTransaction(new Runnable() {
-			public void run() {
-				dao.delete(item);
-			}
-		});
-	}
-	
-	@SuppressWarnings("unchecked")
-	public boolean deleteById(Long id) {
+	public void deleteById(final long id) {
 		runInTransaction(new Runnable() {
 			public void run() {
 				dao.deleteById(id);
 			}
 		});
-		return true;
 	}
 	
 	protected void runInTransaction(Runnable runnable) {

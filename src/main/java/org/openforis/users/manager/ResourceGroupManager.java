@@ -16,10 +16,10 @@ public class ResourceGroupManager {
 	private ResourceGroupDao resourceGroupDao;
 	private GroupManager groupManager;
 
-	public ResourceGroupManager(GroupManager groupManager, ResourceGroupDao resourceGroupDao) {
+	public ResourceGroupManager(ResourceGroupDao resourceGroupDao, GroupManager groupManager) {
 		super();
-		this.groupManager = groupManager;
 		this.resourceGroupDao = resourceGroupDao;
+		this.groupManager = groupManager;
 	}
 	
 	public Group loadGroup(String resourceType, String resourceId) {
@@ -30,6 +30,10 @@ public class ResourceGroupManager {
 	public List<String> loadResourceIds(String resourceType, Group group) {
 		return resourceGroupDao.loadResourceIdsByGroup(resourceType, group);
 	}
+
+	public int countResourcesByUserId(long userId) {
+		return resourceGroupDao.countResourcesByUser(userId);
+	}
 	
 	public void associate(Group group, String resourceType, String resourceId) {
 		resourceGroupDao.insert(new OfResourceGroup(resourceType, resourceId, group.getId()));
@@ -38,5 +42,5 @@ public class ResourceGroupManager {
 	public void disassociate(Group group, String resourceType, String resourceId) {
 		resourceGroupDao.delete(new OfResourceGroup(resourceType, resourceId, group.getId()));
 	}
-	
+
 }

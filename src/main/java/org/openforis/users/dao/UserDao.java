@@ -20,7 +20,7 @@ public class UserDao extends org.openforis.users.jooq.tables.daos.OfUserDao {
 			.fetchOneInto(User.class);
 		return result;
 	}
-
+	
 	private DSLContext dsl() {
 		return DSL.using(configuration());
 	}

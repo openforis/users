@@ -4,9 +4,15 @@ import org.jooq.Configuration;
 import org.jooq.ConnectionProvider;
 import org.jooq.impl.DialectAwareJooqConfiguration;
 import org.openforis.users.dao.GroupDao;
+import org.openforis.users.dao.ResourceGroupDao;
 import org.openforis.users.dao.UserDao;
 import org.openforis.users.dao.UserGroupDao;
 
+/**
+ * 
+ * @author S. Ricci
+ *
+ */
 public class EntityManagerFactory {
 
 	private static EntityManagerFactory instance;
@@ -16,10 +22,12 @@ public class EntityManagerFactory {
 	private UserDao userDao;
 	private GroupDao groupDao;
 	private UserGroupDao userGroupDao;
+	private ResourceGroupDao resourceGroupDao;
 	
 	private UserManager userManager;
 	private GroupManager groupManager;
 	private UserGroupManager userGroupManager;
+	private ResourceGroupManager resourceGroupManager;
 
 	public static void init(ConnectionProvider connectionProvider) {
 		instance = new EntityManagerFactory(connectionProvider);
@@ -40,11 +48,13 @@ public class EntityManagerFactory {
 		this.groupDao = new GroupDao(config);
 		this.userDao = new UserDao(config);
 		this.userGroupDao = new UserGroupDao(config);
+		this.resourceGroupDao = new ResourceGroupDao(config);
 		
 		//managers
 		this.groupManager = new GroupManager(groupDao);
 		this.userGroupManager = new UserGroupManager(userGroupDao);
-		this.userManager = new UserManager(groupManager, userGroupManager, userDao);
+		this.resourceGroupManager = new ResourceGroupManager(resourceGroupDao, groupManager);
+		this.userManager = new UserManager(userDao, groupManager, userGroupManager, resourceGroupManager);
 	}
 
 	public UserManager getUserManager() {
