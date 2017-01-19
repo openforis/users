@@ -1,13 +1,13 @@
 package org.openforis.users.web;
 
-import static spark.Spark.staticFileLocation;
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.patch;
 import static spark.Spark.delete;
+import static spark.Spark.get;
+import static spark.Spark.patch;
+import static spark.Spark.post;
+import static spark.Spark.staticFileLocation;
 
-import java.io.File;
-import java.net.URL;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -16,14 +16,11 @@ import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserManager;
 import org.openforis.users.model.User;
 
-import freemarker.template.Configuration;
-import freemarker.template.TemplateExceptionHandler;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.Spark;
 import spark.servlet.SparkApplication;
-import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * 
@@ -38,17 +35,6 @@ public class Server implements SparkApplication {
 	private static final UserManager USER_MANAGER = EntityManagerFactory.getInstance().getUserManager();
 
 	private JsonTransformer jsonTransformer;
-
-	private static FreeMarkerEngine getTemplateRenderer() throws Exception {
-		Configuration cfg = new Configuration();
-		URL templateDirectory = Server.class.getResource("/template/freemarker");
-		cfg.setDirectoryForTemplateLoading(new File(templateDirectory.toURI()));
-		cfg.setDefaultEncoding("UTF-8");
-		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-		// cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-		// cfg.setLogTemplateExceptions(false);
-		return new FreeMarkerEngine(cfg);
-	}
 
 	private static void enebleCORS() {
 		Spark.options("/*", (request, response) -> {
@@ -67,31 +53,30 @@ public class Server implements SparkApplication {
 		});
 	}
 
+	private static void enebleExceptionHandler() {
+		Spark.exception(Exception.class, (e, request, response) -> {
+			final StringWriter sw = new StringWriter();
+			final PrintWriter pw = new PrintWriter(sw, true);
+			e.printStackTrace(pw);
+			System.err.println(sw.getBuffer().toString());
+		});
+	}
+
 	@Override
 	public void init() {
 
-		Server.enebleCORS();
+		staticFileLocation("/public");
 
 		jsonTransformer = new JsonTransformer();
 
-		FreeMarkerEngine renderer = null;
-		try {
-			renderer = getTemplateRenderer();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		staticFileLocation("/public");
-
-		get("/hello/:name", Views.home);
-		get("/hello2/:name", Views.home2, renderer);
+		Server.enebleCORS();
+		Server.enebleExceptionHandler();
 
 		// USER
-		get("/user", findUsers, new JsonTransformer());
-		post("/user", JSON_CONTENT_TYPE, addUser, new JsonTransformer());
-		patch("/user", JSON_CONTENT_TYPE, editUser, new JsonTransformer());
-		delete("/user/:id", JSON_CONTENT_TYPE, deleteUser, new JsonTransformer());
+		get("/api/user", findUsers, new JsonTransformer());
+		post("/api/user", JSON_CONTENT_TYPE, addUser, new JsonTransformer());
+		patch("/api/user", JSON_CONTENT_TYPE, editUser, new JsonTransformer());
+		delete("/api/user/:id", JSON_CONTENT_TYPE, deleteUser, new JsonTransformer());
 
 	}
 
@@ -112,12 +97,15 @@ public class Server implements SparkApplication {
 	private Route addUser = (Request req, Response rsp) -> {
 		String body = req.body();
 		Map<String, Object> bodyMap = jsonTransformer.parse(body);
+		//
 		String username = bodyMap.get("username").toString();
 		String password = bodyMap.get("password").toString();
+		Boolean enabled = Boolean.valueOf(bodyMap.get("enabled").toString());
 		//
 		User user = new User();
 		user.setUsername(username);
 		user.setPlainPassword(password);
+		user.setEnabled(enabled);
 		//
 		USER_MANAGER.save(user);
 		return user;
@@ -125,15 +113,20 @@ public class Server implements SparkApplication {
 
 	private Route editUser = (Request req, Response rsp) -> {
 		String body = req.body();
+
 		Map<String, Object> bodyMap = jsonTransformer.parse(body);
 		//
-		Long id = Long.parseLong(bodyMap.get("id").toString());
+		Double idDouble = Double.parseDouble(bodyMap.get("id").toString());
+		long id = idDouble.longValue();
+		//
 		String username = bodyMap.get("username").toString();
 		String password = bodyMap.get("password").toString();
+		Boolean enabled = Boolean.valueOf(bodyMap.get("enabled").toString());
 		//
 		User user = USER_MANAGER.findById(id);
 		user.setUsername(username);
-		user.setPassword(password);
+		user.setPlainPassword(password);
+		user.setEnabled(enabled);
 		//
 		USER_MANAGER.save(user);
 		return user;
@@ -141,6 +134,7 @@ public class Server implements SparkApplication {
 
 	private Route deleteUser = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
+		//
 		Long id = Long.parseLong(idParam);
 		//
 		USER_MANAGER.deleteById(id);
