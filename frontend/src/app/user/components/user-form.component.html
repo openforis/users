@@ -1,0 +1,28 @@
+<div class="row">
+    <a class="btn btn-info" (click)="goBack()">Back</a>
+</div>
+
+<br />
+
+<div class="row">
+    <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input [(ngModel)]="user.username" type="text" name="username" class="form-control" aria-describedby="usernameHelp" placeholder="Enter username" />
+            <small id="usernameHelp" class="form-text text-muted">usernameHelp</small>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input [(ngModel)]="user.password" type="password" name="password" class="form-control" aria-describedby="passwordHelp" placeholder="Enter password" />
+            <small id="passwordHelp" class="form-text text-muted">passwordHelp</small>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input [(ngModel)]="user.enabled" type="checkbox" name="enabled" class="form-check-input" />
+                Enabled
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-danger" (click)="deleteUser()">Delete</button>
+    </form>
+</div>
