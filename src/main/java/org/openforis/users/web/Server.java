@@ -16,6 +16,8 @@ import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserManager;
 import org.openforis.users.model.User;
 
+import freemarker.template.utility.StringUtil;
+import liquibase.util.StringUtils;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -120,12 +122,12 @@ public class Server implements SparkApplication {
 		long id = idDouble.longValue();
 		//
 		String username = bodyMap.get("username").toString();
-		String password = bodyMap.get("password").toString();
+		//String password = bodyMap.get("password").toString();
 		Boolean enabled = Boolean.valueOf(bodyMap.get("enabled").toString());
 		//
 		User user = USER_MANAGER.findById(id);
 		user.setUsername(username);
-		user.setPlainPassword(password);
+		user.setPlainPassword(null); // do not overwrite password
 		user.setEnabled(enabled);
 		//
 		USER_MANAGER.save(user);
@@ -135,7 +137,7 @@ public class Server implements SparkApplication {
 	private Route deleteUser = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
 		//
-		Long id = Long.parseLong(idParam);
+		long id = Long.parseLong(idParam);
 		//
 		USER_MANAGER.deleteById(id);
 		return true;

@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Hex;
 import org.openforis.users.dao.UserDao;
+import org.openforis.users.jooq.tables.pojos.OfUser;
 import org.openforis.users.model.Group;
 import org.openforis.users.model.Group.Visibility;
 import org.openforis.users.model.User;
@@ -57,21 +58,30 @@ public class UserManager extends AbstractManager<User, UserDao> {
 
 	@Override
 	public void save(User user) {
+		super.save(user); // under transaction
+		obfuscatePassword(user);
+	}
+
+	@Override
+	protected void update(User user) {
+		String plainPassword = user.getPlainPassword();
+		if (plainPassword != null) {
+			String encodedPassword = checkAndEncodePassword(plainPassword);
+			user.setPassword(encodedPassword);
+		} else {
+			OfUser oldUser = dao.findById(user.getId());
+			user.setPassword(oldUser.getPassword());
+		}
+		super.update(user);
+	}
+
+	@Override
+	protected void insert(User user) {
 		String plainPassword = user.getPlainPassword();
 		String encodedPassword = checkAndEncodePassword(plainPassword);
 		user.setPassword(encodedPassword);
-		super.save(user);
-		obfuscatePassword(user);
-	}
-	
-	@Override
-	protected void insert(User user) {
-		runInTransaction(new Runnable() {
-			public void run() {
-				UserManager.super.insert(user);
-				createAndInsertPrivateGroup(user);
-			}
-		});
+		super.insert(user);
+		createAndInsertPrivateGroup(user);
 	}
 
 	public boolean verifyPassword(String username, String plainPassword) {
