@@ -13,7 +13,7 @@
 		<temp.database.url>jdbc:h2:file:${project.build.directory}/temp_users</temp.database.url>
 		<db.schema>OF_USERS</db.schema>
 	</properties>
-	
+
 	<profiles>
 		<profile>
 			<id>code-gen</id>
@@ -110,10 +110,11 @@
 			</build>
 		</profile>
 	</profiles>
-	
+
 	<build>
 		<finalName>of-users</finalName>
 		<plugins>
+			<!-- -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -123,26 +124,114 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<!-- -->
 			<plugin>
-			    <groupId>org.codehaus.mojo</groupId>
-			    <artifactId>build-helper-maven-plugin</artifactId>
-			    <version>1.12</version>
-			    <executions>
-			        <execution>
-			            <phase>generate-sources</phase>
-			            <goals><goal>add-source</goal></goals>
-			            <configuration>
-			                <sources>
-			                    <source>${basedir}/src/generated/java</source>
-			                </sources>
-			            </configuration>
-			        </execution>
-			    </executions>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.12</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${basedir}/src/generated/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
+			<!-- -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
+			</plugin>
+			<!-- FRONTEND-MAVEN-PLUGIN -->
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.3</version>
+				<configuration>
+					<workingDirectory>${basedir}/frontend</workingDirectory>
+					<installDirectory>${basedir}/target</installDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>v6.9.1</nodeVersion>
+							<npmVersion>3.10.9</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>angular-cli install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install --no-optional -g angular-cli</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm run-script prod</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>run-script prod</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- MAVEN RESOURCES PLUGIN -->
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/src/main/resources/public</outputDirectory>
+							<resources>
+								<resource>
+									<directory>frontend/dist</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- CLEAN -->
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>frontend/dist</directory>
+						</fileset>
+					</filesets>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -229,7 +318,7 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
 		</dependency>
-				
+
 		<!-- Provided by the application server -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
