@@ -109,4 +109,8 @@
             
     </changeSet>
 
+	<changeSet id="2" author="admin">
+		<customChange class="org.openforis.users.db.MigrateCollectDatabaseCustomTaskChange" />
+	</changeSet>
+
 </databaseChangeLog>
