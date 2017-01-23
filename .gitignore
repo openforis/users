@@ -3,3 +3,4 @@
 hs_err_pid*
 /target/
 /build/
+src/main/resources/public
