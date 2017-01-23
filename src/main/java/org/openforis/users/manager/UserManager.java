@@ -35,33 +35,24 @@ public class UserManager extends AbstractManager<User, UserDao> {
 
 	@Override
 	public List<User> findAll() {
-		List<User> users = super.findAll();
-		for (User user : users) {
-			obfuscatePassword(user);
-		}
-		return users;
+		return super.findAll();
 	}
 	
 	@Override
 	public User findById(Long id) {
-		User user = super.findById(id);
-		obfuscatePassword(user);
-		return user;
+		return super.findById(id);
 	}
 	
 	public User findByUsername(String username) {
-		User user = dao.findByUsername(username);
-		obfuscatePassword(user);
-		return user;
+		return dao.findByUsername(username);
 	}
 
 	@Override
 	public void save(User user) {
-		String plainPassword = user.getPlainPassword();
-		String encodedPassword = checkAndEncodePassword(plainPassword);
+		String rawPassword = user.getRawPassword();
+		String encodedPassword = checkAndEncodePassword(rawPassword);
 		user.setPassword(encodedPassword);
 		super.save(user);
-		obfuscatePassword(user);
 	}
 	
 	@Override
@@ -127,13 +118,6 @@ public class UserManager extends AbstractManager<User, UserDao> {
 			return new String(resultChar);
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("Error encoding user password", e);
-		}
-	}
-	
-	private void obfuscatePassword(User user) {
-		if (user != null) {
-			user.setPlainPassword("****PRIVATE****");
-			user.setPassword("****PRIVATE****");
 		}
 	}
 	

@@ -18,14 +18,14 @@ public class User extends org.openforis.users.jooq.tables.pojos.OfUser implement
 		super(value);
 	}
 
-	private String plainPassword;
+	private String rawPassword;
 
-	public String getPlainPassword() {
-		return plainPassword;
+	public String getRawPassword() {
+		return rawPassword;
 	}
 
-	public void setPlainPassword(String plainPassword) {
-		this.plainPassword = plainPassword;
+	public void setRawPassword(String rawPassword) {
+		this.rawPassword = rawPassword;
 	}
 	
 }

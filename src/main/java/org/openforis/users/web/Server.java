@@ -74,6 +74,7 @@ public class Server implements SparkApplication {
 
 		// USER
 		get("/api/user", findUsers, new JsonTransformer());
+		get("/api/user/:id", getUser, new JsonTransformer());
 		post("/api/user", JSON_CONTENT_TYPE, addUser, new JsonTransformer());
 		patch("/api/user", JSON_CONTENT_TYPE, editUser, new JsonTransformer());
 		delete("/api/user/:id", JSON_CONTENT_TYPE, deleteUser, new JsonTransformer());
@@ -94,6 +95,14 @@ public class Server implements SparkApplication {
 		}
 	};
 
+	private Route getUser = (Request req, Response rsp) -> {
+		String idParam = req.params("id");
+		//
+		Long id = Long.parseLong(idParam);
+		
+		return USER_MANAGER.findById(id);
+	};
+
 	private Route addUser = (Request req, Response rsp) -> {
 		String body = req.body();
 		Map<String, Object> bodyMap = jsonTransformer.parse(body);
@@ -104,7 +113,7 @@ public class Server implements SparkApplication {
 		//
 		User user = new User();
 		user.setUsername(username);
-		user.setPlainPassword(password);
+		user.setRawPassword(password);
 		user.setEnabled(enabled);
 		//
 		USER_MANAGER.save(user);
@@ -125,7 +134,7 @@ public class Server implements SparkApplication {
 		//
 		User user = USER_MANAGER.findById(id);
 		user.setUsername(username);
-		user.setPlainPassword(password);
+		user.setRawPassword(password);
 		user.setEnabled(enabled);
 		//
 		USER_MANAGER.save(user);

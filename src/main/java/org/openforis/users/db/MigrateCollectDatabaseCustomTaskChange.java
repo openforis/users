@@ -27,6 +27,10 @@ public class MigrateCollectDatabaseCustomTaskChange implements CustomTaskChange 
 
 	private static final String COLLECT_JNDI_DS_NAME = "jdbc/collectDs";
 
+	/**
+	 * For every Collect user insert a user and a private Group owned by the user himself, then insert a public Group and associate it
+	 * to the user specifying a role compatible with the Collect one.  
+	 */
 	@Override
 	public void execute(Database database) throws CustomChangeException {
 		Connection collectConn = null;

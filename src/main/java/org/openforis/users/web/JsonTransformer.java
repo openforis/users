@@ -1,5 +1,6 @@
 package org.openforis.users.web;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -21,6 +22,10 @@ public class JsonTransformer implements ResponseTransformer {
     }
 
     public <T> T parse(String json, Class<T> type) {
+    	return gson.fromJson(json, type);
+    }
+    
+    public <T> T parse(String json, Type type) {
     	return gson.fromJson(json, type);
     }
     

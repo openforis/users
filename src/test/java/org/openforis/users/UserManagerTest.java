@@ -19,7 +19,7 @@ public class UserManagerTest extends AbstractTest {
 		// create the objects needed for testing
 		User user = new User();
 		user.setUsername("test_user");
-		user.setPassword("test_pass");
+		user.setRawPassword("test_pass");
 		// storing the objects for the test in the database
 		
 		userManager.save(user);
