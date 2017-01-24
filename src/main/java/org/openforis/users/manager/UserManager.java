@@ -72,22 +72,26 @@ public class UserManager extends AbstractManager<User, UserDao> {
 
 	public boolean verifyPassword(String username, String rawPassword) {
 		User user = findByUsername(username);
-		if (user == null) {
-			throw new IllegalArgumentException("User not found: " + username);
+		if (user != null) {
+			String encodedPassword = encodePassword(rawPassword);
+			return user.getPassword().equals(encodedPassword);
+		} else {
+			return false;
 		}
-		String encodedPassword = encodePassword(rawPassword);
-		return user.getPassword().equals(encodedPassword);
 	}
 	
-	public boolean changePassword(String username, String oldPassword, String newPassword) {
+	public OperationResult changePassword(String username, String oldPassword, String newPassword) {
 		if (verifyPassword(username, oldPassword)) {
 			User user = findByUsername(username);
 			user.setRawPassword(newPassword);
-			save(user);
-			return true;
+			try {
+				save(user);
+			} catch(InvalidUserPasswordException e) {
+				return new OperationResult(false, "INVALID_PASSWORD", "Password not respecting minimum standard");
+			}
+			return new OperationResult();
 		} else {
-			//TODO
-			throw new IllegalArgumentException(String.format("Error changing password for user %s: invalid password old password", username));
+			return new OperationResult(false, "INVALID_OLD_PASSWORD", String.format("Invalid old password for user %s", username));
 		}
 	}
 	
@@ -141,6 +145,52 @@ public class UserManager extends AbstractManager<User, UserDao> {
 	private static class InvalidUserPasswordException extends RuntimeException {
 
 		private static final long serialVersionUID = 1L;
+		
+	}
+	
+	public static class OperationResult {
+		
+		private boolean success = true;
+		private String errorCode;
+		private String errorMessage;
+
+		public OperationResult() {
+		}
+		
+		public OperationResult(boolean success) {
+			this(success, null, null);
+		}
+		
+		public OperationResult(boolean success, String errorCode, String errorMessage) {
+			super();
+			this.success = success;
+			this.errorCode = errorCode;
+			this.errorMessage = errorMessage;
+		}
+
+		public boolean isSuccess() {
+			return success;
+		}
+
+		public void setSuccess(boolean success) {
+			this.success = success;
+		}
+
+		public String getErrorCode() {
+			return errorCode;
+		}
+
+		public void setErrorCode(String errorCode) {
+			this.errorCode = errorCode;
+		}
+
+		public String getErrorMessage() {
+			return errorMessage;
+		}
+
+		public void setErrorMessage(String errorMessage) {
+			this.errorMessage = errorMessage;
+		}
 		
 	}
 }

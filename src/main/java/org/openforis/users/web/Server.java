@@ -10,11 +10,11 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserManager;
+import org.openforis.users.manager.UserManager.OperationResult;
 import org.openforis.users.model.User;
 
 import spark.Request;
@@ -82,7 +82,6 @@ public class Server implements SparkApplication {
 		post("/api/user", JSON_CONTENT_TYPE, addUser, new JsonTransformer());
 		patch("/api/user/:id", JSON_CONTENT_TYPE, editUser, new JsonTransformer());
 		delete("/api/user/:id", deleteUser, new JsonTransformer());
-
 	}
 
 	private Route findUsers = (Request req, Response rsp) -> {
@@ -100,42 +99,24 @@ public class Server implements SparkApplication {
 	};
 
 	private Route login = (Request req, Response rsp) -> {
-		Map<String, Object> ret = new HashMap<String, Object>();
-		try {
-			String body = req.body();
-			Map<String, Object> bodyMap = jsonTransformer.parse(body);
-			String username = bodyMap.get("username").toString();
-			String password = bodyMap.get("rawPassword").toString();
-			if (USER_MANAGER.verifyPassword(username, password)) {
-				ret.put("result", "ok");
-			} else {
-				throw new Exception("login-generic-error");
-			}
-		} catch (Exception e) {
-			ret.put("result", "error");
-			ret.put("errorCode", e.getMessage());
+		String body = req.body();
+		Map<String, Object> bodyMap = jsonTransformer.parse(body);
+		String username = bodyMap.get("username").toString();
+		String password = bodyMap.get("rawPassword").toString();
+		if (USER_MANAGER.verifyPassword(username, password)) {
+			return new OperationResult();
+		} else {
+			return new OperationResult(false, "WRONG_PASSWORD", "Wrong username or password");
 		}
-		return jsonTransformer.toJson(ret);
 	};
 
 	private Route changePassword = (Request req, Response rsp) -> {
-		Map<String, Object> ret = new HashMap<String, Object>();
-		try {
-			String body = req.body();
-			Map<String, Object> bodyMap = jsonTransformer.parse(body);
-			String username = bodyMap.get("username").toString();
-			String oldPassword = bodyMap.get("oldPassword").toString();
-			String newPassword = bodyMap.get("newPassword").toString();
-			if (USER_MANAGER.changePassword(username, oldPassword, newPassword)) {
-				ret.put("result", "ok");
-			} else {
-				throw new Exception("change-password-generic-error");
-			}
-		} catch (Exception e) {
-			ret.put("result", "error");
-			ret.put("errorCode", e.getMessage());
-		}
-		return jsonTransformer.toJson(ret);
+		String body = req.body();
+		Map<String, Object> bodyMap = jsonTransformer.parse(body);
+		String username = bodyMap.get("username").toString();
+		String oldPassword = bodyMap.get("oldPassword").toString();
+		String newPassword = bodyMap.get("newPassword").toString();
+		return USER_MANAGER.changePassword(username, oldPassword, newPassword);
 	};
 
 	private Route getUser = (Request req, Response rsp) -> {
