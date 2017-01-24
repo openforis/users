@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.openforis.users.manager.EntityManagerFactory;
@@ -99,30 +100,44 @@ public class Server implements SparkApplication {
 	};
 
 	private Route login = (Request req, Response rsp) -> {
-		boolean ret = false;
+		Map<String, Object> ret = new HashMap<String, Object>();
 		try {
 			String body = req.body();
 			Map<String, Object> bodyMap = jsonTransformer.parse(body);
 			String username = bodyMap.get("username").toString();
 			String password = bodyMap.get("rawPassword").toString();
-			ret = USER_MANAGER.verifyPassword(username, password);
-		} catch (Exception e) {}
-		return ret;
+			if (USER_MANAGER.verifyPassword(username, password)) {
+				ret.put("result", "ok");
+			} else {
+				throw new Exception("login-generic-error");
+			}
+		} catch (Exception e) {
+			ret.put("result", "error");
+			ret.put("errorCode", e.getMessage());
+		}
+		return jsonTransformer.toJson(ret);
 	};
 
 	private Route changePassword = (Request req, Response rsp) -> {
-		boolean ret = false;
+		Map<String, Object> ret = new HashMap<String, Object>();
 		try {
 			String body = req.body();
 			Map<String, Object> bodyMap = jsonTransformer.parse(body);
 			String username = bodyMap.get("username").toString();
 			String oldPassword = bodyMap.get("oldPassword").toString();
 			String newPassword = bodyMap.get("newPassword").toString();
-			ret = USER_MANAGER.changePassword(username, oldPassword, newPassword);
-		} catch (Exception e) {}
-		return ret;
+			if (USER_MANAGER.changePassword(username, oldPassword, newPassword)) {
+				ret.put("result", "ok");
+			} else {
+				throw new Exception("change-password-generic-error");
+			}
+		} catch (Exception e) {
+			ret.put("result", "error");
+			ret.put("errorCode", e.getMessage());
+		}
+		return jsonTransformer.toJson(ret);
 	};
-	
+
 	private Route getUser = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
 		long id = Long.parseLong(idParam);

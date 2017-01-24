@@ -11,22 +11,26 @@ public class JsonTransformer implements ResponseTransformer {
 
 	private Gson gson = new Gson();
 
-    @Override
-    public String render(Object model) {
-        return gson.toJson(model);
-    }
+	@Override
+	public String render(Object model) {
+		return gson.toJson(model);
+	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> parse(String json) {
-        return parse(json, Map.class);
-    }
+		return parse(json, Map.class);
+	}
 
-    public <T> T parse(String json, Class<T> type) {
-    	return gson.fromJson(json, type);
-    }
-    
-    public <T> T parse(String json, Type type) {
-    	return gson.fromJson(json, type);
-    }
-    
+	public <T> T parse(String json, Class<T> type) {
+		return gson.fromJson(json, type);
+	}
+
+	public <T> T parse(String json, Type type) {
+		return gson.fromJson(json, type);
+	}
+
+	public String toJson(Map<String, Object> map) {
+		return gson.toJson(map);
+	}
+
 }
