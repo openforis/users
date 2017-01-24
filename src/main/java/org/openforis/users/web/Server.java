@@ -73,6 +73,7 @@ public class Server implements SparkApplication {
 		Server.enebleExceptionHandler();
 
 		post("/api/login", JSON_CONTENT_TYPE, login, new JsonTransformer());
+		post("/api/change-password", JSON_CONTENT_TYPE, changePassword, new JsonTransformer());
 
 		// USER
 		get("/api/user", findUsers, new JsonTransformer());
@@ -109,6 +110,19 @@ public class Server implements SparkApplication {
 		return ret;
 	};
 
+	private Route changePassword = (Request req, Response rsp) -> {
+		boolean ret = false;
+		try {
+			String body = req.body();
+			Map<String, Object> bodyMap = jsonTransformer.parse(body);
+			String username = bodyMap.get("username").toString();
+			String oldPassword = bodyMap.get("oldPassword").toString();
+			String newPassword = bodyMap.get("newPassword").toString();
+			ret = USER_MANAGER.changePassword(username, oldPassword, newPassword);
+		} catch (Exception e) {}
+		return ret;
+	};
+	
 	private Route getUser = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
 		long id = Long.parseLong(idParam);

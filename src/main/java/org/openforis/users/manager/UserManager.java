@@ -49,14 +49,6 @@ public class UserManager extends AbstractManager<User, UserDao> {
 	}
 
 	@Override
-	public void save(User user) {
-		String rawPassword = user.getRawPassword();
-		String encodedPassword = checkAndEncodePassword(rawPassword);
-		user.setPassword(encodedPassword);
-		super.save(user);
-	}
-
-	@Override
 	protected void update(User user) {
 		String plainPassword = user.getRawPassword();
 		if (plainPassword != null) {
@@ -78,13 +70,25 @@ public class UserManager extends AbstractManager<User, UserDao> {
 		createAndInsertPrivateGroup(user);
 	}
 
-	public boolean verifyPassword(String username, String plainPassword) {
+	public boolean verifyPassword(String username, String rawPassword) {
 		User user = findByUsername(username);
 		if (user == null) {
 			throw new IllegalArgumentException("User not found: " + username);
 		}
-		String encodedPassword = encodePassword(plainPassword);
+		String encodedPassword = encodePassword(rawPassword);
 		return user.getPassword().equals(encodedPassword);
+	}
+	
+	public boolean changePassword(String username, String oldPassword, String newPassword) {
+		if (verifyPassword(username, oldPassword)) {
+			User user = findByUsername(username);
+			user.setRawPassword(newPassword);
+			save(user);
+			return true;
+		} else {
+			//TODO
+			throw new IllegalArgumentException(String.format("Error changing password for user %s: invalid password old password", username));
+		}
 	}
 	
 	@Override
