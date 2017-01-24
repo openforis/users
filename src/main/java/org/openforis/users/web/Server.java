@@ -98,8 +98,8 @@ public class Server implements SparkApplication {
 	private Route getUser = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
 		long id = Long.parseLong(idParam);
-		//
-		return USER_MANAGER.findById(id);
+		User user = USER_MANAGER.findById(id);
+		return user;
 	};
 
 	private Route addUser = (Request req, Response rsp) -> {
@@ -139,11 +139,15 @@ public class Server implements SparkApplication {
 	};
 
 	private Route deleteUser = (Request req, Response rsp) -> {
+		boolean ret = false;
 		String idParam = req.params("id");
 		long id = Long.parseLong(idParam);
-		//
-		USER_MANAGER.deleteById(id);
-		return true;
+		User user = USER_MANAGER.findById(id);
+		if (user != null) {
+			USER_MANAGER.deleteById(id);
+			ret = true;
+		}
+		return ret;
 	};
 
 }
