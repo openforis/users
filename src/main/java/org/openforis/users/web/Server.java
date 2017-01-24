@@ -72,6 +72,8 @@ public class Server implements SparkApplication {
 		Server.enebleCORS();
 		Server.enebleExceptionHandler();
 
+		post("/api/login", JSON_CONTENT_TYPE, login, new JsonTransformer());
+
 		// USER
 		get("/api/user", findUsers, new JsonTransformer());
 		get("/api/user/:id", getUser, new JsonTransformer());
@@ -95,6 +97,18 @@ public class Server implements SparkApplication {
 		}
 	};
 
+	private Route login = (Request req, Response rsp) -> {
+		boolean ret = false;
+		try {
+			String body = req.body();
+			Map<String, Object> bodyMap = jsonTransformer.parse(body);
+			String username = bodyMap.get("username").toString();
+			String password = bodyMap.get("rawPassword").toString();
+			ret = USER_MANAGER.verifyPassword(username, password);
+		} catch (Exception e) {}
+		return ret;
+	};
+
 	private Route getUser = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
 		long id = Long.parseLong(idParam);
@@ -107,7 +121,7 @@ public class Server implements SparkApplication {
 		Map<String, Object> bodyMap = jsonTransformer.parse(body);
 		//
 		String username = bodyMap.get("username").toString();
-		String password = bodyMap.get("password").toString();
+		String password = bodyMap.get("rawPassword").toString();
 		Boolean enabled = Boolean.valueOf(bodyMap.get("enabled").toString());
 		//
 		User user = new User();
