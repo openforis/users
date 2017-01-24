@@ -60,8 +60,10 @@ public class MigrateCollectDatabaseCustomTaskChange implements CustomTaskChange 
 				int collectUserId = rs.getInt("id");
 				String username = rs.getString("username");
 				String password = rs.getString("password");
-				Boolean enabled = rs.getBoolean("enabled");
-				
+				boolean enabled = getBooleanValue(rs, "enabled");
+				if ("admin".equals(username)) {
+					enabled = true; //consider admin user as always enabled
+				}
 				long newUserId = insertUser(insertUserStmt, username, password, enabled);
 				insertPrivateGroup(insertGroupStmt, insertUserGroupStmt, newUserId, username);
 				
@@ -74,6 +76,13 @@ public class MigrateCollectDatabaseCustomTaskChange implements CustomTaskChange 
 		} finally {
 			closeQuietly(collectConn);
 		}
+	}
+
+	private boolean getBooleanValue(ResultSet rs, String colName) throws SQLException {
+		boolean enabled = rs.getBoolean(colName) 
+				|| "y".equalsIgnoreCase(rs.getString(colName)) 
+				|| "true".equalsIgnoreCase(rs.getString(colName));
+		return enabled;
 	}
 
 	@Override
