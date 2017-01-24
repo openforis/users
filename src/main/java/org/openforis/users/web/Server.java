@@ -76,8 +76,8 @@ public class Server implements SparkApplication {
 		get("/api/user", findUsers, new JsonTransformer());
 		get("/api/user/:id", getUser, new JsonTransformer());
 		post("/api/user", JSON_CONTENT_TYPE, addUser, new JsonTransformer());
-		patch("/api/user", JSON_CONTENT_TYPE, editUser, new JsonTransformer());
-		delete("/api/user/:id", JSON_CONTENT_TYPE, deleteUser, new JsonTransformer());
+		patch("/api/user/:id", JSON_CONTENT_TYPE, editUser, new JsonTransformer());
+		delete("/api/user/:id", deleteUser, new JsonTransformer());
 
 	}
 
@@ -97,9 +97,8 @@ public class Server implements SparkApplication {
 
 	private Route getUser = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
+		long id = Long.parseLong(idParam);
 		//
-		Long id = Long.parseLong(idParam);
-		
 		return USER_MANAGER.findById(id);
 	};
 
@@ -121,18 +120,16 @@ public class Server implements SparkApplication {
 	};
 
 	private Route editUser = (Request req, Response rsp) -> {
-		String body = req.body();
-
-		Map<String, Object> bodyMap = jsonTransformer.parse(body);
-		//
-		Double idDouble = Double.parseDouble(bodyMap.get("id").toString());
-		long id = idDouble.longValue();
-		//
-		String username = bodyMap.get("username").toString();
-		//String password = bodyMap.get("password").toString();
-		Boolean enabled = Boolean.valueOf(bodyMap.get("enabled").toString());
-		//
+		String idParam = req.params("id");
+		long id = Long.parseLong(idParam);
 		User user = USER_MANAGER.findById(id);
+		//
+		String body = req.body();
+		Map<String, Object> bodyMap = jsonTransformer.parse(body);
+		String username = (bodyMap.get("username") != null) ? bodyMap.get("username").toString() : user.getUsername();
+		//String password = bodyMap.get("password").toString();
+		boolean enabled = (bodyMap.get("enabled") != null) ?  Boolean.valueOf(bodyMap.get("enabled").toString()) : false;
+		//
 		user.setUsername(username);
 		user.setRawPassword(null); // do not overwrite password
 		user.setEnabled(enabled);
@@ -143,7 +140,6 @@ public class Server implements SparkApplication {
 
 	private Route deleteUser = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
-		//
 		long id = Long.parseLong(idParam);
 		//
 		USER_MANAGER.deleteById(id);

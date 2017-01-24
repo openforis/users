@@ -37,12 +37,10 @@ export class UserService {
     }
 
     editUser(user: User): Observable<User> {
-        let userToEdit = {
-            id: user.id,
-            username: user.username,
-            enabled: user.enabled
-        }
-        return this.http.patch(this.usersUrl, userToEdit)
+        let userPatch = {};
+        if (user.username) userPatch['username'] = user.username;
+        if (user.enabled) userPatch['enabled'] = user.enabled;
+        return this.http.patch(this.usersUrl + '/' + user.id, userPatch)
             .map((res:Response) => res.json())
             .catch((error:any) => Observable.throw(error || 'Server error'));
     }
