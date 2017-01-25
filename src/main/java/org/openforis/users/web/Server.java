@@ -11,6 +11,7 @@ import java.io.StringWriter;
 
 import org.openforis.users.web.controller.GroupController;
 import org.openforis.users.web.controller.UserController;
+import org.openforis.users.web.controller.UserGroupController;
 
 import spark.Spark;
 import spark.servlet.SparkApplication;
@@ -62,6 +63,7 @@ public class Server implements SparkApplication {
 
 		UserController userController = new UserController(jsonTransformer);
 		GroupController groupController = new GroupController(jsonTransformer);
+		UserGroupController userGroupController = new UserGroupController(jsonTransformer);
 
 		Server.enebleCORS();
 		Server.enebleExceptionHandler();
@@ -82,6 +84,10 @@ public class Server implements SparkApplication {
 		post("/api/user", JSON_CONTENT_TYPE, userController.addUser, new JsonTransformer());
 		patch("/api/user/:id", JSON_CONTENT_TYPE, userController.editUser, new JsonTransformer());
 		delete("/api/user/:id", userController.deleteUser, new JsonTransformer());
+
+		//USER_GROUP
+		get("/api/user/:id/groups", userGroupController.getGroupsByUser, new JsonTransformer());
+		get("/api/group/:id/users", userGroupController.getUsersByGroup, new JsonTransformer());
 
 	}
 

@@ -72,4 +72,13 @@ public class UserGroupManager {
 		userGroup.setRoleCode(role.getCode());
 		userGroupDao.insert(userGroup);
 	}
+
+	public List<OfUserGroup> getJoinByUser(Long id) {
+		return userGroupDao.fetchByUserId(id);
+	}
+
+	public List<OfUserGroup> getJoinByGroup(Long id) {
+		return userGroupDao.fetchByGroupId(id);
+	}
+
 }
