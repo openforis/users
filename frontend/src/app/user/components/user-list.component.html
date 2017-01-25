@@ -1,10 +1,10 @@
-<div class="row">
+<div class="container">
     <a class="btn btn-success" [routerLink]="['/users/add']">add</a>
 </div>
 
 <br />
 
-<div class="row">
+<div class="container">
     <table class="table table-bordered">
         <thead class="thead-inverse">
             <tr>
@@ -15,11 +15,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of users; let i = index">
+            <tr *ngFor="let user of users">
                 <td>{{user.id}}</td>
-                <td>
-                    <span (click)="onSelect(user)">{{user.username}}</span>
-                </td>
+                <td>{{user.username}}</td>
                 <td>{{user.enabled}}</td>
                 <td>
                     <a class="btn btn-primary" [routerLink]="['/users', user.id]">detail</a>
@@ -28,4 +26,3 @@
         </tbody>
     </table>
 </div>
-

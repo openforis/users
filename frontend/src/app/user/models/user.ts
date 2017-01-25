@@ -2,7 +2,7 @@ export class User {
 
     id: number;
     username: string;
-    password: string;
+    rawPassword: string;
     enabled: boolean;
 
     constructor() {

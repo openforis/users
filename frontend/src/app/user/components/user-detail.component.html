@@ -1,11 +1,11 @@
-<div class="row">
+<div class="container">
     <a class="btn btn-info" (click)="goBack()">Back</a>
 </div>
 
 <hr />
 
-<div class="row">
-    <div class="card" style="width: 20rem; color: black;">
+<div class="container">
+    <div class="card" *ngIf="user.id" style="width: 20rem; color: black;">
         <div class="card-block">
             <h4 class="card-title">{{user.id}}</h4>
             <p class="card-text">{{user.username}}</p>

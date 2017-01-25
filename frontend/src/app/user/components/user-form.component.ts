@@ -1,52 +1,46 @@
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 
 @Component({
-    //moduleId: module.id,
     selector: 'user-form',
     templateUrl: './user-form.component.html'
 })
 export class UserFormComponent implements OnInit {
 
-    private id: number;
+    private userId: number;
     private user: User;
-
-    private mode: string;
-    private submitted = false;
+    private isNew: boolean;
 
     constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private location: Location) { }
 
     ngOnInit(): void {
         this.user = new User();
-        //this.user.username = "";
-        this.route.params.subscribe(params => {
-            if (params['id'] !== undefined) {
-                this.mode = 'edit';
-                this.id = +params['id'];
-                this.getUser(this.id);
+        this.route.params.subscribe((params: any) => {
+            if (!params.hasOwnProperty('id')) {
+                this.isNew = true;
             } else {
-                this.mode = 'add';
+                this.isNew = false;
+                this.userId = +params['id'];
+                this.getUser(this.userId);
             }
         }, err => {
             console.log(err);
         });
-    };
+    }
 
     getUser(id: number) {
-        this.userService.getUser(id).subscribe(users => this.user = users.find(user => user.id === id), err => {
+        this.userService.getUser(id).subscribe(user => this.user = user, err => {
             console.log(err);
         });
-    };
+    }
 
-    onSubmit() {
-        this.submitted = true;
-        if (this.mode == 'add') {
+    onSubmit(event) {
+        event.stopPropagation();
+        if (this.isNew) {
             this.userService.addUser(this.user).subscribe(data => {
                 this.router.navigate(["/users"]);
             }, err => {

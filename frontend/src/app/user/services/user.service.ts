@@ -1,52 +1,50 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Response } from '@angular/http';
-
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 import { User } from '../models/user';
 
-import { AppConfiguration }    from '../../app-configuration';
+import { AppConfiguration } from '../../app-configuration';
 
 @Injectable()
 export class UserService {
 
-    private usersUrl = 'user';
+    private userUrl = 'user';
 
     constructor(private http: Http, private appConfiguration: AppConfiguration) {
-        this.usersUrl = appConfiguration.apiUrl + this.usersUrl;
+        this.userUrl = appConfiguration.apiUrl + this.userUrl;
     }
 
     getUsers(): Observable<User[]> {
-        return this.http.get(this.usersUrl)
+        return this.http.get(this.userUrl)
             .map((res: Response) => res.json())
             .catch((error: any) => Observable.throw(error || 'Server error'));
     }
 
-    getUser(id: number): Observable<User[]> {
-        return this.http.get(this.usersUrl)
+    getUser(id: number): Observable<User> {
+        return this.http.get(this.userUrl + '/' + id)
             .map((res: Response) => res.json())
             .catch((error: any) => Observable.throw(error || 'Server error'));
     }
 
     addUser(user: User): Observable<User> {
-        return this.http.post(this.usersUrl, user)
+        return this.http.post(this.userUrl, user)
             .map((res:Response) => res.json())
             .catch((error:any) => Observable.throw(error || 'Server error'));
     }
 
     editUser(user: User): Observable<User> {
-        let userPatch = {};
-        if (user.username) userPatch['username'] = user.username;
-        if (user.enabled) userPatch['enabled'] = user.enabled;
-        return this.http.patch(this.usersUrl + '/' + user.id, userPatch)
+        let patch = {};
+        if (user.username) patch['username'] = user.username;
+        if (user.enabled) patch['enabled'] = user.enabled;
+        return this.http.patch(this.userUrl + '/' + user.id, patch)
             .map((res:Response) => res.json())
             .catch((error:any) => Observable.throw(error || 'Server error'));
     }
 
     deleteUser(id: number): Observable<any> {
-        return this.http.delete(this.usersUrl + '/' + id)
+        return this.http.delete(this.userUrl + '/' + id)
             .map((res:Response) => res.json())
             .catch((error:any) => Observable.throw(error || 'Server error'));
     }
