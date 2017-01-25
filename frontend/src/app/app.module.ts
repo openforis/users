@@ -17,6 +17,8 @@ import { UserDetailComponent }    from './user/components/user-detail.component'
 import { UserFormComponent }      from './user/components/user-form.component';
 import { UserService }            from './user/services/user.service';
 
+import { GroupListComponent }    from './group/components/group-list.component';
+import { GroupDetailComponent }  from './group/components/group-detail.component';
 import { GroupFormComponent }    from './group/components/group-form.component';
 import { GroupService }          from './group/services/group.service';
 
@@ -35,6 +37,8 @@ import { GroupService }          from './group/services/group.service';
         UserListComponent,
         UserDetailComponent,
         UserFormComponent,
+        GroupListComponent,
+        GroupDetailComponent,
         GroupFormComponent
     ],
     providers: [

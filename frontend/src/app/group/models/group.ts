@@ -5,8 +5,8 @@ export class Group {
     label: string;
     description?: string;
     enabled: boolean;
-    system_defined: boolean;
-    visibility_code: string;
+    systemDefined: boolean;
+    visibilityCode: string;
 
     constructor() {
         this.enabled = false;

@@ -22,12 +22,12 @@ export class GroupFormComponent implements OnInit {
     ngOnInit(): void {
         this.group = new Group();
         this.groupForm = new FormGroup({
-            name: new FormControl('', [Validators.required, Validators.minLength(2)]),
-            label: new FormControl('', [Validators.required, Validators.minLength(2)]),
+            name: new FormControl('', [Validators.required]),
+            label: new FormControl('', [Validators.required]),
             description: new FormControl(''),
             enabled: new FormControl(''),
-            system_defined: new FormControl(''),
-            visibility_code: new FormControl('', [Validators.required, Validators.minLength(2)])
+            systemDefined: new FormControl(''),
+            visibilityCode: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(3)])
         });
         this.route.params.subscribe((params: any) => {
             if (!params.hasOwnProperty('id')) {
@@ -38,6 +38,11 @@ export class GroupFormComponent implements OnInit {
                 this.groupService.getGroup(this.groupId).subscribe(group => {
                     this.group = group;
                     this.groupForm.controls['name'].setValue(this.group.name);
+                    this.groupForm.controls['label'].setValue(this.group.label);
+                    this.groupForm.controls['description'].setValue(this.group.description);
+                    this.groupForm.controls['enabled'].setValue(this.group.enabled);
+                    this.groupForm.controls['systemDefined'].setValue(this.group.systemDefined);
+                    this.groupForm.controls['visibilityCode'].setValue(this.group.visibilityCode);
                 }, err => {
                     console.log(err);
                 });
@@ -48,7 +53,34 @@ export class GroupFormComponent implements OnInit {
     }
 
     onSubmit({value, valid}: {value: Group, valid: boolean}) {
-        console.log(value, valid);
+        if (valid) {
+            if (this.isNew) {
+                this.groupService.addGroup(value).subscribe(data => {
+                    this.router.navigate(["/groups"]);
+                }, err => {
+                    console.log(err);
+                });
+            } else {
+                value['id'] = this.groupId;
+                this.groupService.editGroup(value).subscribe(data => {
+                    this.router.navigate(["/groups"]);
+                }, err => {
+                    console.log(err);
+                });
+            }
+        }
+    }
+
+    deleteUser() {
+        this.groupService.deleteGroup(this.groupId).subscribe(data => {
+            this.router.navigate(["/groups"]);
+        }, err => {
+            console.log(err);
+        });
+    }
+
+    goBack(): void {
+        this.location.back();
     }
 
 }
