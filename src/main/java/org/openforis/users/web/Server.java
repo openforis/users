@@ -13,7 +13,9 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.openforis.users.manager.EntityManagerFactory;
+import org.openforis.users.manager.GroupManager;
 import org.openforis.users.manager.UserManager;
+import org.openforis.users.model.Group;
 import org.openforis.users.manager.UserManager.OperationResult;
 import org.openforis.users.model.User;
 
@@ -34,6 +36,7 @@ public class Server implements SparkApplication {
 	private static final String JSON_CONTENT_TYPE = "application/json";
 
 	private static final UserManager USER_MANAGER = EntityManagerFactory.getInstance().getUserManager();
+	private static final GroupManager GROUP_MANAGER = EntityManagerFactory.getInstance().getGroupManager();
 
 	private JsonTransformer jsonTransformer;
 
@@ -76,6 +79,9 @@ public class Server implements SparkApplication {
 		post("/api/login", JSON_CONTENT_TYPE, login, new JsonTransformer());
 		post("/api/change-password", JSON_CONTENT_TYPE, changePassword, new JsonTransformer());
 
+		//GROUP
+		get("/api/group/:id", getGroup, new JsonTransformer());
+
 		// USER
 		get("/api/user", findUsers, new JsonTransformer());
 		get("/api/user/:id", getUser, new JsonTransformer());
@@ -117,6 +123,13 @@ public class Server implements SparkApplication {
 		String oldPassword = bodyMap.get("oldPassword").toString();
 		String newPassword = bodyMap.get("newPassword").toString();
 		return USER_MANAGER.changePassword(username, oldPassword, newPassword);
+	};
+
+	private Route getGroup = (Request req, Response rsp) -> {
+		String idParam = req.params("id");
+		long id = Long.parseLong(idParam);
+		Group group = GROUP_MANAGER.findById(id);
+		return group;
 	};
 
 	private Route getUser = (Request req, Response rsp) -> {
