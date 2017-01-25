@@ -5,24 +5,24 @@
 <br />
 
 <div class="container">
-    <form (ngSubmit)="onSubmit($event)">
+    <form novalidate (ngSubmit)="onSubmit(userForm)" [formGroup]="userForm">
         <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" [(ngModel)]="user.username"  name="username" class="form-control" aria-describedby="usernameHelp" placeholder="Enter username" required />
+            <input type="text" placeholder="Enter username" formControlName="username" class="form-control" aria-describedby="usernameHelp" required />
             <small id="usernameHelp" class="form-text text-muted">usernameHelp</small>
         </div>
         <div class="form-group">
-            <label for="password">Password</label>
-            <input [(ngModel)]="user.rawPassword" type="password" name="password" class="form-control" aria-describedby="passwordHelp" placeholder="Enter password" />
-            <small id="passwordHelp" class="form-text text-muted">passwordHelp</small>
+            <label for="rawPassword">Password</label>
+            <input type="text" placeholder="Enter password" formControlName="rawPassword" class="form-control" aria-describedby="rawPasswordHelp" required />
+            <small id="rawPasswordHelp" class="form-text text-muted">passwordHelp</small>
         </div>
         <div class="form-check">
             <label class="form-check-label">
-                <input [(ngModel)]="user.enabled" type="checkbox" name="enabled" class="form-check-input" />
+                <input type="checkbox" formControlName="enabled" />
                 Enabled
             </label>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Submit</button>
         <button type="button" class="btn btn-danger" (click)="deleteUser()">Delete</button>
     </form>
 </div>
