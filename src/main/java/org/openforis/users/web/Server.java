@@ -8,20 +8,10 @@ import static spark.Spark.staticFileLocation;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
 
-import org.openforis.users.manager.EntityManagerFactory;
-import org.openforis.users.manager.GroupManager;
-import org.openforis.users.manager.UserManager;
-import org.openforis.users.model.Group;
-import org.openforis.users.manager.UserManager.OperationResult;
-import org.openforis.users.model.User;
+import org.openforis.users.web.controller.GroupController;
+import org.openforis.users.web.controller.UserController;
 
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Spark;
 import spark.servlet.SparkApplication;
 
@@ -34,9 +24,6 @@ import spark.servlet.SparkApplication;
 public class Server implements SparkApplication {
 
 	private static final String JSON_CONTENT_TYPE = "application/json";
-
-	private static final UserManager USER_MANAGER = EntityManagerFactory.getInstance().getUserManager();
-	private static final GroupManager GROUP_MANAGER = EntityManagerFactory.getInstance().getGroupManager();
 
 	private JsonTransformer jsonTransformer;
 
@@ -73,118 +60,24 @@ public class Server implements SparkApplication {
 
 		jsonTransformer = new JsonTransformer();
 
+		UserController userController = new UserController(jsonTransformer);
+		GroupController groupController = new GroupController(jsonTransformer);
+
 		Server.enebleCORS();
 		Server.enebleExceptionHandler();
 
-		post("/api/login", JSON_CONTENT_TYPE, login, new JsonTransformer());
-		post("/api/change-password", JSON_CONTENT_TYPE, changePassword, new JsonTransformer());
+		post("/api/login", JSON_CONTENT_TYPE, userController.login, new JsonTransformer());
+		post("/api/change-password", JSON_CONTENT_TYPE, userController.changePassword, new JsonTransformer());
 
-		//GROUP
-		get("/api/group/:id", getGroup, new JsonTransformer());
+		// GROUP
+		get("/api/group/:id", groupController.getGroup, new JsonTransformer());
 
 		// USER
-		get("/api/user", findUsers, new JsonTransformer());
-		get("/api/user/:id", getUser, new JsonTransformer());
-		post("/api/user", JSON_CONTENT_TYPE, addUser, new JsonTransformer());
-		patch("/api/user/:id", JSON_CONTENT_TYPE, editUser, new JsonTransformer());
-		delete("/api/user/:id", deleteUser, new JsonTransformer());
+		get("/api/user", userController.findUsers, new JsonTransformer());
+		get("/api/user/:id", userController.getUser, new JsonTransformer());
+		post("/api/user", JSON_CONTENT_TYPE, userController.addUser, new JsonTransformer());
+		patch("/api/user/:id", JSON_CONTENT_TYPE, userController.editUser, new JsonTransformer());
+		delete("/api/user/:id", userController.deleteUser, new JsonTransformer());
 	}
-
-	private Route findUsers = (Request req, Response rsp) -> {
-		String username = req.queryParams("username");
-		if (username == null) {
-			return USER_MANAGER.findAll();
-		} else {
-			User user = USER_MANAGER.findByUsername(username);
-			if (user == null) {
-				return Collections.emptyList();
-			} else {
-				return Arrays.asList(user);
-			}
-		}
-	};
-
-	private Route login = (Request req, Response rsp) -> {
-		String body = req.body();
-		Map<String, Object> bodyMap = jsonTransformer.parse(body);
-		String username = bodyMap.get("username").toString();
-		String password = bodyMap.get("rawPassword").toString();
-		if (USER_MANAGER.verifyPassword(username, password)) {
-			return new OperationResult();
-		} else {
-			return new OperationResult(false, "WRONG_PASSWORD", "Wrong username or password");
-		}
-	};
-
-	private Route changePassword = (Request req, Response rsp) -> {
-		String body = req.body();
-		Map<String, Object> bodyMap = jsonTransformer.parse(body);
-		String username = bodyMap.get("username").toString();
-		String oldPassword = bodyMap.get("oldPassword").toString();
-		String newPassword = bodyMap.get("newPassword").toString();
-		return USER_MANAGER.changePassword(username, oldPassword, newPassword);
-	};
-
-	private Route getGroup = (Request req, Response rsp) -> {
-		String idParam = req.params("id");
-		long id = Long.parseLong(idParam);
-		Group group = GROUP_MANAGER.findById(id);
-		return group;
-	};
-
-	private Route getUser = (Request req, Response rsp) -> {
-		String idParam = req.params("id");
-		long id = Long.parseLong(idParam);
-		User user = USER_MANAGER.findById(id);
-		return user;
-	};
-
-	private Route addUser = (Request req, Response rsp) -> {
-		String body = req.body();
-		Map<String, Object> bodyMap = jsonTransformer.parse(body);
-		//
-		String username = bodyMap.get("username").toString();
-		String password = bodyMap.get("rawPassword").toString();
-		Boolean enabled = Boolean.valueOf(bodyMap.get("enabled").toString());
-		//
-		User user = new User();
-		user.setUsername(username);
-		user.setRawPassword(password);
-		user.setEnabled(enabled);
-		//
-		USER_MANAGER.save(user);
-		return user;
-	};
-
-	private Route editUser = (Request req, Response rsp) -> {
-		String idParam = req.params("id");
-		long id = Long.parseLong(idParam);
-		User user = USER_MANAGER.findById(id);
-		//
-		String body = req.body();
-		Map<String, Object> bodyMap = jsonTransformer.parse(body);
-		String username = (bodyMap.get("username") != null) ? bodyMap.get("username").toString() : user.getUsername();
-		//String password = bodyMap.get("password").toString();
-		boolean enabled = (bodyMap.get("enabled") != null) ?  Boolean.valueOf(bodyMap.get("enabled").toString()) : false;
-		//
-		user.setUsername(username);
-		user.setRawPassword(null); // do not overwrite password
-		user.setEnabled(enabled);
-		//
-		USER_MANAGER.save(user);
-		return user;
-	};
-
-	private Route deleteUser = (Request req, Response rsp) -> {
-		boolean ret = false;
-		String idParam = req.params("id");
-		long id = Long.parseLong(idParam);
-		User user = USER_MANAGER.findById(id);
-		if (user != null) {
-			USER_MANAGER.deleteById(id);
-			ret = true;
-		}
-		return ret;
-	};
 
 }
