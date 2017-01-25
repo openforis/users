@@ -21,6 +21,10 @@ public class GroupController {
 		this.jsonTransformer = jsonTransformer;
 	}
 
+	public Route findGroups = (Request req, Response rsp) -> {
+		return GROUP_MANAGER.findAll();
+	};
+
 	public Route getGroup = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
 		long id = Long.parseLong(idParam);
@@ -35,8 +39,8 @@ public class GroupController {
 		String label = bodyMap.get("label").toString();
 		String description = bodyMap.get("description").toString();
 		boolean enabled = (bodyMap.get("enabled") != null) ?  Boolean.valueOf(bodyMap.get("enabled").toString()) : false;
-		boolean systemDefined = (bodyMap.get("system_defined") != null) ?  Boolean.valueOf(bodyMap.get("system_defined").toString()) : false;
-		String visibilityCode = bodyMap.get("visibility_code").toString();
+		boolean systemDefined = (bodyMap.get("systemDefined") != null) ?  Boolean.valueOf(bodyMap.get("systemDefined").toString()) : false;
+		String visibilityCode = bodyMap.get("visibilityCode").toString();
 		//
 		Group group = new Group();
 		group.setName(name);
@@ -50,7 +54,7 @@ public class GroupController {
 		return group;
 	};
 
-	public Route editUser = (Request req, Response rsp) -> {
+	public Route editGroup = (Request req, Response rsp) -> {
 		String idParam = req.params("id");
 		long id = Long.parseLong(idParam);
 		Group group = GROUP_MANAGER.findById(id);
@@ -61,8 +65,8 @@ public class GroupController {
 		String label = (bodyMap.get("label") != null) ? bodyMap.get("label").toString() : group.getLabel();
 		String description = (bodyMap.get("description") != null) ? bodyMap.get("description").toString() : group.getDescription();
 		boolean enabled = (bodyMap.get("enabled") != null) ?  Boolean.valueOf(bodyMap.get("enabled").toString()) : false;
-		boolean systemDefined = (bodyMap.get("system_defined") != null) ? Boolean.valueOf(bodyMap.get("system_defined").toString()) : false;
-		String visibilityCode = (bodyMap.get("visibility_code") != null) ? bodyMap.get("visibility_code").toString() : group.getVisibilityCode();
+		boolean systemDefined = (bodyMap.get("systemDefined") != null) ? Boolean.valueOf(bodyMap.get("systemDefined").toString()) : false;
+		String visibilityCode = (bodyMap.get("visibilityCode") != null) ? bodyMap.get("visibilityCode").toString() : group.getVisibilityCode();
 		//
 		group.setName(name);
 		group.setLabel(label);
@@ -75,7 +79,7 @@ public class GroupController {
 		return group;
 	};
 
-	public Route deleteUser = (Request req, Response rsp) -> {
+	public Route deleteGroup = (Request req, Response rsp) -> {
 		boolean ret = false;
 		String idParam = req.params("id");
 		long id = Long.parseLong(idParam);
