@@ -3,6 +3,7 @@ package org.openforis.users.web.controller;
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.GroupManager;
 import org.openforis.users.model.Group;
+import org.openforis.users.model.Group.Visibility;
 import org.openforis.users.web.JsonTransformer;
 
 import spark.Request;
@@ -18,7 +19,10 @@ public class GroupController extends AbstractController {
 	}
 
 	public Route findGroups = (Request req, Response rsp) -> {
-		return GROUP_MANAGER.findAll();
+		boolean enabled = getBooleanParam(req, "enabled", true);
+		boolean systemDefined = getBooleanParam(req, "systemDefined", false);
+		Visibility visibility = getEnumParam(req, "visibility", Visibility.class, Visibility.PUBLIC);
+		return GROUP_MANAGER.findAll(enabled, systemDefined, visibility);
 	};
 
 	public Route getGroup = (Request req, Response rsp) -> {

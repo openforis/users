@@ -23,12 +23,12 @@ public class GroupDao extends OfGroupDao {
 		super(config);
 	}
 
-	public List<Group> loadEnabledPublicUserDefinedGroups() {
+	public List<Group> loadAll(boolean enabled, boolean systemDefined, Visibility visibility) {
 		return dsl()
 			.selectFrom(OF_GROUP)
-			.where(OF_GROUP.ENABLED.isTrue()
-				.and(OF_GROUP.SYSTEM_DEFINED.isFalse())
-				.and(OF_GROUP.VISIBILITY_CODE.eq(Visibility.PUBLIC.getCode())))
+			.where(OF_GROUP.ENABLED.eq(enabled)
+				.and(OF_GROUP.SYSTEM_DEFINED.eq(systemDefined))
+				.and(OF_GROUP.VISIBILITY_CODE.eq(visibility.getCode())))
 			.fetchInto(Group.class);
 	}
 

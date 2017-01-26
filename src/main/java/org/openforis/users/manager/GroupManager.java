@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openforis.users.dao.GroupDao;
 import org.openforis.users.model.Group;
+import org.openforis.users.model.Group.Visibility;
 
 /**
  * 
@@ -16,12 +17,12 @@ public class GroupManager extends AbstractManager<Group, GroupDao> {
 		super(dao, Group.class);
 	}
 
-	public List<Group> loadEnabledPublicGroups() {
-		return dao.loadEnabledPublicUserDefinedGroups();
-	}
-
 	public void deleteByUserId(Long userId) {
 		dao.deleteByUserId(userId);
+	}
+
+	public List<Group> findAll(boolean enabled, boolean systemDefined, Visibility visibility) {
+		return dao.loadAll(enabled, systemDefined, visibility);
 	}
 	
 }
