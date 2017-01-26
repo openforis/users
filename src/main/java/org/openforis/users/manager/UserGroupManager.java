@@ -13,7 +13,7 @@ import org.openforis.users.model.UserGroup.UserGroupRole;
 
 /**
  * 
- * @author S. Rricci
+ * @author S. Ricci
  *
  */
 public class UserGroupManager {
