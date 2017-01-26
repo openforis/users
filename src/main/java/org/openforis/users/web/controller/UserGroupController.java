@@ -19,10 +19,8 @@ public class UserGroupController extends AbstractController {
 
 	public UserGroupManager USER_GROUP_MANAGER = EntityManagerFactory.getInstance().getUserGroupManager();
 
-	private JsonTransformer jsonTransformer;
-
 	public UserGroupController(JsonTransformer jsonTransformer) {
-		this.jsonTransformer = jsonTransformer;
+		super(jsonTransformer);
 	}
 
 	public Route findGroupsByUser = (Request req, Response rsp) -> {
