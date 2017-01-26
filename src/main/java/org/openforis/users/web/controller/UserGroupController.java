@@ -1,17 +1,21 @@
 package org.openforis.users.web.controller;
 
-import java.util.List;
-
-import org.openforis.users.jooq.tables.pojos.OfUserGroup;
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserGroupManager;
+import org.openforis.users.model.UserGroup.UserGroupRequestStatus;
 import org.openforis.users.web.JsonTransformer;
 
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class UserGroupController {
+/**
+ * 
+ * @author R. Fontanarosa
+ * @author S. Ricci
+ *
+ */
+public class UserGroupController extends AbstractController {
 
 	public UserGroupManager USER_GROUP_MANAGER = EntityManagerFactory.getInstance().getUserGroupManager();
 
@@ -21,18 +25,30 @@ public class UserGroupController {
 		this.jsonTransformer = jsonTransformer;
 	}
 
-	public Route getGroupsByUser = (Request req, Response rsp) -> {
-		String idParam = req.params("id");
-		long id = Long.parseLong(idParam);
-		List<OfUserGroup> userGroups = USER_GROUP_MANAGER.getJoinByUser(id);
-		return userGroups;
+	public Route findGroupsByUser = (Request req, Response rsp) -> {
+		long id = getLongParam(req, "id");
+		return USER_GROUP_MANAGER.findJoinByUser(id);
 	};
 
-	public Route getUsersByGroup = (Request req, Response rsp) -> {
-		String idParam = req.params("id");
-		long id = Long.parseLong(idParam);
-		List<OfUserGroup> userGroups = USER_GROUP_MANAGER.getJoinByGroup(id);
-		return userGroups;
+	public Route findUsersByGroup = (Request req, Response rsp) -> {
+		long id = getLongParam(req, "id");
+		return USER_GROUP_MANAGER.findJoinByGroup(id);
 	};
 
+	public Route addUserGroupJoinRequest = (Request req, Response rsp) -> {
+		long groupId = getLongParam(req, "groupId");
+		long userId = getLongParam(req, "userId");
+		USER_GROUP_MANAGER.requestJoin(groupId, userId);
+		return true;
+	};
+	
+	public Route updateUserGroupJoinRequest = (Request req, Response rsp) -> {
+		long groupId = getLongParam(req, "groupId");
+		long userId = getLongParam(req, "userId");
+		String statusCode = req.params("status");
+		UserGroupRequestStatus status = UserGroupRequestStatus.fromCode(statusCode);
+		USER_GROUP_MANAGER.updateJoinRequest(groupId, userId, status);
+		return true;
+	};
+	
 }

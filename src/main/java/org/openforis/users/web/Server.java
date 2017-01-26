@@ -68,27 +68,28 @@ public class Server implements SparkApplication {
 		Server.enebleCORS();
 		Server.enebleExceptionHandler();
 
-		post("/api/login", JSON_CONTENT_TYPE, userController.login, new JsonTransformer());
-		post("/api/change-password", JSON_CONTENT_TYPE, userController.changePassword, new JsonTransformer());
+		post("/api/login", JSON_CONTENT_TYPE, userController.login, jsonTransformer);
+		post("/api/change-password", JSON_CONTENT_TYPE, userController.changePassword, jsonTransformer);
 
 		// GROUP
-		get("/api/group", groupController.findGroups, new JsonTransformer());
-		get("/api/group/:id", groupController.getGroup, new JsonTransformer());
-		post("/api/group", JSON_CONTENT_TYPE, groupController.addGroup, new JsonTransformer());
-		patch("/api/group/:id", JSON_CONTENT_TYPE, groupController.editGroup, new JsonTransformer());
-		delete("/api/group/:id", groupController.deleteGroup, new JsonTransformer());
+		get("/api/group", groupController.findGroups, jsonTransformer);
+		get("/api/group/:id", groupController.getGroup, jsonTransformer);
+		post("/api/group", JSON_CONTENT_TYPE, groupController.addGroup, jsonTransformer);
+		patch("/api/group/:id", JSON_CONTENT_TYPE, groupController.editGroup, jsonTransformer);
+		delete("/api/group/:id", groupController.deleteGroup, jsonTransformer);
 
 		// USER
-		get("/api/user", userController.findUsers, new JsonTransformer());
-		get("/api/user/:id", userController.getUser, new JsonTransformer());
-		post("/api/user", JSON_CONTENT_TYPE, userController.addUser, new JsonTransformer());
-		patch("/api/user/:id", JSON_CONTENT_TYPE, userController.editUser, new JsonTransformer());
-		delete("/api/user/:id", userController.deleteUser, new JsonTransformer());
+		get("/api/user", userController.findUsers, jsonTransformer);
+		get("/api/user/:id", userController.getUser, jsonTransformer);
+		post("/api/user", JSON_CONTENT_TYPE, userController.addUser, jsonTransformer);
+		patch("/api/user/:id", JSON_CONTENT_TYPE, userController.editUser, jsonTransformer);
+		delete("/api/user/:id", userController.deleteUser, jsonTransformer);
 
 		//USER_GROUP
-		get("/api/user/:id/groups", userGroupController.getGroupsByUser, new JsonTransformer());
-		get("/api/group/:id/users", userGroupController.getUsersByGroup, new JsonTransformer());
-
+		get("/api/user/:id/groups", userGroupController.findGroupsByUser, jsonTransformer);
+		get("/api/group/:id/users", userGroupController.findUsersByGroup, jsonTransformer);
+		post("/api/group/:groupId/user/:userId", userGroupController.addUserGroupJoinRequest, jsonTransformer);
+		patch("/api/group/:groupId/user/:userId", userGroupController.updateUserGroupJoinRequest, jsonTransformer);
 	}
 
 }

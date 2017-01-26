@@ -18,25 +18,25 @@ import org.openforis.users.model.UserGroup.UserGroupRole;
  */
 public class UserGroupManager {
 	
-	private GroupManager groupManager;
 	private UserGroupDao userGroupDao;
+	private GroupManager groupManager;
+	private UserManager userManager;
 	
-	public UserGroupManager(UserGroupDao userGroupDao) {
+	public UserGroupManager(UserGroupDao userGroupDao, GroupManager groupManager, UserManager userManager) {
 		super();
 		this.userGroupDao = userGroupDao;
+		this.groupManager = groupManager;
+		this.userManager = userManager;
 	}
 	
-	public List<UserGroup> loadAcceptedUserDefinedGroupsByUser(User user) {
+	public List<UserGroup> findAcceptedUserDefinedGroupsByUser(User user) {
 		List<OfUserGroup> ofUserGroups = userGroupDao.fetchByUserId(user.getId());
 		List<UserGroup> userGroups = new ArrayList<UserGroup>(ofUserGroups.size());
 		for (OfUserGroup ofUserGroup : ofUserGroups) {
 			UserGroupRequestStatus status = UserGroupRequestStatus.fromCode(ofUserGroup.getStatusCode());
 			if (status == UserGroupRequestStatus.ACCEPTED) {
-				Group group = groupManager.findById(ofUserGroup.getGroupId());
-				if (! group.getSystemDefined()) {
-					UserGroup userGroup = new UserGroup(ofUserGroup);
-					userGroup.setUser(user);
-					userGroup.setGroup(group);
+				UserGroup userGroup = fill(ofUserGroup);
+				if (! userGroup.getGroup().getSystemDefined()) {
 					userGroups.add(userGroup);
 				}
 			}
@@ -44,41 +44,61 @@ public class UserGroupManager {
 		return userGroups;
 	}
 	
-	public void requestJoin(Group group, User user) {
-		requestJoin(group, user, UserGroupRole.OPERATOR);
+	public List<UserGroup> findJoinByUser(Long id) {
+		List<OfUserGroup> ofUserGroups = userGroupDao.fetchByUserId(id);
+		return fill(ofUserGroups);
 	}
 
-	public void requestJoin(Group group, User user, UserGroupRole role) {
-		insertJoin(group, user, role, UserGroupRequestStatus.PENDING);
-	}
-
-	public void acceptJoinRequest(Group group, User user) {
-		userGroupDao.updateJoinRequestStatus(group, user, UserGroupRequestStatus.ACCEPTED);
-	}
-
-	public void rejectJoinRequest(Group group, User user) {
-		userGroupDao.updateJoinRequestStatus(group, user, UserGroupRequestStatus.REJECTED);
-	}
-
-	public void join(Group group, User user, UserGroupRole role) {
-		insertJoin(group, user, role, UserGroupRequestStatus.ACCEPTED);
+	public List<UserGroup> findJoinByGroup(Long id) {
+		List<OfUserGroup> ofUserGroups = userGroupDao.fetchByGroupId(id);
+		return fill(ofUserGroups);
 	}
 	
-	private void insertJoin(Group group, User user, UserGroupRole role, UserGroupRequestStatus status) {
+	public void requestJoin(long groupId, long userId) {
+		requestJoin(groupId, userId, UserGroupRole.OPERATOR);
+	}
+
+	public void requestJoin(long groupId, long userId, UserGroupRole role) {
+		insertJoin(groupId, userId, role, UserGroupRequestStatus.PENDING);
+	}
+
+	public void acceptJoinRequest(long groupId, long userId) {
+		updateJoinRequest(groupId, userId, UserGroupRequestStatus.ACCEPTED);
+	}
+
+	public void rejectJoinRequest(long groupId, long userId) {
+		updateJoinRequest(groupId, userId, UserGroupRequestStatus.REJECTED);
+	}
+
+	public void updateJoinRequest(long groupId, long userId, UserGroupRequestStatus status) {
+		userGroupDao.updateJoinRequestStatus(groupId, userId, status);
+	}
+	
+	public void join(long groupId, long userId, UserGroupRole role) {
+		insertJoin(groupId, userId, role, UserGroupRequestStatus.ACCEPTED);
+	}
+	
+	private void insertJoin(long userId, long groupId, UserGroupRole role, UserGroupRequestStatus status) {
 		UserGroup userGroup = new UserGroup();
-		userGroup.setUserId(user.getId());
-		userGroup.setGroupId(group.getId());
+		userGroup.setUserId(userId);
+		userGroup.setGroupId(groupId);
 		userGroup.setStatusCode(status.getCode());
 		userGroup.setRoleCode(role.getCode());
 		userGroupDao.insert(userGroup);
 	}
-
-	public List<OfUserGroup> getJoinByUser(Long id) {
-		return userGroupDao.fetchByUserId(id);
+	
+	private List<UserGroup> fill(List<OfUserGroup> ofUserGroups) {
+		List<UserGroup> result = new ArrayList<UserGroup>();
+		for (OfUserGroup ofUserGroup : ofUserGroups) {
+			result.add(fill(ofUserGroup));
+		}
+		return result;
 	}
 
-	public List<OfUserGroup> getJoinByGroup(Long id) {
-		return userGroupDao.fetchByGroupId(id);
+	private UserGroup fill(OfUserGroup ofUserGroup) {
+		User user = userManager.findById(ofUserGroup.getUserId());
+		Group group = groupManager.findById(ofUserGroup.getGroupId());
+		return new UserGroup(ofUserGroup, user, group);
 	}
-
+	
 }

@@ -70,6 +70,12 @@ public class UserGroup extends OfUserGroup {
 		super(ofUserGroup);
 	}
 
+	public UserGroup(OfUserGroup ofUserGroup, User user, Group group) {
+		super(ofUserGroup);
+		this.user = user;
+		this.group = group;
+	}
+
 	public User getUser() {
 		return user;
 	}

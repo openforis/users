@@ -52,9 +52,9 @@ public class EntityManagerFactory {
 		
 		//managers
 		this.groupManager = new GroupManager(groupDao);
-		this.userGroupManager = new UserGroupManager(userGroupDao);
 		this.resourceGroupManager = new ResourceGroupManager(resourceGroupDao, groupManager);
-		this.userManager = new UserManager(userDao, groupManager, userGroupManager, resourceGroupManager);
+		this.userManager = new UserManager(userDao, userGroupDao, groupManager, resourceGroupManager);
+		this.userGroupManager = new UserGroupManager(userGroupDao, groupManager, userManager);
 	}
 
 	public UserManager getUserManager() {

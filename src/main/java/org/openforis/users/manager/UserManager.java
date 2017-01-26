@@ -7,10 +7,13 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Hex;
 import org.openforis.users.dao.UserDao;
+import org.openforis.users.dao.UserGroupDao;
 import org.openforis.users.jooq.tables.pojos.OfUser;
 import org.openforis.users.model.Group;
 import org.openforis.users.model.Group.Visibility;
 import org.openforis.users.model.User;
+import org.openforis.users.model.UserGroup;
+import org.openforis.users.model.UserGroup.UserGroupRequestStatus;
 import org.openforis.users.model.UserGroup.UserGroupRole;
 
 /**
@@ -23,14 +26,14 @@ public class UserManager extends AbstractManager<User, UserDao> {
 	private static final String PASSWORD_PATTERN = "^\\w{5,}$"; // alphanumeric, at least 5 letters
 
 	private GroupManager groupManager;
-	private UserGroupManager userGroupManager;
 	private ResourceGroupManager resourceGroupManager;
+	private UserGroupDao userGroupDao;
 	
-	public UserManager(UserDao userDao, GroupManager groupManager, 
-			UserGroupManager userGroupManager, ResourceGroupManager resourceGroupManager) {
+	public UserManager(UserDao userDao, UserGroupDao userGroupDao, 
+			GroupManager groupManager, ResourceGroupManager resourceGroupManager) {
 		super(userDao, User.class);
+		this.userGroupDao = userGroupDao;
 		this.groupManager = groupManager;
-		this.userGroupManager = userGroupManager;
 		this.resourceGroupManager = resourceGroupManager;
 	}
 
@@ -119,7 +122,14 @@ public class UserManager extends AbstractManager<User, UserDao> {
 		privateGroup.setSystemDefined(true);
 		privateGroup.setEnabled(true);
 		groupManager.insert(privateGroup);
-		userGroupManager.join(privateGroup, user, UserGroupRole.OWNER);
+		
+		//add user-privateGroup relation
+		UserGroup userGroup = new UserGroup();
+		userGroup.setUserId(user.getId());
+		userGroup.setGroupId(privateGroup.getId());
+		userGroup.setStatusCode(UserGroupRequestStatus.ACCEPTED.getCode());
+		userGroup.setRoleCode(UserGroupRole.OWNER.getCode());
+		userGroupDao.insert(userGroup);
 	}
 	
 	private String checkAndEncodePassword(String plainPassword)  {

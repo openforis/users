@@ -6,8 +6,6 @@ import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.openforis.users.jooq.tables.daos.OfUserGroupDao;
-import org.openforis.users.model.Group;
-import org.openforis.users.model.User;
 import org.openforis.users.model.UserGroup.UserGroupRequestStatus;
 
 /**
@@ -21,11 +19,11 @@ public class UserGroupDao extends OfUserGroupDao {
 		super(configuration);
 	}
 
-	public void updateJoinRequestStatus(Group group, User user, UserGroupRequestStatus status) {
+	public void updateJoinRequestStatus(long groupId, long userId, UserGroupRequestStatus status) {
 		dsl().update(OF_USER_GROUP)
 			.set(OF_USER_GROUP.STATUS_CODE, status.getCode())
-			.where(OF_USER_GROUP.GROUP_ID.eq(group.getId())
-				.and(OF_USER_GROUP.USER_ID.eq(user.getId())))
+			.where(OF_USER_GROUP.GROUP_ID.eq(groupId)
+				.and(OF_USER_GROUP.USER_ID.eq(userId)))
 			.execute();
 	}
 	
