@@ -28,7 +28,7 @@ public class Server implements SparkApplication {
 
 	private JsonTransformer jsonTransformer;
 
-	private static void enebleCORS() {
+	private static void CORS() {
 		Spark.options("/*", (request, response) -> {
 			String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
 			if (accessControlRequestHeaders != null) {
@@ -45,12 +45,24 @@ public class Server implements SparkApplication {
 		});
 	}
 
-	private static void enebleExceptionHandler() {
+	private static void exceptionHandler() {
 		Spark.exception(Exception.class, (e, request, response) -> {
 			final StringWriter sw = new StringWriter();
 			final PrintWriter pw = new PrintWriter(sw, true);
 			e.printStackTrace(pw);
 			System.err.println(sw.getBuffer().toString());
+		});
+	}
+
+
+	private static void errorHandler() {
+		Spark.notFound((req, res) -> {
+			res.type(JSON_CONTENT_TYPE);
+			return "{\"status\":\"error\", \"message\":\"404\"}";
+		});
+		Spark.internalServerError((req, res) -> {
+			res.type(JSON_CONTENT_TYPE);
+			return "{\"status\":\"error\", \"message\":\"500\"}";
 		});
 	}
 
@@ -65,8 +77,9 @@ public class Server implements SparkApplication {
 		GroupController groupController = new GroupController(jsonTransformer);
 		UserGroupController userGroupController = new UserGroupController(jsonTransformer);
 
-		Server.enebleCORS();
-		Server.enebleExceptionHandler();
+		Server.CORS();
+		Server.exceptionHandler();
+		Server.errorHandler();
 
 		post("/api/login", JSON_CONTENT_TYPE, userController.login, jsonTransformer);
 		post("/api/change-password", JSON_CONTENT_TYPE, userController.changePassword, jsonTransformer);
@@ -90,6 +103,7 @@ public class Server implements SparkApplication {
 		get("/api/group/:id/users", userGroupController.findUsersByGroup, jsonTransformer);
 		post("/api/group/:groupId/user/:userId", userGroupController.addUserGroupJoinRequest, jsonTransformer);
 		patch("/api/group/:groupId/user/:userId", userGroupController.updateUserGroupJoinRequest, jsonTransformer);
+
 	}
 
 }
