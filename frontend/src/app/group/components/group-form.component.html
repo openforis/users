@@ -1,4 +1,10 @@
 <div class="container">
+    <a class="btn btn-info" (click)="goBack()">Back</a>
+</div>
+
+<br />
+
+<div class="container">
     <form novalidate (ngSubmit)="onSubmit(groupForm)" [formGroup]="groupForm">
         <div class="form-group">
             <label for="name">Name</label>
@@ -28,6 +34,7 @@
             <label for="visibilityCode">Visibility Code</label>
             <input type="text" placeholder="" formControlName="visibilityCode" class="form-control" />
         </div>
-        <button type="submit" [disabled]="groupForm.invalid">Sign up</button>
+        <button type="submit" class="btn btn-primary" [disabled]="groupForm.invalid">Submit</button>
+        <button type="button" class="btn btn-danger" (click)="deleteGroup()">Delete</button>
     </form>
 </div>
