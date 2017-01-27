@@ -23,21 +23,21 @@ public abstract class AbstractController {
 	}
 	
 	protected String getStringParam(Request req, String param, String defaultValue) {
-		String value = req.params(param);
+		String value = getParamOrQueryParam(req, param);
 		return value == null ? defaultValue : value;
 	}
-	
-	protected long getLongParam(Request req, String param) {
-		String strParam = req.params(param);
+
+	protected Long getLongParam(Request req, String param) {
+		String strParam = getParamOrQueryParam(req, param);
 		return Long.parseLong(strParam);
 	}
 	
-	protected boolean getBooleanParam(Request req, String param) {
-		return getBooleanParam(req, param, false);
+	protected Boolean getBooleanParam(Request req, String param) {
+		return getBooleanParam(req, param, null);
 	}
 	
-	protected boolean getBooleanParam(Request req, String param, boolean defaultValue) {
-		String strParam = req.params(param);
+	protected Boolean getBooleanParam(Request req, String param, Boolean defaultValue) {
+		String strParam = getParamOrQueryParam(req, param);
 		return strParam == null ? defaultValue : Boolean.valueOf(strParam);
 	}
 	
@@ -59,5 +59,13 @@ public abstract class AbstractController {
 			}
 		}
 	}
-
+	
+	protected String getParamOrQueryParam(Request req, String param) {
+		String result = req.params(param);
+		if (result == null) {
+			result = req.queryParams(param);
+		}
+		return result;
+	}
+	
 }

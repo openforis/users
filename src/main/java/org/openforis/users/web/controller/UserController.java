@@ -14,14 +14,12 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class UserController {
+public class UserController extends AbstractController {
 
 	public UserManager USER_MANAGER = EntityManagerFactory.getInstance().getUserManager();
 
-	private JsonTransformer jsonTransformer;
-
 	public UserController(JsonTransformer jsonTransformer) {
-		this.jsonTransformer = jsonTransformer;
+		super(jsonTransformer);
 	}
 
 	public Route findUsers = (Request req, Response rsp) -> {
@@ -39,15 +37,14 @@ public class UserController {
 	};
 
 	public Route getUser = (Request req, Response rsp) -> {
-		String idParam = req.params("id");
-		long id = Long.parseLong(idParam);
+		long id = getLongParam(req, "id");
 		User user = USER_MANAGER.findById(id);
 		return user;
 	};
 
 	public Route addUser = (Request req, Response rsp) -> {
 		String body = req.body();
-		Map<String, Object> bodyMap = this.jsonTransformer.parse(body);
+		Map<String, Object> bodyMap = jsonTransformer.parse(body);
 		String username = bodyMap.get("username").toString();
 		String password = bodyMap.get("rawPassword").toString();
 		Boolean enabled = Boolean.valueOf(bodyMap.get("enabled").toString());
@@ -62,12 +59,11 @@ public class UserController {
 	};
 
 	public Route editUser = (Request req, Response rsp) -> {
-		String idParam = req.params("id");
-		long id = Long.parseLong(idParam);
+		long id = getLongParam(req, "id");
 		User user = USER_MANAGER.findById(id);
 		//
 		String body = req.body();
-		Map<String, Object> bodyMap = this.jsonTransformer.parse(body);
+		Map<String, Object> bodyMap = jsonTransformer.parse(body);
 		String username = (bodyMap.get("username") != null) ? bodyMap.get("username").toString() : user.getUsername();
 		boolean enabled = (bodyMap.get("enabled") != null) ? Boolean.valueOf(bodyMap.get("enabled").toString()) : false;
 		//
@@ -81,8 +77,7 @@ public class UserController {
 
 	public Route deleteUser = (Request req, Response rsp) -> {
 		boolean ret = false;
-		String idParam = req.params("id");
-		long id = Long.parseLong(idParam);
+		long id = getLongParam(req, "id");
 		User user = USER_MANAGER.findById(id);
 		if (user != null) {
 			USER_MANAGER.deleteById(id);
