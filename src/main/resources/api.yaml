@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: Of-Users API
-  description: ''
+  description: Of-Users API
   version: "0.0.0"
 schemes:
   - http
@@ -9,6 +9,55 @@ basePath: /api
 produces:
   - application/json
 paths:
+  /login:
+    post:
+      tags:
+        - Operation
+      consumes:
+        - application/json
+      parameters:
+        - name: ''
+          in: body
+          description: ''
+          schema:
+            properties:
+              username:
+                type: string
+                description: Username of the user
+              rawPassword:
+                type: string
+                description: Not-encrypted password of the user
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/OperationalResult'
+  /change-password:
+    post:
+      tags:
+        - Operation
+      consumes:
+        - application/json
+      parameters:
+        - name: ''
+          in: body
+          description: ''
+          schema:
+            properties:
+              username:
+                type: string
+                description: Username of the user
+              oldPassword:
+                type: string
+                description: Old password of the user
+              newPassword:
+                type: string
+                description: New password of the user
+      responses:
+        200:
+          description: ''
+          schema:
+            $ref: '#/definitions/OperationalResult'
   /user:
     get:
       tags:
@@ -32,6 +81,12 @@ paths:
         - User
       consumes:
         - application/json
+      parameters:
+        - name: User
+          in: body
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
       responses:
         200:
           description: List of users found
@@ -54,7 +109,7 @@ paths:
           format: int64
       responses:
         200:
-          description: Profile information for a user
+          description: ''
           schema:
             $ref: '#/definitions/User'
         default:
@@ -64,6 +119,8 @@ paths:
     patch:
       tags:
         - User
+      consumes:
+        - application/json
       parameters:
         - name: id
           in: path
@@ -71,11 +128,14 @@ paths:
           required: true
           type: integer
           format: int64
-      consumes:
-        - application/json
+        - name: User
+          in: body
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
       responses:
         200:
-          description: Profile information for a user
+          description: ''
           schema:
             $ref: '#/definitions/User'
         default:
@@ -94,7 +154,7 @@ paths:
           format: int64
       responses:
         200:
-          description: Profile information for a user
+          description: ''
           schema:
             $ref: '#/definitions/User'
         default:
@@ -136,6 +196,12 @@ paths:
         - Group
       consumes:
         - application/json
+      parameters:
+        - name: Group
+          in: body
+          description: ''
+          schema:
+            $ref: '#/definitions/Group'
       responses:
         200:
           description: Group posted
@@ -158,7 +224,7 @@ paths:
           format: int64
       responses:
         200:
-          description: Profile information for a user
+          description: ''
           schema:
             $ref: '#/definitions/User'
         default:
@@ -167,40 +233,45 @@ paths:
             $ref: '#/definitions/Error'
     patch:
       tags:
-        - User
+        - Group
+      consumes:
+        - application/json
       parameters:
         - name: id
           in: path
-          description: ID of user to patch
+          description: ID of group to patch
           required: true
           type: integer
           format: int64
-      consumes:
-        - application/json
+        - name: Group
+          in: body
+          description: ''
+          schema:
+            $ref: '#/definitions/Group'
       responses:
         200:
-          description: Profile information for a user
+          description: ''
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/Group'
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
     delete:
       tags:
-        - User
+        - Group
       parameters:
         - name: id
           in: path
-          description: ID of user to delete
+          description: ID of group to delete
           required: true
           type: integer
           format: int64
       responses:
         200:
-          description: Profile information for a user
+          description: ''
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/Group'
         default:
           description: Unexpected error
           schema:
@@ -211,10 +282,10 @@ definitions:
     properties:
       username:
         type: string
-        description: Username of the user.
+        description: Username of the user
       password:
         type: string
-        description: Password of the user.
+        description: Password of the user
       enabled:
         type: boolean
         description: If the user is enabled or not
@@ -223,13 +294,13 @@ definitions:
     properties:
       name:
         type: string
-        description: Name of the group.
+        description: Name of the group
       label:
         type: string
-        description: Label of the group.
+        description: Label of the group
       description:
         type: string
-        description: Description of the group.
+        description: Description of the group
       enabled:
         type: boolean
         description: If the group is enabled or not
@@ -239,6 +310,15 @@ definitions:
       visibilityCode:
         type: string
         description: TODO
+  OperationalResult:
+    type: object
+    properties:
+      success:
+        type: boolean
+      errorCode:
+        type: string
+      errorMessage:
+        type: string
   Error:
     type: object
     properties:
