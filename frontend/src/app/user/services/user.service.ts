@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 import { User } from '../models/user';
+import { UserGroup } from '../../userGroup/models/userGroup';
 
 import { AppConfiguration } from '../../app-configuration';
 
@@ -47,6 +48,12 @@ export class UserService {
         return this.http.delete(this.userUrl + '/' + id)
             .map((res:Response) => res.json())
             .catch((error:any) => Observable.throw(error || 'Server error'));
+    }
+
+    getUserGroups(id: number): Observable<UserGroup[]> {
+        return this.http.get(this.userUrl + '/' + id + '/groups')
+            .map((res: Response) => res.json())
+            .catch((error: any) => Observable.throw(error || 'Server error'));
     }
 
 }
