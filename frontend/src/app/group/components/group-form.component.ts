@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { BackButtonComponent } from '../../backButton/components/back-button.component';
 
 import { Group } from '../models/group';
 import { GroupService } from '../services/group.service';
@@ -17,7 +18,7 @@ export class GroupFormComponent implements OnInit {
     private groupForm: FormGroup;
     private isNew: boolean;
 
-    constructor(private route: ActivatedRoute, private router: Router, private groupService: GroupService, private location: Location) { }
+    constructor(private route: ActivatedRoute, private router: Router, private groupService: GroupService) { }
 
     ngOnInit(): void {
         this.group = new Group();
@@ -77,10 +78,6 @@ export class GroupFormComponent implements OnInit {
         }, err => {
             console.log(err);
         });
-    }
-
-    goBack(): void {
-        this.location.back();
     }
 
 }

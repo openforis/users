@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+
+import { BackButtonComponent } from '../../backButton/components/back-button.component';
 
 import { Group } from '../models/group';
 import { GroupService } from '../services/group.service';
+
+import { UserGroup } from '../../userGroup/models/userGroup';
 
 @Component({
     selector: 'group-detail',
@@ -13,8 +16,9 @@ export class GroupDetailComponent implements OnInit {
 
     private groupId: number;
     private group: Group;
+    private userGroups: UserGroup[];
 
-    constructor(private route: ActivatedRoute, private groupService: GroupService, private location: Location) { }
+    constructor(private route: ActivatedRoute, private groupService: GroupService) { }
 
     ngOnInit(): void {
         this.group = new Group();
@@ -22,8 +26,15 @@ export class GroupDetailComponent implements OnInit {
             if (params.hasOwnProperty('id')) {
                 this.groupId = +params['id'];
                 this.getGroupById(this.groupId);
+                this.getUserGroupById(this.groupId);
             }
         }, err => {
+            console.log(err);
+        });
+    };
+
+    getUserGroupById(id: number) {
+        this.groupService.getUserGroups(id).subscribe(userGroup => this.userGroups = userGroup, err => {
             console.log(err);
         });
     };
@@ -33,9 +44,5 @@ export class GroupDetailComponent implements OnInit {
             console.log(err);
         });
     };
-
-    goBack(): void {
-        this.location.back();
-    }
 
 }

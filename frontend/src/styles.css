@@ -6,3 +6,11 @@ body {
     background-color: rgba(17,18,21,.9);
     padding-top: 60px;
 }
+
+.card {
+    color: black;
+}
+
+.list-group-item {
+    color: black;
+}

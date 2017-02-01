@@ -12,6 +12,8 @@ import { AppConfiguration }       from './app-configuration';
 import { NavbarComponent }        from './navbar/components/navbar.component';
 import { HomeComponent }          from './home/components/home.component';
 
+import { BackButtonComponent }    from './backButton/components/back-button.component';
+
 import { UserListComponent }      from './user/components/user-list.component';
 import { UserDetailComponent }    from './user/components/user-detail.component';
 import { UserFormComponent }      from './user/components/user-form.component';
@@ -34,6 +36,7 @@ import { GroupService }          from './group/services/group.service';
         AppComponent,
         NavbarComponent,
         HomeComponent,
+        BackButtonComponent,
         UserListComponent,
         UserDetailComponent,
         UserFormComponent,

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { BackButtonComponent } from '../../backButton/components/back-button.component';
 
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
@@ -17,7 +18,7 @@ export class UserFormComponent implements OnInit {
     private userForm: FormGroup;
     private isNew: boolean;
 
-    constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private location: Location) { }
+    constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
     ngOnInit(): void {
         this.user = new User();
@@ -71,10 +72,6 @@ export class UserFormComponent implements OnInit {
         }, err => {
             console.log(err);
         });
-    }
-
-    goBack(): void {
-        this.location.back();
     }
 
 }
