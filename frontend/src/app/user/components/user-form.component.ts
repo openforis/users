@@ -35,8 +35,8 @@ export class UserFormComponent implements OnInit {
                 this.userId = +params['id'];
                 this.userService.getUser(this.userId).subscribe(user => {
                     this.user = user;
+                    this.userForm.controls['rawPassword'].disable();
                     this.userForm.controls['username'].setValue(this.user.username);
-                    this.userForm.controls['rawPassword'].setValue(this.user.rawPassword);
                     this.userForm.controls['enabled'].setValue(this.user.enabled);
                 }, err => {
                     console.log(err);
@@ -66,12 +66,6 @@ export class UserFormComponent implements OnInit {
         }
     }
 
-    deleteUser() {
-        this.userService.deleteUser(this.user.id).subscribe(data => {
-            this.router.navigate(["/users"]);
-        }, err => {
-            console.log(err);
-        });
-    }
+
 
 }

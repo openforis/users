@@ -17,6 +17,7 @@ import { BackButtonComponent }    from './backButton/components/back-button.comp
 import { UserListComponent }      from './user/components/user-list.component';
 import { UserDetailComponent }    from './user/components/user-detail.component';
 import { UserFormComponent }      from './user/components/user-form.component';
+import { ChangePasswordComponent } from './user/components/change-password.component';
 import { UserService }            from './user/services/user.service';
 
 import { GroupListComponent }    from './group/components/group-list.component';
@@ -40,6 +41,7 @@ import { GroupService }          from './group/services/group.service';
         UserListComponent,
         UserDetailComponent,
         UserFormComponent,
+        ChangePasswordComponent,
         GroupListComponent,
         GroupDetailComponent,
         GroupFormComponent

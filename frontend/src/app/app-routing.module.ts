@@ -8,6 +8,7 @@ import { HomeComponent }        from './home/components/home.component';
 import { UserListComponent }    from './user/components/user-list.component';
 import { UserDetailComponent }  from './user/components/user-detail.component';
 import { UserFormComponent }    from './user/components/user-form.component';
+import { ChangePasswordComponent } from './user/components/change-password.component';
 
 import { GroupListComponent }    from './group/components/group-list.component';
 import { GroupDetailComponent }  from './group/components/group-detail.component';
@@ -19,6 +20,7 @@ const routes: Routes = [
     { path: 'users/add',         component: UserFormComponent },
     { path: 'users/:id',         component: UserDetailComponent },
     { path: 'users/:id/edit',    component: UserFormComponent },
+    { path: 'users/:id/change-password', component: ChangePasswordComponent },
     { path: 'groups',            component: GroupListComponent },
     { path: 'groups/add',        component: GroupFormComponent },
     { path: 'groups/:id',        component: GroupDetailComponent },

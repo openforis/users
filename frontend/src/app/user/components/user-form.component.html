@@ -11,7 +11,7 @@
             <input type="text" placeholder="Enter username" formControlName="username" class="form-control" aria-describedby="usernameHelp" required />
             <small id="usernameHelp" class="form-text text-muted">usernameHelp</small>
         </div>
-        <div class="form-group">
+        <div class="form-group" *ngIf="isNew">
             <label for="rawPassword">Password</label>
             <input type="text" placeholder="Enter password" formControlName="rawPassword" class="form-control" aria-describedby="rawPasswordHelp" required />
             <small id="rawPasswordHelp" class="form-text text-muted">passwordHelp</small>
@@ -22,7 +22,6 @@
                 Enabled
             </label>
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Submit</button>
-        <button type="button" class="btn btn-danger" (click)="deleteUser()">Delete</button>
+        <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">submit</button>
     </form>
 </div>

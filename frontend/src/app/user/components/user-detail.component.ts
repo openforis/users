@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { BackButtonComponent } from '../../backButton/components/back-button.component';
 
@@ -18,7 +18,7 @@ export class UserDetailComponent implements OnInit {
     private user: User;
     private userGroups: UserGroup[];
 
-    constructor(private route: ActivatedRoute, private userService: UserService) { }
+    constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
     ngOnInit(): void {
         this.user = new User();
@@ -44,5 +44,13 @@ export class UserDetailComponent implements OnInit {
             console.log(err);
         });
     };
+
+    deleteUser() {
+        this.userService.deleteUser(this.user.id).subscribe(data => {
+            this.router.navigate(["/users"]);
+        }, err => {
+            console.log(err);
+        });
+    }
 
 }

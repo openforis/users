@@ -72,12 +72,4 @@ export class GroupFormComponent implements OnInit {
         }
     }
 
-    deleteUser() {
-        this.groupService.deleteGroup(this.groupId).subscribe(data => {
-            this.router.navigate(["/groups"]);
-        }, err => {
-            console.log(err);
-        });
-    }
-
 }

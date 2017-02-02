@@ -13,10 +13,12 @@
                     <p class="card-text">{{user.username}}</p>
                 </div>
                 <ul class="list-group list-group-flush">
-                     <li class="list-group-item">Enabled: {{user.enabled}}</li>
+                     <li class="list-group-item">enabled: {{user.enabled}}</li>
                 </ul>
                 <div class="card-block">
-                    <a class="btn btn-primary" [routerLink]="['/users', user.id, 'edit']">edit</a>
+                    <a class="btn btn-outline-primary" [routerLink]="['/users', user.id, 'edit']">edit</a>
+                    <a class="btn btn-outline-warning" [routerLink]="['/users', user.id, 'change-password']">change password</a>
+                    <a class="btn btn-outline-danger" href="#" (click)="deleteUser()">delete</a>
                 </div>
             </div>
         </div>

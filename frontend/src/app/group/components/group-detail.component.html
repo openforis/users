@@ -11,7 +11,8 @@
                 <div class="card-block">
                     <h4 class="card-title">#{{group.id}}</h4>
                     <p class="card-text">{{group.name}}</p>
-                    <a class="btn btn-primary" [routerLink]="['/groups', group.id, 'edit']">edit</a>
+                    <a class="btn btn-outline-primary" [routerLink]="['/groups', group.id, 'edit']">edit</a>
+                    <a class="btn btn-outline-danger" href="#" (click)="deleteGROUP()">delete</a>
                 </div>
             </div>
         </div>

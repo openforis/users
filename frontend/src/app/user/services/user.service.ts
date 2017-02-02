@@ -56,4 +56,15 @@ export class UserService {
             .catch((error: any) => Observable.throw(error || 'Server error'));
     }
 
+    changePassword(username: string, oldPassword: string, newPassword: string): Observable<any> {
+        let patch = {
+            username: username,
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        };
+        return this.http.post(this.appConfiguration.apiUrl + 'change-password', patch)
+            .map((res:Response) => res.json())
+            .catch((error:any) => Observable.throw(error || 'Server error'));
+    }
+
 }
