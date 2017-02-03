@@ -7,6 +7,8 @@ import { BackButtonComponent } from '../../backButton/components/back-button.com
 import { Group } from '../models/group';
 import { GroupService } from '../services/group.service';
 
+import { MessageBarService } from '../../message-bar/services/message-bar.service'
+
 @Component({
     selector: 'group-form',
     templateUrl: './group-form.component.html'
@@ -18,7 +20,7 @@ export class GroupFormComponent implements OnInit {
     private groupForm: FormGroup;
     private isNew: boolean;
 
-    constructor(private route: ActivatedRoute, private router: Router, private groupService: GroupService) { }
+    constructor(private route: ActivatedRoute, private router: Router, private groupService: GroupService, private messageBarService: MessageBarService) { }
 
     ngOnInit(): void {
         this.group = new Group();
@@ -59,6 +61,7 @@ export class GroupFormComponent implements OnInit {
                 this.groupService.addGroup(value).subscribe(data => {
                     this.router.navigate(["/groups"]);
                 }, err => {
+                    this.messageBarService.add('danger', 'ERROR!');
                     console.log(err);
                 });
             } else {
@@ -66,6 +69,7 @@ export class GroupFormComponent implements OnInit {
                 this.groupService.editGroup(value).subscribe(data => {
                     this.router.navigate(["/groups"]);
                 }, err => {
+                    this.messageBarService.add('danger', 'ERROR!');
                     console.log(err);
                 });
             }

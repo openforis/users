@@ -7,6 +7,8 @@ import { BackButtonComponent } from '../../backButton/components/back-button.com
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 
+import { MessageBarService } from '../../message-bar/services/message-bar.service'
+
 @Component({
     selector: 'user-form',
     templateUrl: './user-form.component.html'
@@ -18,7 +20,7 @@ export class UserFormComponent implements OnInit {
     private userForm: FormGroup;
     private isNew: boolean;
 
-    constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) { }
+    constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private messageBarService: MessageBarService) { }
 
     ngOnInit(): void {
         this.user = new User();
@@ -53,6 +55,7 @@ export class UserFormComponent implements OnInit {
                 this.userService.addUser(value).subscribe(data => {
                     this.router.navigate(["/users"]);
                 }, err => {
+                    this.messageBarService.add('danger', 'ERROR!');
                     console.log(err);
                 });
             } else {
@@ -60,12 +63,11 @@ export class UserFormComponent implements OnInit {
                 this.userService.editUser(value).subscribe(data => {
                     this.router.navigate(["/users"]);
                 }, err => {
+                    this.messageBarService.add('danger', 'ERROR!');
                     console.log(err);
                 });
             }
         }
     }
-
-
 
 }

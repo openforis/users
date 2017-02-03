@@ -12,6 +12,9 @@ import { AppConfiguration }       from './app-configuration';
 import { NavbarComponent }        from './navbar/components/navbar.component';
 import { HomeComponent }          from './home/components/home.component';
 
+import { MessageBarComponent }    from './message-bar/components/message-bar.component';
+import { MessageBarService }      from './message-bar/services/message-bar.service';
+
 import { BackButtonComponent }    from './backButton/components/back-button.component';
 
 import { UserListComponent }      from './user/components/user-list.component';
@@ -25,17 +28,21 @@ import { GroupDetailComponent }  from './group/components/group-detail.component
 import { GroupFormComponent }    from './group/components/group-form.component';
 import { GroupService }          from './group/services/group.service';
 
+import { AlertModule }           from 'ng2-bootstrap/alert';
+
 @NgModule({
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        AlertModule.forRoot()
     ],
     declarations: [
         AppComponent,
         NavbarComponent,
+        MessageBarComponent,
         HomeComponent,
         BackButtonComponent,
         UserListComponent,
@@ -49,7 +56,8 @@ import { GroupService }          from './group/services/group.service';
     providers: [
         AppConfiguration,
         UserService,
-        GroupService
+        GroupService,
+        MessageBarService
     ],
     bootstrap: [
         AppComponent
