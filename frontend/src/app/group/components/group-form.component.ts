@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { BackButtonComponent } from '../../backButton/components/back-button.component';
+import { BackButtonComponent } from '../../back-button/components/back-button.component';
 
 import { Group } from '../models/group';
 import { GroupService } from '../services/group.service';
