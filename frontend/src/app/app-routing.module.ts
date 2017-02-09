@@ -5,6 +5,9 @@ import { Routes }               from '@angular/router';
 import { NavbarComponent }      from './navbar/components/navbar.component';
 import { HomeComponent }        from './home/components/home.component';
 
+import { LoginComponent }       from './auth/components/login.component';
+import { LoggedInGuard }        from './auth/services/logged-in.guard';
+
 import { UserListComponent }    from './user/components/user-list.component';
 import { UserDetailComponent }  from './user/components/user-detail.component';
 import { UserFormComponent }    from './user/components/user-form.component';
@@ -16,15 +19,16 @@ import { GroupFormComponent }    from './group/components/group-form.component';
 
 const routes: Routes = [
     { path: '',                  component: HomeComponent },
-    { path: 'users',             component: UserListComponent },
-    { path: 'users/add',         component: UserFormComponent },
-    { path: 'users/:id',         component: UserDetailComponent },
-    { path: 'users/:id/edit',    component: UserFormComponent },
-    { path: 'users/:id/change-password', component: ChangePasswordComponent },
-    { path: 'groups',            component: GroupListComponent },
-    { path: 'groups/add',        component: GroupFormComponent },
-    { path: 'groups/:id',        component: GroupDetailComponent },
-    { path: 'groups/:id/edit',   component: GroupFormComponent }
+    { path: 'login',             component: LoginComponent },
+    { path: 'users',             component: UserListComponent, canActivate: [LoggedInGuard] },
+    { path: 'users/add',         component: UserFormComponent, canActivate: [LoggedInGuard] },
+    { path: 'users/:id',         component: UserDetailComponent, canActivate: [LoggedInGuard] },
+    { path: 'users/:id/edit',    component: UserFormComponent, canActivate: [LoggedInGuard] },
+    { path: 'users/:id/change-password', component: ChangePasswordComponent, canActivate: [LoggedInGuard] },
+    { path: 'groups',            component: GroupListComponent, canActivate: [LoggedInGuard] },
+    { path: 'groups/add',        component: GroupFormComponent, canActivate: [LoggedInGuard] },
+    { path: 'groups/:id',        component: GroupDetailComponent, canActivate: [LoggedInGuard] },
+    { path: 'groups/:id/edit',   component: GroupFormComponent, canActivate: [LoggedInGuard] }
 ];
 
 @NgModule({

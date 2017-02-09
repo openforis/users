@@ -9,6 +9,10 @@ import { AppComponent }           from './app.component';
 import { AppRoutingModule }       from './app-routing.module';
 import { AppConfiguration }       from './app-configuration';
 
+import { LoginComponent }         from './auth/components/login.component';
+import { AuthService }            from './auth/services/auth.service';
+import { LoggedInGuard }          from './auth/services/logged-in.guard';
+
 import { NavbarComponent }        from './navbar/components/navbar.component';
 import { HomeComponent }          from './home/components/home.component';
 
@@ -41,6 +45,7 @@ import { AlertModule }           from 'ng2-bootstrap/alert';
     ],
     declarations: [
         AppComponent,
+        LoginComponent,
         NavbarComponent,
         MessageBarComponent,
         HomeComponent,
@@ -55,6 +60,8 @@ import { AlertModule }           from 'ng2-bootstrap/alert';
     ],
     providers: [
         AppConfiguration,
+        AuthService,
+        LoggedInGuard,
         UserService,
         GroupService,
         MessageBarService

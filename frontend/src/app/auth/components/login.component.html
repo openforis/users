@@ -1,0 +1,14 @@
+<div class="container">
+    <form #f="ngForm" (ngSubmit)="login()" *ngIf="!isLoggedIn">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" placeholder="Enter username" class="form-control" [(ngModel)]="loginCredentials.username" required />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="text" name="password" placeholder="Enter password" class="form-control" [(ngModel)]="loginCredentials.password" required />
+        </div>
+        <button type="submit" class="btn btn-info" [disabled]="!f.valid">login</button>
+    </form>
+    <button type="submit" class="btn btn-danger" (click)="logout()" *ngIf="isLoggedIn">logout</button>
+</div>
