@@ -53,18 +53,18 @@ public class Server implements SparkApplication {
 			System.err.println(sw.getBuffer().toString());
 			res.status(500);
 			res.type(JSON_CONTENT_TYPE);
-			res.body((new ApiError(500, "", "Internal server error")).toJson());
+			res.body((new ResponseBody(500, "", "Internal server error")).toJson());
 		});
 	}
 
 	private static void errorHandler() {
 		Spark.notFound((req, res) -> {
 			res.type(JSON_CONTENT_TYPE);
-			return (new ApiError(404, "", "Not found")).toJson();
+			return (new ResponseBody(404, "", "Not found")).toJson();
 		});
 		Spark.internalServerError((req, res) -> {
 			res.type(JSON_CONTENT_TYPE);
-			return (new ApiError(500, "", "Internal server error")).toJson();
+			return (new ResponseBody(500, "", "Internal server error")).toJson();
 		});
 	}
 

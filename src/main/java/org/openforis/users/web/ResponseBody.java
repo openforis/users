@@ -1,15 +1,15 @@
 package org.openforis.users.web;
 
-public class ApiError {
+public class ResponseBody {
 
 	private int status = 500;
 	private String code;
 	private String message;
 
-	public ApiError() {
+	public ResponseBody() {
 	}
 
-	public ApiError(int status, String code, String message) {
+	public ResponseBody(int status, String code, String message) {
 		this.status = status;
 		this.code = code;
 		this.message = message;

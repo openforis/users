@@ -8,7 +8,7 @@ import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserManager;
 import org.openforis.users.model.User;
 import org.openforis.users.web.JsonTransformer;
-import org.openforis.users.web.ApiError;
+import org.openforis.users.web.ResponseBody;
 
 import spark.Request;
 import spark.Response;
@@ -82,30 +82,30 @@ public class UserController extends AbstractController {
 	};
 
 	public Route login = (Request req, Response rsp) -> {
-		ApiError result;
+		ResponseBody result;
 		String body = req.body();
 		Map<String, Object> bodyMap = jsonTransformer.parse(body);
 		String username = bodyMap.get("username").toString();
 		String password = bodyMap.get("rawPassword").toString();
 		if (USER_MANAGER.verifyPassword(username, password)) {
-			result = new ApiError(200, "", "");
+			result = new ResponseBody(200, "", "");
 		} else {
-			result = new ApiError(400, "", "Wrong username or password");
+			result = new ResponseBody(400, "", "Wrong username or password");
 		}
 		return result;
 	};
 
 	public Route changePassword = (Request req, Response rsp) -> {
-		ApiError result;
+		ResponseBody result;
 		String body = req.body();
 		Map<String, Object> bodyMap = jsonTransformer.parse(body);
 		String username = bodyMap.get("username").toString();
 		String newPassword = bodyMap.get("newPassword").toString();
 		try {
 			USER_MANAGER.changePassword(username, newPassword);
-			result = new ApiError(200, "", "");
+			result = new ResponseBody(200, "", "");
 		} catch(IllegalArgumentException e) {
-			result = new ApiError(400, "", e.getMessage());
+			result = new ResponseBody(400, "", e.getMessage());
 		}
 		return result;
 	};
