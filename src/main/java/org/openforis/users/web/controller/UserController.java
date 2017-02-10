@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserManager;
-import org.openforis.users.manager.UserManager.OperationResult;
 import org.openforis.users.model.User;
 import org.openforis.users.web.JsonTransformer;
+import org.openforis.users.web.ApiError;
 
 import spark.Request;
 import spark.Response;
@@ -48,12 +48,10 @@ public class UserController extends AbstractController {
 		String username = bodyMap.get("username").toString();
 		String password = bodyMap.get("rawPassword").toString();
 		Boolean enabled = Boolean.valueOf(bodyMap.get("enabled").toString());
-		//
 		User user = new User();
 		user.setUsername(username);
 		user.setRawPassword(password);
 		user.setEnabled(enabled);
-		//
 		USER_MANAGER.save(user);
 		return user;
 	};
@@ -61,16 +59,13 @@ public class UserController extends AbstractController {
 	public Route editUser = (Request req, Response rsp) -> {
 		long id = getLongParam(req, "id");
 		User user = USER_MANAGER.findById(id);
-		//
 		String body = req.body();
 		Map<String, Object> bodyMap = jsonTransformer.parse(body);
 		String username = (bodyMap.get("username") != null) ? bodyMap.get("username").toString() : user.getUsername();
 		boolean enabled = (bodyMap.get("enabled") != null) ? Boolean.valueOf(bodyMap.get("enabled").toString()) : false;
-		//
 		user.setUsername(username);
 		user.setRawPassword(null); // do not overwrite password
 		user.setEnabled(enabled);
-		//
 		USER_MANAGER.save(user);
 		return user;
 	};
@@ -87,24 +82,32 @@ public class UserController extends AbstractController {
 	};
 
 	public Route login = (Request req, Response rsp) -> {
+		ApiError result;
 		String body = req.body();
 		Map<String, Object> bodyMap = jsonTransformer.parse(body);
 		String username = bodyMap.get("username").toString();
 		String password = bodyMap.get("rawPassword").toString();
 		if (USER_MANAGER.verifyPassword(username, password)) {
-			return new OperationResult();
+			result = new ApiError(200, "", "");
 		} else {
-			return new OperationResult(false, "WRONG_PASSWORD", "Wrong username or password");
+			result = new ApiError(400, "", "Wrong username or password");
 		}
+		return result;
 	};
 
 	public Route changePassword = (Request req, Response rsp) -> {
+		ApiError result;
 		String body = req.body();
 		Map<String, Object> bodyMap = jsonTransformer.parse(body);
 		String username = bodyMap.get("username").toString();
-		String oldPassword = bodyMap.get("oldPassword").toString();
 		String newPassword = bodyMap.get("newPassword").toString();
-		return USER_MANAGER.changePassword(username, oldPassword, newPassword);
+		try {
+			USER_MANAGER.changePassword(username, newPassword);
+			result = new ApiError(200, "", "");
+		} catch(IllegalArgumentException e) {
+			result = new ApiError(400, "", e.getMessage());
+		}
+		return result;
 	};
 
 }

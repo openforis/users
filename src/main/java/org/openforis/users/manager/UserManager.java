@@ -53,24 +53,30 @@ public class UserManager extends AbstractManager<User, UserDao> {
 
 	@Override
 	protected void update(User user) {
-		String plainPassword = user.getRawPassword();
-		if (plainPassword != null) {
-			String encodedPassword = checkAndEncodePassword(plainPassword);
-			user.setPassword(encodedPassword);
-		} else {
-			OfUser oldUser = dao.findById(user.getId());
-			user.setPassword(oldUser.getPassword());
+		try {
+			String plainPassword = user.getRawPassword();
+			if (plainPassword != null) {
+				String encodedPassword = checkAndEncodePassword(plainPassword);
+				user.setPassword(encodedPassword);
+			} else {
+				OfUser oldUser = dao.findById(user.getId());
+				user.setPassword(oldUser.getPassword());
+			}
+			super.update(user);
+		} catch (Exception e) {
 		}
-		super.update(user);
 	}
 
 	@Override
 	protected void insert(User user) {
-		String plainPassword = user.getRawPassword();
-		String encodedPassword = checkAndEncodePassword(plainPassword);
-		user.setPassword(encodedPassword);
-		super.insert(user);
-		createAndInsertPrivateGroup(user);
+		try {
+			String plainPassword = user.getRawPassword();
+			String encodedPassword = checkAndEncodePassword(plainPassword);
+			user.setPassword(encodedPassword);
+			super.insert(user);
+			createAndInsertPrivateGroup(user);
+		} catch (Exception e) {
+		}
 	}
 
 	public boolean verifyPassword(String username, String rawPassword) {
@@ -82,22 +88,26 @@ public class UserManager extends AbstractManager<User, UserDao> {
 			return false;
 		}
 	}
-	
-	public OperationResult changePassword(String username, String oldPassword, String newPassword) {
-		if (verifyPassword(username, oldPassword)) {
-			User user = findByUsername(username);
+
+	public void changePassword(String username, String newPassword) {
+		User user = findByUsername(username);
+		if (user != null) {
 			user.setRawPassword(newPassword);
-			try {
-				save(user);
-			} catch(InvalidUserPasswordException e) {
-				return new OperationResult(false, "INVALID_PASSWORD", "Password not respecting minimum standard");
-			}
-			return new OperationResult();
+			save(user);
 		} else {
-			return new OperationResult(false, "INVALID_OLD_PASSWORD", String.format("Invalid old password for user %s", username));
+			throw new IllegalArgumentException(String.format("User %s not found." + username));
 		}
 	}
-	
+
+	public boolean isEnabled(String username) {
+		User user = findByUsername(username);
+		if (user != null) {
+			return user.getEnabled();
+		} else {
+			throw new IllegalArgumentException(String.format("User %s not found." + username));
+		}
+	}
+
 	@Override
 	public void deleteById(final long id) {
 		runInTransaction(new Runnable() {
@@ -113,7 +123,7 @@ public class UserManager extends AbstractManager<User, UserDao> {
 			}
 		});
 	}
-	
+
 	private void createAndInsertPrivateGroup(User user) {
 		Group privateGroup = new Group();
 		privateGroup.setName(user.getUsername() + "_private_group");
@@ -131,16 +141,16 @@ public class UserManager extends AbstractManager<User, UserDao> {
 		userGroup.setRoleCode(UserGroupRole.OWNER.getCode());
 		userGroupDao.insert(userGroup);
 	}
-	
-	private String checkAndEncodePassword(String plainPassword)  {
+
+	private String checkAndEncodePassword(String plainPassword) throws Exception {
 		boolean matchesPattern = Pattern.matches(PASSWORD_PATTERN, plainPassword);
 		if (matchesPattern) {
 			return encodePassword(plainPassword);
 		} else {
-			throw new InvalidUserPasswordException();
+			throw new Exception("", new Throwable(""));
 		}
 	}
-	
+
 	private String encodePassword(String plainPassword) {
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
@@ -151,56 +161,5 @@ public class UserManager extends AbstractManager<User, UserDao> {
 			throw new RuntimeException("Error encoding user password", e);
 		}
 	}
-	
-	private static class InvalidUserPasswordException extends RuntimeException {
 
-		private static final long serialVersionUID = 1L;
-		
-	}
-	
-	public static class OperationResult {
-		
-		private boolean success = true;
-		private String errorCode;
-		private String errorMessage;
-
-		public OperationResult() {
-		}
-		
-		public OperationResult(boolean success) {
-			this(success, null, null);
-		}
-		
-		public OperationResult(boolean success, String errorCode, String errorMessage) {
-			super();
-			this.success = success;
-			this.errorCode = errorCode;
-			this.errorMessage = errorMessage;
-		}
-
-		public boolean isSuccess() {
-			return success;
-		}
-
-		public void setSuccess(boolean success) {
-			this.success = success;
-		}
-
-		public String getErrorCode() {
-			return errorCode;
-		}
-
-		public void setErrorCode(String errorCode) {
-			this.errorCode = errorCode;
-		}
-
-		public String getErrorMessage() {
-			return errorMessage;
-		}
-
-		public void setErrorMessage(String errorMessage) {
-			this.errorMessage = errorMessage;
-		}
-		
-	}
 }
