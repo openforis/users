@@ -1,5 +1,6 @@
 package org.openforis.users.web;
 
+import static spark.Spark.before;
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.patch;
@@ -8,11 +9,22 @@ import static spark.Spark.staticFileLocation;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.openforis.users.auth.UsersConfigFactory;
 import org.openforis.users.web.controller.GroupController;
 import org.openforis.users.web.controller.UserController;
 import org.openforis.users.web.controller.UserGroupController;
+import org.pac4j.core.config.Config;
+import org.pac4j.core.profile.CommonProfile;
+import org.pac4j.core.profile.ProfileManager;
+import org.pac4j.sparkjava.SecurityFilter;
+import org.pac4j.sparkjava.SparkWebContext;
 
+import spark.Request;
+import spark.Response;
 import spark.Spark;
 import spark.servlet.SparkApplication;
 
@@ -83,6 +95,9 @@ public class Server implements SparkApplication {
 		Server.exceptionHandler();
 		Server.errorHandler();
 
+		final Config config = new UsersConfigFactory().build();
+		before("/api/*", new SecurityFilter(config, "DirectBasicAuthClient, IpClient", null, "HttpMethodMatcher"));
+
 		post("/api/login", JSON_CONTENT_TYPE, userController.login, jsonTransformer);
 		post("/api/change-password", JSON_CONTENT_TYPE, userController.changePassword, jsonTransformer);
 
@@ -106,6 +121,18 @@ public class Server implements SparkApplication {
 		post("/api/group/:groupId/user/:userId", userGroupController.addUserGroupJoinRequest, jsonTransformer);
 		patch("/api/group/:groupId/user/:userId", userGroupController.updateUserGroupJoinRequest, jsonTransformer);
 
+	}
+
+	private static Map userInfo(final Request request, final Response response) {
+		final Map map = new HashMap();
+		map.put("profiles", getProfiles(request, response));
+		return map;
+	}
+
+	private static List<CommonProfile> getProfiles(final Request request, final Response response) {
+		final SparkWebContext context = new SparkWebContext(request, response);
+		final ProfileManager manager = new ProfileManager(context);
+		return manager.getAll(true);
 	}
 
 }
