@@ -27,14 +27,14 @@ export class AuthService {
         return this.http.post(authUrl + 'login', login, {headers: headers})
             .map((res: Response) => res.json())
             .map((res) => {
-                if (res.success) {
+                if (res && res.status == 200) {
                     localStorage.setItem('loggedId', 'true');
                     localStorage.setItem('username', username);
                     localStorage.setItem('password', password);
                     this.loggedIn = true;
                     this.loggedIn$.next(true);
                 }
-            return res.success;
+            return res;
         });
     }
 
