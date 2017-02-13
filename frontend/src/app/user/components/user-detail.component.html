@@ -18,7 +18,7 @@
                 <div class="card-block">
                     <a class="btn btn-outline-primary" [routerLink]="['/users', user.id, 'edit']">edit</a>
                     <a class="btn btn-outline-warning" [routerLink]="['/users', user.id, 'change-password']">change password</a>
-                    <a class="btn btn-outline-danger" href="#" (click)="deleteUser()">delete</a>
+                    <button type="button" class="btn btn-outline-danger" (click)="deleteUser()">delete</button>
                 </div>
             </div>
         </div>
