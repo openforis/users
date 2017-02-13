@@ -34,19 +34,19 @@ export class GroupDetailComponent implements OnInit {
     };
 
     getUserGroupById(id: number) {
-        this.groupService.getUserGroups(id).subscribe(userGroup => this.userGroups = userGroup, err => {
+        this.groupService.getUserGroups(id).then(userGroup => this.userGroups = userGroup, err => {
             console.log(err);
         });
     };
 
     getGroupById(id: number) {
-        this.groupService.getGroup(id).subscribe(group => this.group = group, err => {
+        this.groupService.getGroup(id).then(group => this.group = group, err => {
             console.log(err);
         });
     };
 
-    deleteUser() {
-        this.groupService.deleteGroup(this.groupId).subscribe(data => {
+    deleteGroup() {
+        this.groupService.deleteGroup(this.groupId).then(data => {
             this.router.navigate(["/groups"]);
         }, err => {
             console.log(err);

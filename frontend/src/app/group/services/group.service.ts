@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
 import { Group } from '../models/group';
 import { UserGroup } from '../../userGroup/models/userGroup';
@@ -22,25 +23,28 @@ export class GroupService {
         this.headers.append('Authorization', baa);
     }
 
-    getGroups(): Observable<Group[]> {
+    getGroups(): Promise<Group[]> {
         return this.http.get(this.groupUrl, {headers: this.headers})
             .map((res: Response) => res.json())
-            .catch((error: any) => Observable.throw(error || 'Server error'));
+            .catch((error: any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    getGroup(id: number): Observable<Group> {
+    getGroup(id: number): Promise<Group> {
         return this.http.get(this.groupUrl + '/' + id, {headers: this.headers})
             .map((res: Response) => res.json())
-            .catch((error: any) => Observable.throw(error || 'Server error'));
+            .catch((error: any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    addGroup(group: Group): Observable<Group> {
+    addGroup(group: Group): Promise<Group> {
         return this.http.post(this.groupUrl, group, {headers: this.headers})
             .map((res:Response) => res.json())
-            .catch((error:any) => Observable.throw(error || 'Server error'));
+            .catch((error:any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    editGroup(group: Group): Observable<Group> {
+    editGroup(group: Group): Promise<Group> {
         let patch = {};
         if (group.name) patch['name'] = group.name;
         if (group.label) patch['label'] = group.label;
@@ -49,19 +53,22 @@ export class GroupService {
         if (group.visibilityCode) patch['visibilityCode'] = group.visibilityCode;
         return this.http.patch(this.groupUrl + '/' + group.id, patch, {headers: this.headers})
             .map((res:Response) => res.json())
-            .catch((error:any) => Observable.throw(error || 'Server error'));
+            .catch((error:any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    deleteGroup(id: number): Observable<any> {
+    deleteGroup(id: number): Promise<any> {
         return this.http.delete(this.groupUrl + '/' + id, {headers: this.headers})
             .map((res:Response) => res.json())
-            .catch((error:any) => Observable.throw(error || 'Server error'));
+            .catch((error:any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    getUserGroups(id: number): Observable<UserGroup[]> {
+    getUserGroups(id: number): Promise<UserGroup[]> {
         return this.http.get(this.groupUrl + '/' + id + '/users', {headers: this.headers})
             .map((res: Response) => res.json())
-            .catch((error: any) => Observable.throw(error || 'Server error'));
+            .catch((error: any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
 }

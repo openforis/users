@@ -38,7 +38,7 @@ export class GroupFormComponent implements OnInit {
             } else {
                 this.isNew = false;
                 this.groupId = +params['id'];
-                this.groupService.getGroup(this.groupId).subscribe(group => {
+                this.groupService.getGroup(this.groupId).then(group => {
                     this.group = group;
                     this.groupForm.controls['name'].setValue(this.group.name);
                     this.groupForm.controls['label'].setValue(this.group.label);
@@ -58,7 +58,7 @@ export class GroupFormComponent implements OnInit {
     onSubmit({value, valid}: {value: Group, valid: boolean}) {
         if (valid) {
             if (this.isNew) {
-                this.groupService.addGroup(value).subscribe(data => {
+                this.groupService.addGroup(value).then(data => {
                     this.router.navigate(["/groups"]);
                 }, err => {
                     this.messageBarService.add('danger', 'ERROR!');
@@ -66,7 +66,7 @@ export class GroupFormComponent implements OnInit {
                 });
             } else {
                 value['id'] = this.groupId;
-                this.groupService.editGroup(value).subscribe(data => {
+                this.groupService.editGroup(value).then(data => {
                     this.router.navigate(["/groups"]);
                 }, err => {
                     this.messageBarService.add('danger', 'ERROR!');

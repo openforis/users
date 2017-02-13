@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
 import { User } from '../models/user';
 import { UserGroup } from '../../userGroup/models/userGroup';
@@ -22,46 +23,52 @@ export class UserService {
         this.headers.append('Authorization', baa);
     }
 
-    getUsers(): Observable<User[]> {
+    getUsers(): Promise<User[]> {
         return this.http.get(this.userUrl, {headers: this.headers})
             .map((res: Response) => res.json())
-            .catch((error: any) => Observable.throw(error || 'Server error'));
+            .catch((error: any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    getUser(id: number): Observable<User> {
+    getUser(id: number): Promise<User> {
         return this.http.get(this.userUrl + '/' + id, {headers: this.headers})
             .map((res: Response) => res.json())
-            .catch((error: any) => Observable.throw(error || 'Server error'));
+            .catch((error: any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    addUser(user: User): Observable<User> {
+    addUser(user: User): Promise<User> {
         return this.http.post(this.userUrl, user, {headers: this.headers})
             .map((res:Response) => res.json())
-            .catch((error:any) => Observable.throw(error || 'Server error'));
+            .catch((error:any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    editUser(user: User): Observable<User> {
+    editUser(user: User): Promise<User> {
         let patch = {};
         if (user.username) patch['username'] = user.username;
         if (user.enabled) patch['enabled'] = user.enabled;
         return this.http.patch(this.userUrl + '/' + user.id, patch, {headers: this.headers})
             .map((res:Response) => res.json())
-            .catch((error:any) => Observable.throw(error || 'Server error'));
+            .catch((error:any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    deleteUser(id: number): Observable<any> {
+    deleteUser(id: number): Promise<any> {
         return this.http.delete(this.userUrl + '/' + id, {headers: this.headers})
             .map((res:Response) => res.json())
-            .catch((error:any) => Observable.throw(error || 'Server error'));
+            .catch((error:any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    getUserGroups(id: number): Observable<UserGroup[]> {
+    getUserGroups(id: number): Promise<UserGroup[]> {
         return this.http.get(this.userUrl + '/' + id + '/groups', {headers: this.headers})
             .map((res: Response) => res.json())
-            .catch((error: any) => Observable.throw(error || 'Server error'));
+            .catch((error: any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
-    changePassword(username: string, oldPassword: string, newPassword: string): Observable<any> {
+    changePassword(username: string, oldPassword: string, newPassword: string): Promise<any> {
         let patch = {
             username: username,
             oldPassword: oldPassword,
@@ -69,7 +76,8 @@ export class UserService {
         };
         return this.http.post(this.appConfiguration.apiUrl + 'change-password', patch, {headers: this.headers})
             .map((res:Response) => res.json())
-            .catch((error:any) => Observable.throw(error || 'Server error'));
+            .catch((error:any) => Observable.throw(error || 'Server error'))
+            .toPromise();
     }
 
 }

@@ -35,7 +35,7 @@ export class UserFormComponent implements OnInit {
             } else {
                 this.isNew = false;
                 this.userId = +params['id'];
-                this.userService.getUser(this.userId).subscribe(user => {
+                this.userService.getUser(this.userId).then(user => {
                     this.user = user;
                     this.userForm.controls['rawPassword'].disable();
                     this.userForm.controls['username'].setValue(this.user.username);
@@ -52,7 +52,7 @@ export class UserFormComponent implements OnInit {
     onSubmit({value, valid}: {value: User, valid: boolean}) {
         if (valid) {
             if (this.isNew) {
-                this.userService.addUser(value).subscribe(data => {
+                this.userService.addUser(value).then(data => {
                     this.router.navigate(["/users"]);
                 }, err => {
                     this.messageBarService.add('danger', 'ERROR!');
@@ -60,7 +60,7 @@ export class UserFormComponent implements OnInit {
                 });
             } else {
                 value['id'] = this.userId;
-                this.userService.editUser(value).subscribe(data => {
+                this.userService.editUser(value).then(data => {
                     this.router.navigate(["/users"]);
                 }, err => {
                     this.messageBarService.add('danger', 'ERROR!');

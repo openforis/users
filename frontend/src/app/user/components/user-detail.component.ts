@@ -34,19 +34,19 @@ export class UserDetailComponent implements OnInit {
     };
 
     getUserGroupById(id: number) {
-        this.userService.getUserGroups(id).subscribe(userGroup => this.userGroups = userGroup, err => {
+        this.userService.getUserGroups(id).then(userGroup => this.userGroups = userGroup, err => {
             console.log(err);
         });
     };
 
     getUserById(id: number) {
-        this.userService.getUser(id).subscribe(user => this.user = user, err => {
+        this.userService.getUser(id).then(user => this.user = user, err => {
             console.log(err);
         });
     };
 
     deleteUser() {
-        this.userService.deleteUser(this.user.id).subscribe(data => {
+        this.userService.deleteUser(this.user.id).then(data => {
             this.router.navigate(["/users"]);
         }, err => {
             console.log(err);

@@ -29,7 +29,7 @@ export class ChangePasswordComponent implements OnInit {
         this.route.params.subscribe((params: any) => {
             if (params.hasOwnProperty('id')) {
                 this.userId = +params['id'];
-                this.userService.getUser(this.userId).subscribe(user => {
+                this.userService.getUser(this.userId).then(user => {
                     this.user = user;
                 }, err => {
                     console.log(err);
@@ -42,7 +42,7 @@ export class ChangePasswordComponent implements OnInit {
 
     onSubmit({value, valid}: {value: any, valid: boolean}) {
         if (valid) {
-            this.userService.changePassword(this.user.username, value.oldPassword, value.newPassword1).subscribe(data => {
+            this.userService.changePassword(this.user.username, value.oldPassword, value.newPassword1).then(data => {
                 if (!data.success) {
                     console.log(data);
                 } else {
