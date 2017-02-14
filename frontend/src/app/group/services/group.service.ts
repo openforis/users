@@ -23,8 +23,11 @@ export class GroupService {
         this.headers.append('Authorization', baa);
     }
 
-    getGroups(): Promise<Group[]> {
-        return this.http.get(this.groupUrl, {headers: this.headers})
+    getGroups(enabled?: boolean, systemDefined?: boolean): Promise<Group[]> {
+        let url = this.groupUrl + '?';
+        if (typeof(enabled) !== undefined) url += 'enabled=' + enabled + '&';
+        if (typeof(systemDefined) !== undefined) url += 'systemDefined=' + systemDefined + '&';
+        return this.http.get(url, {headers: this.headers})
             .map((res: Response) => res.json())
             .catch((error: any) => Observable.throw(error || 'Server error'))
             .toPromise();
