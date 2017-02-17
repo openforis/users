@@ -12,13 +12,13 @@ paths:
   /login:
     post:
       tags:
-        - Operation
+        - User Management
       consumes:
         - application/json
       parameters:
-        - name: ''
+        - name: '-'
           in: body
-          description: ''
+          description: '-'
           schema:
             properties:
               username:
@@ -29,35 +29,40 @@ paths:
                 description: Not-encrypted password of the user
       responses:
         200:
-          description: ''
+          description: Success
           schema:
-            $ref: '#/definitions/OperationalResult'
+            $ref: '#/definitions/Result'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Result'
   /change-password:
     post:
       tags:
-        - Operation
+        - User Management
       consumes:
         - application/json
       parameters:
-        - name: ''
+        - name: '-'
           in: body
-          description: ''
+          description: '-'
           schema:
             properties:
               username:
                 type: string
                 description: Username of the user
-              oldPassword:
-                type: string
-                description: Old password of the user
               newPassword:
                 type: string
                 description: New password of the user
       responses:
         200:
-          description: ''
+          description: Success
           schema:
-            $ref: '#/definitions/OperationalResult'
+            $ref: '#/definitions/Result'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Result'
   /user:
     get:
       tags:
@@ -69,13 +74,13 @@ paths:
           type: string
       responses:
         200:
-          description: User posted
+          description: Added user
           schema:
             $ref: '#/definitions/User'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
     post:
       tags:
         - User
@@ -84,18 +89,18 @@ paths:
       parameters:
         - name: User
           in: body
-          description: ''
+          description: '-'
           schema:
             $ref: '#/definitions/User'
       responses:
         200:
-          description: List of users found
+          description: Found users
           schema:
             $ref: '#/definitions/User'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
   /user/{id}:
     get:
       tags:
@@ -109,13 +114,13 @@ paths:
           format: int64
       responses:
         200:
-          description: ''
+          description: Found user
           schema:
             $ref: '#/definitions/User'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
     patch:
       tags:
         - User
@@ -130,18 +135,18 @@ paths:
           format: int64
         - name: User
           in: body
-          description: ''
+          description: User to modify
           schema:
             $ref: '#/definitions/User'
       responses:
         200:
-          description: ''
+          description: Modified user
           schema:
             $ref: '#/definitions/User'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
     delete:
       tags:
         - User
@@ -154,13 +159,13 @@ paths:
           format: int64
       responses:
         200:
-          description: ''
+          description: '-'
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/Result'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
   /group:
     get:
       tags:
@@ -184,13 +189,13 @@ paths:
           type: string
       responses:
         200:
-          description: List of groups found
+          description: Found groups
           schema:
             $ref: '#/definitions/Group'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
     post:
       tags:
         - Group
@@ -199,18 +204,18 @@ paths:
       parameters:
         - name: Group
           in: body
-          description: ''
+          description: '-'
           schema:
             $ref: '#/definitions/Group'
       responses:
         200:
-          description: Group posted
+          description: Added group
           schema:
             $ref: '#/definitions/Group'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
   /group/{id}:
     get:
       tags:
@@ -224,13 +229,13 @@ paths:
           format: int64
       responses:
         200:
-          description: ''
+          description: Found group
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/Group'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
     patch:
       tags:
         - Group
@@ -245,18 +250,18 @@ paths:
           format: int64
         - name: Group
           in: body
-          description: ''
+          description: Group to modify
           schema:
             $ref: '#/definitions/Group'
       responses:
         200:
-          description: ''
+          description: '-'
           schema:
             $ref: '#/definitions/Group'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
     delete:
       tags:
         - Group
@@ -269,13 +274,13 @@ paths:
           format: int64
       responses:
         200:
-          description: ''
+          description: '-'
           schema:
             $ref: '#/definitions/Group'
         default:
           description: Unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/Result'
   /user/{id}/groups:
     get:
       tags:
@@ -292,7 +297,7 @@ paths:
           format: int64
       responses:
         200:
-          description: ''
+          description: '-'
           schema:
             $ref: '#/definitions/Group'
   /group/{id}/users:
@@ -311,9 +316,72 @@ paths:
           format: int64
       responses:
         200:
-          description: ''
+          description: '-'
           schema:
             $ref: '#/definitions/User'
+  /group/{groupId}/user/{userId}:
+    post:
+      tags:
+        - UserGroup
+      consumes:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: User's ID
+          required: true
+          type: integer
+          format: int64
+        - name: groupId
+          in: path
+          description: Group's ID
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: '-'
+          schema:
+            $ref: '#/definitions/UserGroup'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Result'
+    patch:
+      tags:
+        - UserGroup
+      consumes:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: User's ID
+          required: true
+          type: integer
+          format: int64
+        - name: groupId
+          in: path
+          description: Group's ID
+          required: true
+          type: integer
+          format: int64
+        - name: '-'
+          in: body
+          description: '-'
+          schema:
+            properties:
+              status:
+                type: string
+                description: '-'
+      responses:
+        200:
+          description: '-'
+          schema:
+            $ref: '#/definitions/UserGroup'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Result'
 definitions:
   User:
     type: object
@@ -348,19 +416,27 @@ definitions:
       visibilityCode:
         type: string
         description: TODO
-  OperationalResult:
+  UserGroup:
     type: object
     properties:
-      success:
-        type: boolean
-      errorCode:
+      userId:
+        type: integer
+        description: User's ID
+      groupId:
+        type: integer
+        description: Group's ID
+      statusCode:
         type: string
-      errorMessage:
+        description: TODO
+      roleCode:
         type: string
-  Error:
+        description: TODO
+  Result:
     type: object
     properties:
       status:
+        type: integer
+      code:
         type: string
       message:
         type: string
