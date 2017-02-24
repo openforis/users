@@ -25,8 +25,8 @@ export class GroupService {
 
     getGroups(enabled?: boolean, systemDefined?: boolean): Promise<Group[]> {
         let url = this.groupUrl + '?';
-        if (typeof(enabled) !== undefined) url += 'enabled=' + enabled + '&';
-        if (typeof(systemDefined) !== undefined) url += 'systemDefined=' + systemDefined + '&';
+        if (typeof(enabled) !== 'undefined') url += 'enabled=' + enabled + '&';
+        if (typeof(systemDefined) !== 'undefined') url += 'systemDefined=' + systemDefined + '&';
         return this.http.get(url, {headers: this.headers})
             .map((res: Response) => res.json())
             .catch((error: any) => Observable.throw(error || 'Server error'))
