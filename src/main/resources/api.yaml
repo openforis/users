@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   title: Of-Users API
   description: Of-Users API
-  version: "0.0.0"
+  version: 0.0.0
 schemes:
   - http
 basePath: /api
@@ -65,18 +65,23 @@ paths:
             $ref: '#/definitions/Result'
   /user:
     get:
+      description: Returns a collection which contain all the users matching the provided filters that the user has access to.
+      produces:
+        - application/json
       tags:
         - User
       parameters:
         - name: username
           in: query
-          description: Username of user to find
+          description: Username of the user to find
           type: string
       responses:
         200:
-          description: Added user
+          description: A list of users
           schema:
-            $ref: '#/definitions/User'
+            type: array
+            items:
+              $ref: '#/definitions/User'
         default:
           description: Unexpected error
           schema:
@@ -94,7 +99,7 @@ paths:
             $ref: '#/definitions/User'
       responses:
         200:
-          description: Found users
+          description: Added user
           schema:
             $ref: '#/definitions/User'
         default:
@@ -159,7 +164,7 @@ paths:
           format: int64
       responses:
         200:
-          description: '-'
+          description: Successfully completed
           schema:
             $ref: '#/definitions/Result'
         default:
@@ -168,30 +173,35 @@ paths:
             $ref: '#/definitions/Result'
   /group:
     get:
+      description: Returns a collection which contain all the groups matching the provided filters that the user has access to.
+      produces:
+        - application/json
       tags:
         - Group
       parameters:
         - name: name
           in: query
-          description: Name of group to find
+          description: Name of the group to find
           type: string
         - name: enabled
           in: query
-          description: TODO
+          description: If the group is enabled or not
           type: boolean
         - name: systemDefined
           in: query
-          description: TODO
+          description: If the group is defined by the system or not
           type: boolean
         - name: visibility
           in: query
-          description: Visibility of group to find
+          description: Visibility of the group to find
           type: string
       responses:
         200:
-          description: Found groups
+          description: A list of groups
           schema:
-            $ref: '#/definitions/Group'
+            type: array
+            items:
+              $ref: '#/definitions/Group'
         default:
           description: Unexpected error
           schema:
@@ -268,15 +278,15 @@ paths:
       parameters:
         - name: id
           in: path
-          description: ID of group to delete
+          description: ID of the group to delete
           required: true
           type: integer
           format: int64
       responses:
         200:
-          description: '-'
+          description: Successfully completed
           schema:
-            $ref: '#/definitions/Group'
+            $ref: '#/definitions/Result'
         default:
           description: Unexpected error
           schema:
