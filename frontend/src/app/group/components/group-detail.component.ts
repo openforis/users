@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { BackButtonComponent } from '../../back-button/components/back-button.component';
@@ -8,11 +8,15 @@ import { GroupService } from '../services/group.service';
 
 import { UserGroup } from '../../userGroup/models/userGroup';
 
+import { ModalDirective } from 'ng2-bootstrap/modal';
+
 @Component({
     selector: 'group-detail',
     templateUrl: './group-detail.component.html'
 })
 export class GroupDetailComponent implements OnInit {
+
+    @ViewChild('confirmDelete') public confirmDelete: ModalDirective;
 
     private groupId: number;
     private group: Group;
@@ -51,6 +55,15 @@ export class GroupDetailComponent implements OnInit {
         }, err => {
             console.log(err);
         });
+        this.hideConfirmDeleteModal();
+    }
+
+    public showConfirmDeleteModal():void {
+        this.confirmDelete.show();
+    }
+
+    public hideConfirmDeleteModal():void {
+        this.confirmDelete.hide();
     }
 
 }

@@ -1,36 +1,35 @@
 <div class="container">
-    <a class="btn btn-success" [routerLink]="['/groups/add']">add</a>
-</div>
-
-<br />
-
-<div class="container">
-    <table class="table table-bordered" *ngIf="groups">
-        <thead class="thead-inverse">
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Label</th>
-                <th>Description</th>
-                <th>Enabled</th>
-                <th>System defined</th>
-                <th>Visibility code</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let group of groups">
-                <td>{{group.id}}</td>
-                <td>{{group.name}}</td>
-                <td>{{group.label}}</td>
-                <td>{{group.description}}</td>
-                <td>{{group.enabled}}</td>
-                <td>{{group.systemDefined}}</td>
-                <td>{{group.visibilityCode}}</td>
-                <td>
-                    <a class="btn btn-primary" [routerLink]="['/groups', group.id]">detail</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-outline-success float-right" [routerLink]="['/groups/add']">add</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive" *ngIf="groups">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Enabled</th>
+                            <th>System defined</th>
+                            <th>Visibility code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let group of groups">
+                            <td>
+                                <a [routerLink]="['/groups', group.id]">#{{group.id}}</a>
+                            </td>
+                            <td>{{group.name}}</td>
+                            <td>{{group.enabled}}</td>
+                            <td>{{group.systemDefined}}</td>
+                            <td>{{group.visibilityCode}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

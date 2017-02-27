@@ -1,28 +1,31 @@
 <div class="container">
-    <a class="btn btn-success" [routerLink]="['/users/add']">add</a>
-</div>
-
-<br />
-
-<div class="container">
-    <table class="table table-bordered" *ngIf="users">
-        <thead class="thead-inverse">
-            <tr>
-                <th>#</th>
-                <th>Username</th>
-                <th>Enabled</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of users">
-                <td>{{user.id}}</td>
-                <td>{{user.username}}</td>
-                <td>{{user.enabled}}</td>
-                <td>
-                    <a class="btn btn-primary" [routerLink]="['/users', user.id]">detail</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-outline-success float-right" [routerLink]="['/users/add']">add</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive" *ngIf="users">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Enabled</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of users">
+                            <td>
+                                <a [routerLink]="['/groups', user.id]">#{{user.id}}</a>
+                            </td>
+                            <td>{{user.username}}</td>
+                            <td>{{user.enabled}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

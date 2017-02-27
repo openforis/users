@@ -33,6 +33,7 @@ import { GroupFormComponent }    from './group/components/group-form.component';
 import { GroupService }          from './group/services/group.service';
 
 import { AlertModule }           from 'ng2-bootstrap/alert';
+import { ModalModule }           from 'ng2-bootstrap/modal';
 
 @NgModule({
     imports: [
@@ -41,7 +42,8 @@ import { AlertModule }           from 'ng2-bootstrap/alert';
         HttpModule,
         FormsModule,
         ReactiveFormsModule,
-        AlertModule.forRoot()
+        AlertModule.forRoot(),
+        ModalModule.forRoot()
     ],
     declarations: [
         AppComponent,

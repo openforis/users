@@ -4,6 +4,12 @@
 
 <hr />
 
+<div class="container" *ngIf="!user.id">
+    <div class="row">
+        <div class="col-12">User not found!</div>
+    </div>
+</div>
+
 <div class="container" *ngIf="user.id">
     <div class="row">
         <div class="col-6">
@@ -16,9 +22,9 @@
                      <li class="list-group-item">enabled: {{user.enabled}}</li>
                 </ul>
                 <div class="card-block">
-                    <a class="btn btn-outline-primary" [routerLink]="['/users', user.id, 'edit']">edit</a>
                     <a class="btn btn-outline-warning" [routerLink]="['/users', user.id, 'change-password']">change password</a>
-                    <button type="button" class="btn btn-outline-danger" (click)="deleteUser()">delete</button>
+                    <a class="btn btn-outline-primary" [routerLink]="['/users', user.id, 'edit']">edit</a>
+                    <button type="button" class="btn btn-outline-danger" (click)="showConfirmDeleteModal()">delete</button>
                 </div>
             </div>
         </div>
@@ -28,6 +34,26 @@
                     {{userGroup.group.name}}&nbsp;<span class="badge badge-default">{{userGroup.roleCode}}</span>
                 </li>
             </ul>
+        </div>
+    </div>
+</div>
+
+<div bsModal #confirmDelete="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left"></h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="hideConfirmDeleteModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="hideConfirmDeleteModal()">cancel</button>
+                <button type="button" class="btn btn-danger" (click)="deleteUser()">delete</button>
+            </div>
         </div>
     </div>
 </div>
