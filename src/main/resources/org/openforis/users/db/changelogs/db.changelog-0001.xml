@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="3" author="admin">
+
+		<preConditions onFail="MARK_RAN">
+			<sqlCheck expectedResult="0">select count(*) from OF_USERS.of_user where username = 'admin'</sqlCheck>
+		</preConditions>
+
+		<insert tableName="of_user">
+			<column name="username" value="admin" />
+			<column name="password" value="21232f297a57a5a743894a0e4a801fc3" />
+			<column name="enabled" value="Y" />
+		</insert>
+
+		<insert tableName="of_group">
+			<column name="name" value="admin_private_group" />
+			<column name="label" value="admin Private Group" />
+			<column name="description" value="" />
+			<column name="enabled" value="true" />
+			<column name="system_defined" value="true" />
+			<column name="visibility_code" value="PRV" />
+		</insert>
+
+		<insert tableName="of_user_group">
+			<column name="user_id" valueComputed="(select max(id) from OF_USERS.of_user)" />
+			<column name="group_id" valueComputed="(select max(id) from OF_USERS.of_group)" />
+			<column name="status_code" value="A" />
+			<column name="role_code" value="OWN" />
+		</insert>
+
+		<insert tableName="of_group">
+			<column name="name" value="default_public_group" />
+			<column name="label" value="Default Public Group" />
+			<column name="description" value="" />
+			<column name="enabled" value="true" />
+			<column name="system_defined" value="true" />
+			<column name="visibility_code" value="PUB" />
+		</insert>
+
+	</changeSet>
+
+</databaseChangeLog>
