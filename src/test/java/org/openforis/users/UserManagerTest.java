@@ -15,18 +15,17 @@ public class UserManagerTest extends AbstractTest {
 	@Test
 	public void listAll() {
 		UserManager userManager = EntityManagerFactory.getInstance().getUserManager();
-		
+		List<User> users = userManager.findAll();
+		int size = users.size();
 		// create the objects needed for testing
 		User user = new User();
 		user.setUsername("test_user");
 		user.setRawPassword("test_pass");
 		// storing the objects for the test in the database
-		
 		userManager.save(user);
-		
-		List<User> users = userManager.findAll();
-		
+		users = userManager.findAll();
 		assertNotNull(users);
-		assertEquals(1, users.size());
+		assertEquals(size + 1, users.size());
 	}
+
 }
