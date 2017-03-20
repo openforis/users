@@ -18,7 +18,7 @@
                     <tbody>
                         <tr *ngFor="let user of users">
                             <td>
-                                <a [routerLink]="['/groups', user.id]">#{{user.id}}</a>
+                                <a [routerLink]="['/users', user.id]">#{{user.id}}</a>
                             </td>
                             <td>{{user.username}}</td>
                             <td>{{user.enabled}}</td>
