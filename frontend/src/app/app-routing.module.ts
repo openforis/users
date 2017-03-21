@@ -11,7 +11,8 @@ import { LoggedInGuard }        from './auth/services/logged-in.guard';
 import { UserListComponent }    from './user/components/user-list.component';
 import { UserDetailComponent }  from './user/components/user-detail.component';
 import { UserFormComponent }    from './user/components/user-form.component';
-import { ChangePasswordComponent } from './user/components/change-password.component';
+import { ChangePasswordComponent }  from './user/components/change-password.component';
+import { GroupAssignmentComponent } from './user-group/components/group-assignment.component';
 
 import { GroupListComponent }    from './group/components/group-list.component';
 import { GroupDetailComponent }  from './group/components/group-detail.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
     { path: 'users/:id',         component: UserDetailComponent, canActivate: [LoggedInGuard] },
     { path: 'users/:id/edit',    component: UserFormComponent, canActivate: [LoggedInGuard] },
     { path: 'users/:id/change-password', component: ChangePasswordComponent, canActivate: [LoggedInGuard] },
+    { path: 'users/:id/group-assignment', component: GroupAssignmentComponent, canActivate: [LoggedInGuard] },
     { path: 'groups',            component: GroupListComponent, canActivate: [LoggedInGuard] },
     { path: 'groups/add',        component: GroupFormComponent, canActivate: [LoggedInGuard] },
     { path: 'groups/:id',        component: GroupDetailComponent, canActivate: [LoggedInGuard] },

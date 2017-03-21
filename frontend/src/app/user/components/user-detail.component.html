@@ -33,6 +33,9 @@
                 <li class="list-group-item" *ngFor="let userGroup of userGroups">
                     {{userGroup.group.name}}&nbsp;<span class="badge badge-default">{{userGroup.roleCode}}</span>
                 </li>
+                <li class="list-group-item">
+                    <a class="btn btn-outline-warning float-right" [routerLink]="['/users', user.id, 'group-assignment']">group management</a>
+                </li>
             </ul>
         </div>
     </div>

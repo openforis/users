@@ -1,0 +1,46 @@
+<div class="container" *ngIf="user">
+    <div class="row">
+        <div class="col">
+            <form novalidate (ngSubmit)="onSubmit(userGroupForm)" [formGroup]="userGroupForm">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Group</th>
+                                <th>Status code</th>
+                                <th>Role code</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select type="text" formControlName="groupId" class="form-control">
+                                        <option *ngFor="let group of groups" value="{{group.id}}">{{group.name}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" formControlName="statusCode" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="text" formControlName="roleCode" class="form-control" />
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary float-right" [disabled]="groups.length == 0">add</button>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let userGroup of userGroups">
+                                <td>{{userGroup.group.name}}</td>
+                                <td>{{userGroup.statusCode}}</td>
+                                <td>{{userGroup.roleCode}}</td>
+                                <td>
+                                    <button class="btn btn-outline-danger float-right" (click)="removeGroupAssignment(userGroup.groupId)">remove</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

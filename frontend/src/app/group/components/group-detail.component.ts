@@ -6,7 +6,7 @@ import { BackButtonComponent } from '../../back-button/components/back-button.co
 import { Group } from '../models/group';
 import { GroupService } from '../services/group.service';
 
-import { UserGroup } from '../../userGroup/models/userGroup';
+import { UserGroup } from '../../user-group/models/user-group';
 
 import { ModalDirective } from 'ng2-bootstrap/modal';
 

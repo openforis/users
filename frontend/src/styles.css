@@ -15,3 +15,11 @@ body {
 .list-group-item {
     color: black;
 }
+
+.modal {
+    color: black;
+}
+
+.row {
+    margin-top: 1rem;
+}

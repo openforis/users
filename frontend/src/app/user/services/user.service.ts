@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 import { User } from '../models/user';
-import { UserGroup } from '../../userGroup/models/userGroup';
+import { UserGroup } from '../../user-group/models/user-group';
 
 import { AppConfiguration } from '../../app-configuration';
 import { AuthService } from '../../auth/services/auth.service';

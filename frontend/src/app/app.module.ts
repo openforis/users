@@ -1,11 +1,13 @@
-import { NgModule }               from '@angular/core';
-import { BrowserModule }          from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+
+import { AppComponent } from './app.component';
+
 import { RouterModule }           from '@angular/router';
-import { HttpModule }             from '@angular/http';
-import { FormsModule }            from '@angular/forms';
 import { ReactiveFormsModule }    from '@angular/forms';
 
-import { AppComponent }           from './app.component';
 import { AppRoutingModule }       from './app-routing.module';
 import { AppConfiguration }       from './app-configuration';
 
@@ -32,6 +34,9 @@ import { GroupDetailComponent }  from './group/components/group-detail.component
 import { GroupFormComponent }    from './group/components/group-form.component';
 import { GroupService }          from './group/services/group.service';
 
+import { GroupAssignmentComponent } from './user-group/components/group-assignment.component';
+import { UserGroupService }        from './user-group/services/user-group.service';
+
 import { AlertModule }           from 'ng2-bootstrap/alert';
 import { ModalModule }           from 'ng2-bootstrap/modal';
 
@@ -56,6 +61,7 @@ import { ModalModule }           from 'ng2-bootstrap/modal';
         UserDetailComponent,
         UserFormComponent,
         ChangePasswordComponent,
+        GroupAssignmentComponent,
         GroupListComponent,
         GroupDetailComponent,
         GroupFormComponent
@@ -66,6 +72,7 @@ import { ModalModule }           from 'ng2-bootstrap/modal';
         LoggedInGuard,
         UserService,
         GroupService,
+        UserGroupService,
         MessageBarService
     ],
     bootstrap: [
