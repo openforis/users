@@ -49,14 +49,17 @@ public class GroupController extends AbstractController {
 	};
 
 	public Route deleteGroup = (Request req, Response rsp) -> {
-		long id = getLongParam(req, "id");
-		Group group = GROUP_MANAGER.findById(id);
-		if (group != null) {
-			GROUP_MANAGER.deleteById(id);
-			return true;
-		} else {
-			return false;
+		boolean ret = false;
+		try {
+			long id = getLongParam(req, "id");
+			Group group = GROUP_MANAGER.findById(id);
+			if (group != null) {
+				GROUP_MANAGER.deleteById(id);
+				ret = true;
+			}
+		} catch (Exception e) {
 		}
+		return ret;
 	};
 
 }

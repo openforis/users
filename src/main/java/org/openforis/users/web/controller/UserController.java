@@ -72,11 +72,14 @@ public class UserController extends AbstractController {
 
 	public Route deleteUser = (Request req, Response rsp) -> {
 		boolean ret = false;
-		long id = getLongParam(req, "id");
-		User user = USER_MANAGER.findById(id);
-		if (user != null) {
-			USER_MANAGER.deleteById(id);
-			ret = true;
+		try {
+			long id = getLongParam(req, "id");
+			User user = USER_MANAGER.findById(id);
+			if (user != null) {
+				USER_MANAGER.deleteById(id);
+				ret = true;
+			}
+		} catch (Exception e) {
 		}
 		return ret;
 	};
