@@ -7,7 +7,7 @@ import { BackButtonComponent } from '../../back-button/components/back-button.co
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 
-import { MessageBarService } from '../../message-bar/services/message-bar.service'
+import { MessageBarService } from '../../message-bar/services/message-bar.service';
 
 @Component({
     selector: 'user-form',
@@ -23,7 +23,6 @@ export class UserFormComponent implements OnInit {
     constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private messageBarService: MessageBarService) { }
 
     ngOnInit(): void {
-        this.user = new User();
         this.userForm = new FormGroup({
             username: new FormControl('', [Validators.required]),
             rawPassword: new FormControl('', [Validators.required]),
@@ -53,6 +52,7 @@ export class UserFormComponent implements OnInit {
         if (valid) {
             if (this.isNew) {
                 this.userService.addUser(value).then(data => {
+                    this.messageBarService.add('success', 'User ' + value.username + ' successfully added!');
                     this.router.navigate(["/users"]);
                 }, err => {
                     this.messageBarService.add('danger', 'ERROR!');
@@ -61,6 +61,7 @@ export class UserFormComponent implements OnInit {
             } else {
                 value['id'] = this.userId;
                 this.userService.editUser(value).then(data => {
+                    this.messageBarService.add('success', 'User ' + value.username + ' successfully modified!');
                     this.router.navigate(["/users"]);
                 }, err => {
                     this.messageBarService.add('danger', 'ERROR!');
