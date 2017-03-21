@@ -2,6 +2,7 @@ package org.openforis.users.web.controller;
 
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserGroupManager;
+import org.openforis.users.model.UserGroup;
 import org.openforis.users.model.UserGroup.UserGroupRequestStatus;
 import org.openforis.users.web.JsonTransformer;
 
@@ -36,10 +37,10 @@ public class UserGroupController extends AbstractController {
 	public Route addUserGroupJoinRequest = (Request req, Response rsp) -> {
 		long groupId = getLongParam(req, "groupId");
 		long userId = getLongParam(req, "userId");
-		USER_GROUP_MANAGER.requestJoin(groupId, userId);
-		return true;
+		UserGroup userGroup = USER_GROUP_MANAGER.requestJoin(groupId, userId);
+		return userGroup;
 	};
-	
+
 	public Route updateUserGroupJoinRequest = (Request req, Response rsp) -> {
 		long groupId = getLongParam(req, "groupId");
 		long userId = getLongParam(req, "userId");
@@ -48,5 +49,18 @@ public class UserGroupController extends AbstractController {
 		USER_GROUP_MANAGER.updateJoinRequest(groupId, userId, status);
 		return true;
 	};
-	
+
+	public Route deleteUserGroup = (Request req, Response rsp) -> {
+		boolean ret = false;
+		long groupId = getLongParam(req, "groupId");
+		long userId = getLongParam(req, "userId");
+		try {
+			USER_GROUP_MANAGER.deleteByGroupIdAndUserId(groupId, userId);
+			ret = true;
+		} catch (Exception e) {
+			System.out.println(1);
+		}
+		return ret;
+	};
+
 }
