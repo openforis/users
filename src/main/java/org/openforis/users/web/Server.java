@@ -1,5 +1,6 @@
 package org.openforis.users.web;
 
+import static spark.Spark.path;
 import static spark.Spark.before;
 import static spark.Spark.delete;
 import static spark.Spark.get;
@@ -98,28 +99,32 @@ public class Server implements SparkApplication {
 		final Config config = new UsersConfigFactory().build();
 		before("/api/*", new SecurityFilter(config, "DirectBasicAuthClient, IpClient", null, "HttpMethodMatcher"));
 
-		post("/api/login", JSON_CONTENT_TYPE, userController.login, jsonTransformer);
-		post("/api/change-password", JSON_CONTENT_TYPE, userController.changePassword, jsonTransformer);
+		path("/api", () -> {
 
-		// GROUP
-		get("/api/group", groupController.findGroups, jsonTransformer);
-		get("/api/group/:id", groupController.getGroup, jsonTransformer);
-		post("/api/group", JSON_CONTENT_TYPE, groupController.addGroup, jsonTransformer);
-		patch("/api/group/:id", JSON_CONTENT_TYPE, groupController.editGroup, jsonTransformer);
-		delete("/api/group/:id", groupController.deleteGroup, jsonTransformer);
+			post("/login", JSON_CONTENT_TYPE, userController.login, jsonTransformer);
+			post("/change-password", JSON_CONTENT_TYPE, userController.changePassword, jsonTransformer);
 
-		// USER
-		get("/api/user", userController.findUsers, jsonTransformer);
-		get("/api/user/:id", userController.getUser, jsonTransformer);
-		post("/api/user", JSON_CONTENT_TYPE, userController.addUser, jsonTransformer);
-		patch("/api/user/:id", JSON_CONTENT_TYPE, userController.editUser, jsonTransformer);
-		delete("/api/user/:id", userController.deleteUser, jsonTransformer);
+			// GROUP
+			get("/group", groupController.findGroups, jsonTransformer);
+			get("/group/:id", groupController.getGroup, jsonTransformer);
+			post("/group", JSON_CONTENT_TYPE, groupController.addGroup, jsonTransformer);
+			patch("/group/:id", JSON_CONTENT_TYPE, groupController.editGroup, jsonTransformer);
+			delete("/group/:id", groupController.deleteGroup, jsonTransformer);
 
-		// USER_GROUP
-		get("/api/user/:id/groups", userGroupController.findGroupsByUser, jsonTransformer);
-		get("/api/group/:id/users", userGroupController.findUsersByGroup, jsonTransformer);
-		post("/api/group/:groupId/user/:userId", userGroupController.addUserGroupJoinRequest, jsonTransformer);
-		patch("/api/group/:groupId/user/:userId", userGroupController.updateUserGroupJoinRequest, jsonTransformer);
+			// USER
+			get("/user", userController.findUsers, jsonTransformer);
+			get("/user/:id", userController.getUser, jsonTransformer);
+			post("/user", JSON_CONTENT_TYPE, userController.addUser, jsonTransformer);
+			patch("/user/:id", JSON_CONTENT_TYPE, userController.editUser, jsonTransformer);
+			delete("/user/:id", userController.deleteUser, jsonTransformer);
+
+			// USER_GROUP
+			get("/user/:id/groups", userGroupController.findGroupsByUser, jsonTransformer);
+			get("/group/:id/users", userGroupController.findUsersByGroup, jsonTransformer);
+			post("/group/:groupId/user/:userId", userGroupController.addUserGroupJoinRequest, jsonTransformer);
+			patch("/group/:groupId/user/:userId", userGroupController.updateUserGroupJoinRequest, jsonTransformer);
+
+		});
 
 	}
 
