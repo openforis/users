@@ -12,9 +12,9 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Enabled</th>
-                            <th>System defined</th>
-                            <th>Visibility code</th>
+                            <th class="text-center">Enabled</th>
+                            <th class="text-center">System defined</th>
+                            <th class="text-center">Visibility code</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,9 +23,9 @@
                                 <a [routerLink]="['/groups', group.id]">#{{group.id}}</a>
                             </td>
                             <td>{{group.name}}</td>
-                            <td>{{group.enabled}}</td>
-                            <td>{{group.systemDefined}}</td>
-                            <td>{{group.visibilityCode}}</td>
+                            <td class="text-center">{{group.enabled | yesOrNot}}</td>
+                            <td class="text-center">{{group.systemDefined | yesOrNot}}</td>
+                            <td class="text-center">{{group.visibilityCode}}</td>
                         </tr>
                     </tbody>
                 </table>

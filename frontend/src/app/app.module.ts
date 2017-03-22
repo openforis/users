@@ -39,6 +39,7 @@ import { UserGroupService }        from './user-group/services/user-group.servic
 
 import { AlertModule }           from 'ng2-bootstrap/alert';
 import { ModalModule }           from 'ng2-bootstrap/modal';
+import { YesOrNotPipe } from './yes-or-not.pipe';
 
 @NgModule({
     imports: [
@@ -64,7 +65,8 @@ import { ModalModule }           from 'ng2-bootstrap/modal';
         GroupAssignmentComponent,
         GroupListComponent,
         GroupDetailComponent,
-        GroupFormComponent
+        GroupFormComponent,
+        YesOrNotPipe
     ],
     providers: [
         AppConfiguration,

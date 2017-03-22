@@ -12,7 +12,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Username</th>
-                            <th>Enabled</th>
+                            <th class="text-center">Enabled</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -21,7 +21,7 @@
                                 <a [routerLink]="['/users', user.id]">#{{user.id}}</a>
                             </td>
                             <td>{{user.username}}</td>
-                            <td>{{user.enabled}}</td>
+                            <td class="text-center">{{user.enabled | yesOrNot}}</td>
                         </tr>
                     </tbody>
                 </table>

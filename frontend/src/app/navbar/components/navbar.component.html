@@ -6,18 +6,18 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <ul class="navbar-nav" *ngIf="isLoggedIn">
             <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/login']">Logout</a>
+                <a class="nav-link" [routerLink]="['/login']"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Logout</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/users']">Users</a>
+                <a class="nav-link" [routerLink]="['/users']"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/groups']">Groups</a>
+                <a class="nav-link" [routerLink]="['/groups']"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Groups</a>
             </li>
         </ul>
         <ul class="navbar-nav" *ngIf="!isLoggedIn">
             <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/login']">Login</a>
+                <a class="nav-link" [routerLink]="['/login']"><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login</a>
             </li>
         </ul>
     </div>
