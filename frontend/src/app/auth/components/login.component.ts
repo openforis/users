@@ -4,6 +4,13 @@ import { Router } from '@angular/router';
 import { MessageBarService } from '../../message-bar/services/message-bar.service'
 import { AuthService } from '../services/auth.service';
 
+export class LoginCredentials {
+    username: string;
+    password: string;
+    enabled: boolean;
+    constructor() { }
+}
+
 @Component({
     selector: 'login',
     templateUrl: './login.component.html'
@@ -11,22 +18,20 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent implements OnInit {
 
     private isLoggedIn: boolean;
-    private loginCredentials: Object = {
-        username: '',
-        password: ''
-    };
+    private loginCredentials: LoginCredentials;
 
     constructor(private authService: AuthService, private router: Router, private messageBarService: MessageBarService) { }
 
     ngOnInit(): void {
         this.isLoggedIn = this.authService.isLoggedIn();
+        this.loginCredentials = new LoginCredentials();
         this.authService.loggedIn$.subscribe((isLoggedIn: boolean) => {
             this.isLoggedIn = isLoggedIn;
         });
     };
 
-    login(username, password) {
-        this.authService.login(this.loginCredentials['username'], this.loginCredentials['password']).subscribe((res) => {
+    login(model:LoginCredentials, isValid: boolean) {
+        this.authService.login(model.username, model.password).subscribe((res) => {
             if (res && res.status == 200) {
                 this.messageBarService.add('success', 'Logged in');
                 this.router.navigate(['/login']);

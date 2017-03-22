@@ -1,12 +1,12 @@
 <div class="container">
-    <form #f="ngForm" (ngSubmit)="login()" *ngIf="!isLoggedIn">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" name="username" placeholder="Enter username" class="form-control" [(ngModel)]="loginCredentials.username" required />
+    <form #f="ngForm" (ngSubmit)="login(f.value, f.valid)" *ngIf="!isLoggedIn">
+        <div class="form-group" [ngClass]="{'has-danger': username.dirty && !username.valid}">
+            <label class="form-control-label" for="username">Username</label>
+            <input type="text" name="username" placeholder="Enter username" class="form-control" [(ngModel)]="loginCredentials.username" #username="ngModel" required />
         </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" placeholder="Enter password" class="form-control" [(ngModel)]="loginCredentials.password" required />
+        <div class="form-group" [ngClass]="{'has-danger': password.dirty && !password.valid}">
+            <label class="form-control-label" for="password">Password</label>
+            <input type="password" name="password" placeholder="Enter password" class="form-control" [(ngModel)]="loginCredentials.password" #password="ngModel" required />
         </div>
         <button type="submit" class="btn btn-info" [disabled]="!f.valid">login</button>
     </form>
