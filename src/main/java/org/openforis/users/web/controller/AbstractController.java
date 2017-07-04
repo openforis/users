@@ -12,16 +12,16 @@ import spark.Request;
 public abstract class AbstractController {
 
 	protected JsonTransformer jsonTransformer;
-	
+
 	public AbstractController(JsonTransformer jsonTransformer) {
 		super();
 		this.jsonTransformer = jsonTransformer;
 	}
-	
+
 	protected String getStringParam(Request req, String param) {
 		return getStringParam(req, param, null);
 	}
-	
+
 	protected String getStringParam(Request req, String param, String defaultValue) {
 		String value = getParamOrQueryParam(req, param);
 		return value == null ? defaultValue : value;
@@ -31,20 +31,20 @@ public abstract class AbstractController {
 		String strParam = getParamOrQueryParam(req, param);
 		return Long.parseLong(strParam);
 	}
-	
+
 	protected Boolean getBooleanParam(Request req, String param) {
 		return getBooleanParam(req, param, null);
 	}
-	
+
 	protected Boolean getBooleanParam(Request req, String param, Boolean defaultValue) {
 		String strParam = getParamOrQueryParam(req, param);
 		return strParam == null ? defaultValue : Boolean.valueOf(strParam);
 	}
-	
+
 	protected <T extends Enum<T>> T getEnumParam(Request req, String param, Class<T> enumType) {
 		return getEnumParam(req, param, enumType, null);
 	}
-	
+
 	protected <T extends Enum<T>> T getEnumParam(Request req, String param, Class<T> enumType, T defaultValue) {
 		String enumName = getStringParam(req, param);
 		return enumName == null ? defaultValue : Enum.valueOf(enumType, enumName);
@@ -59,7 +59,7 @@ public abstract class AbstractController {
 			}
 		}
 	}
-	
+
 	protected String getParamOrQueryParam(Request req, String param) {
 		String result = req.params(param);
 		if (result == null) {
@@ -67,5 +67,5 @@ public abstract class AbstractController {
 		}
 		return result;
 	}
-	
+
 }

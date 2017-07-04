@@ -40,8 +40,7 @@ public class ResponseBody {
 	}
 
 	public String toJson() {
-		return String.format("{\"status\": %d, \"code\": \"%s\", \"message\": \"%s\"}", this.status, this.code,
-				this.message);
+		return String.format("{\"status\": %d, \"code\": \"%s\", \"message\": \"%s\"}", this.status, this.code, this.message);
 	}
 
 }
