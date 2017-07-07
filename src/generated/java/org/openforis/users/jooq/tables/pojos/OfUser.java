@@ -5,6 +5,8 @@ package org.openforis.users.jooq.tables.pojos;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 import javax.annotation.Generated;
 
@@ -22,12 +24,17 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUser implements Serializable {
 
-    private static final long serialVersionUID = -500335640;
+    private static final long serialVersionUID = 366030660;
 
-    private Long    id;
-    private String  username;
-    private String  password;
-    private Boolean enabled;
+    private Long       id;
+    private String     username;
+    private String     password;
+    private Boolean    enabled;
+    private BigDecimal lat;
+    private BigDecimal lon;
+    private String     location;
+    private String     affiliations;
+    private Timestamp  creationDate;
 
     public OfUser() {}
 
@@ -36,18 +43,33 @@ public class OfUser implements Serializable {
         this.username = value.username;
         this.password = value.password;
         this.enabled = value.enabled;
+        this.lat = value.lat;
+        this.lon = value.lon;
+        this.location = value.location;
+        this.affiliations = value.affiliations;
+        this.creationDate = value.creationDate;
     }
 
     public OfUser(
-        Long    id,
-        String  username,
-        String  password,
-        Boolean enabled
+        Long       id,
+        String     username,
+        String     password,
+        Boolean    enabled,
+        BigDecimal lat,
+        BigDecimal lon,
+        String     location,
+        String     affiliations,
+        Timestamp  creationDate
     ) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.enabled = enabled;
+        this.lat = lat;
+        this.lon = lon;
+        this.location = location;
+        this.affiliations = affiliations;
+        this.creationDate = creationDate;
     }
 
     public Long getId() {
@@ -82,6 +104,46 @@ public class OfUser implements Serializable {
         this.enabled = enabled;
     }
 
+    public BigDecimal getLat() {
+        return this.lat;
+    }
+
+    public void setLat(BigDecimal lat) {
+        this.lat = lat;
+    }
+
+    public BigDecimal getLon() {
+        return this.lon;
+    }
+
+    public void setLon(BigDecimal lon) {
+        this.lon = lon;
+    }
+
+    public String getLocation() {
+        return this.location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getAffiliations() {
+        return this.affiliations;
+    }
+
+    public void setAffiliations(String affiliations) {
+        this.affiliations = affiliations;
+    }
+
+    public Timestamp getCreationDate() {
+        return this.creationDate;
+    }
+
+    public void setCreationDate(Timestamp creationDate) {
+        this.creationDate = creationDate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("OfUser (");
@@ -90,6 +152,11 @@ public class OfUser implements Serializable {
         sb.append(", ").append(username);
         sb.append(", ").append(password);
         sb.append(", ").append(enabled);
+        sb.append(", ").append(lat);
+        sb.append(", ").append(lon);
+        sb.append(", ").append(location);
+        sb.append(", ").append(affiliations);
+        sb.append(", ").append(creationDate);
 
         sb.append(")");
         return sb.toString();

@@ -1,6 +1,7 @@
 package org.openforis.users.web.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -30,6 +31,11 @@ public abstract class AbstractController {
 	protected Long getLongParam(Request req, String param) {
 		String strParam = getParamOrQueryParam(req, param);
 		return Long.parseLong(strParam);
+	}
+
+	protected BigDecimal getBigDecimalFromBody(Request req, String param) {
+		String strParam = getParamOrQueryParam(req, param);
+		return strParam == null ? null : new BigDecimal(strParam);
 	}
 
 	protected Boolean getBooleanParam(Request req, String param) {

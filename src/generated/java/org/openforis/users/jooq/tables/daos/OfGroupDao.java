@@ -4,6 +4,7 @@
 package org.openforis.users.jooq.tables.daos;
 
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -103,5 +104,26 @@ public class OfGroupDao extends DAOImpl<OfGroupRecord, org.openforis.users.jooq.
      */
     public List<org.openforis.users.jooq.tables.pojos.OfGroup> fetchByVisibilityCode(String... values) {
         return fetch(OfGroup.OF_GROUP.VISIBILITY_CODE, values);
+    }
+
+    /**
+     * Fetch records that have <code>LOGO IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfGroup> fetchByLogo(byte[]... values) {
+        return fetch(OfGroup.OF_GROUP.LOGO, values);
+    }
+
+    /**
+     * Fetch records that have <code>URL IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfGroup> fetchByUrl(String... values) {
+        return fetch(OfGroup.OF_GROUP.URL, values);
+    }
+
+    /**
+     * Fetch records that have <code>CREATION_DATE IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfGroup> fetchByCreationDate(Timestamp... values) {
+        return fetch(OfGroup.OF_GROUP.CREATION_DATE, values);
     }
 }

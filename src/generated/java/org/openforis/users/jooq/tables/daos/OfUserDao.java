@@ -4,6 +4,8 @@
 package org.openforis.users.jooq.tables.daos;
 
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -89,5 +91,40 @@ public class OfUserDao extends DAOImpl<OfUserRecord, org.openforis.users.jooq.ta
      */
     public List<org.openforis.users.jooq.tables.pojos.OfUser> fetchByEnabled(Boolean... values) {
         return fetch(OfUser.OF_USER.ENABLED, values);
+    }
+
+    /**
+     * Fetch records that have <code>LAT IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfUser> fetchByLat(BigDecimal... values) {
+        return fetch(OfUser.OF_USER.LAT, values);
+    }
+
+    /**
+     * Fetch records that have <code>LON IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfUser> fetchByLon(BigDecimal... values) {
+        return fetch(OfUser.OF_USER.LON, values);
+    }
+
+    /**
+     * Fetch records that have <code>LOCATION IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfUser> fetchByLocation(String... values) {
+        return fetch(OfUser.OF_USER.LOCATION, values);
+    }
+
+    /**
+     * Fetch records that have <code>AFFILIATIONS IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfUser> fetchByAffiliations(String... values) {
+        return fetch(OfUser.OF_USER.AFFILIATIONS, values);
+    }
+
+    /**
+     * Fetch records that have <code>CREATION_DATE IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfUser> fetchByCreationDate(Timestamp... values) {
+        return fetch(OfUser.OF_USER.CREATION_DATE, values);
     }
 }

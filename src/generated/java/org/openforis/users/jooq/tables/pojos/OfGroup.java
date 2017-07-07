@@ -5,6 +5,7 @@ package org.openforis.users.jooq.tables.pojos;
 
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.annotation.Generated;
 
@@ -22,15 +23,18 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfGroup implements Serializable {
 
-    private static final long serialVersionUID = -1875993407;
+    private static final long serialVersionUID = -1717665794;
 
-    private Long    id;
-    private String  name;
-    private String  label;
-    private String  description;
-    private Boolean enabled;
-    private Boolean systemDefined;
-    private String  visibilityCode;
+    private Long      id;
+    private String    name;
+    private String    label;
+    private String    description;
+    private Boolean   enabled;
+    private Boolean   systemDefined;
+    private String    visibilityCode;
+    private byte[]    logo;
+    private String    url;
+    private Timestamp creationDate;
 
     public OfGroup() {}
 
@@ -42,16 +46,22 @@ public class OfGroup implements Serializable {
         this.enabled = value.enabled;
         this.systemDefined = value.systemDefined;
         this.visibilityCode = value.visibilityCode;
+        this.logo = value.logo;
+        this.url = value.url;
+        this.creationDate = value.creationDate;
     }
 
     public OfGroup(
-        Long    id,
-        String  name,
-        String  label,
-        String  description,
-        Boolean enabled,
-        Boolean systemDefined,
-        String  visibilityCode
+        Long      id,
+        String    name,
+        String    label,
+        String    description,
+        Boolean   enabled,
+        Boolean   systemDefined,
+        String    visibilityCode,
+        byte[]    logo,
+        String    url,
+        Timestamp creationDate
     ) {
         this.id = id;
         this.name = name;
@@ -60,6 +70,9 @@ public class OfGroup implements Serializable {
         this.enabled = enabled;
         this.systemDefined = systemDefined;
         this.visibilityCode = visibilityCode;
+        this.logo = logo;
+        this.url = url;
+        this.creationDate = creationDate;
     }
 
     public Long getId() {
@@ -118,6 +131,30 @@ public class OfGroup implements Serializable {
         this.visibilityCode = visibilityCode;
     }
 
+    public byte[] getLogo() {
+        return this.logo;
+    }
+
+    public void setLogo(byte... logo) {
+        this.logo = logo;
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Timestamp getCreationDate() {
+        return this.creationDate;
+    }
+
+    public void setCreationDate(Timestamp creationDate) {
+        this.creationDate = creationDate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("OfGroup (");
@@ -129,6 +166,9 @@ public class OfGroup implements Serializable {
         sb.append(", ").append(enabled);
         sb.append(", ").append(systemDefined);
         sb.append(", ").append(visibilityCode);
+        sb.append(", ").append("[binary...]");
+        sb.append(", ").append(url);
+        sb.append(", ").append(creationDate);
 
         sb.append(")");
         return sb.toString();

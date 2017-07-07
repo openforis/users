@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- http://www.h2database.com/html/datatypes.html -->
+	<changeSet id="4" author="admin">
+
+		<!-- https://github.com/openforis/users/issues/2 -->
+		<sql>
+			alter table OF_USERS.of_user add column lat decimal;
+			alter table OF_USERS.of_user add column lon decimal;
+			alter table OF_USERS.of_user add column location varchar(255);
+			alter table OF_USERS.of_user add column affiliations varchar(255);
+			alter table OF_USERS.of_user add column creation_date timestamp;
+		</sql>
+
+		<!-- https://github.com/openforis/users/issues/3 -->
+		<sql>
+			alter table OF_USERS.of_group add column logo blob;
+			alter table OF_USERS.of_group add column url varchar(255);
+			alter table OF_USERS.of_group add column creation_date timestamp;
+		</sql>
+
+	</changeSet>
+
+</databaseChangeLog>

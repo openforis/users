@@ -23,7 +23,7 @@ import org.openforis.users.model.UserGroup.UserGroupRole;
  */
 public class UserManager extends AbstractManager<User, UserDao> {
 
-	private static final String PASSWORD_PATTERN = "^\\w{5,}$"; // alphanumeric, at least 5 letters
+	private static final String PASSWORD_PATTERN = "^.{6,100}$";
 
 	private GroupManager groupManager;
 	private ResourceGroupManager resourceGroupManager;

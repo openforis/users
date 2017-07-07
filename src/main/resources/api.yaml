@@ -81,7 +81,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/User'
+              $ref: '#/definitions/ResponseUser'
         default:
           description: Unexpected error
           schema:
@@ -103,7 +103,7 @@ paths:
         200:
           description: Added user
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/ResponseUser'
         default:
           description: Unexpected error
           schema:
@@ -125,7 +125,7 @@ paths:
         200:
           description: Found user
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/ResponseUser'
         default:
           description: Unexpected error
           schema:
@@ -148,7 +148,7 @@ paths:
           in: body
           description: User to modify
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/ResponseUser'
       responses:
         200:
           description: Modified user
@@ -181,6 +181,27 @@ paths:
             $ref: '#/definitions/Result'
       security:
         - basicAuth: []
+  /user/{id}/groups:
+    get:
+      tags:
+        - Group
+        - User
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user of the groups to find
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ResponseGroup'
   /group:
     get:
       description: Returns a collection which contain all the groups matching the provided filters that the user has access to.
@@ -209,7 +230,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Group'
+              $ref: '#/definitions/ResponseGroup'
         default:
           description: Unexpected error
           schema:
@@ -231,7 +252,7 @@ paths:
         200:
           description: Added group
           schema:
-            $ref: '#/definitions/Group'
+            $ref: '#/definitions/ResponseGroup'
         default:
           description: Unexpected error
           schema:
@@ -253,7 +274,7 @@ paths:
         200:
           description: Found group
           schema:
-            $ref: '#/definitions/Group'
+            $ref: '#/definitions/ResponseGroup'
         default:
           description: Unexpected error
           schema:
@@ -281,7 +302,7 @@ paths:
         200:
           description: Modified group
           schema:
-            $ref: '#/definitions/Group'
+            $ref: '#/definitions/ResponseGroup'
         default:
           description: Unexpected error
           schema:
@@ -309,25 +330,6 @@ paths:
             $ref: '#/definitions/Result'
       security:
         - basicAuth: []
-  /user/{id}/groups:
-    get:
-      tags:
-        - Group
-        - User
-      consumes:
-        - application/json
-      parameters:
-        - name: id
-          in: path
-          description: ID of the user of the groups to find
-          required: true
-          type: integer
-          format: int64
-      responses:
-        200:
-          description: '-'
-          schema:
-            $ref: '#/definitions/Group'
   /group/{id}/users:
     get:
       tags:
@@ -344,9 +346,11 @@ paths:
           format: int64
       responses:
         200:
-          description: '-'
+          description: ''
           schema:
-            $ref: '#/definitions/User'
+            type: array
+            items:
+              $ref: '#/definitions/ResponseUser'
   /group/{groupId}/user/{userId}:
     post:
       tags:
@@ -419,10 +423,22 @@ definitions:
         description: Username of the user
       password:
         type: string
+        format: password
         description: Password of the user
       enabled:
         type: boolean
         description: If the user is enabled or not
+      lat:
+        type: number
+        format: double
+      lon:
+        type: number
+        format: double
+      location:
+        type: string
+      affiliations:
+        type: string
+        description: Comma separated list of affiliations
   Group:
     type: object
     properties:
@@ -431,7 +447,7 @@ definitions:
         description: Name of the group
       label:
         type: string
-        description: Label of the group
+        description: Name of the group in slug case
       description:
         type: string
         description: Description of the group
@@ -440,25 +456,32 @@ definitions:
         description: If the group is enabled or not
       systemDefined:
         type: boolean
-        description: TODO
       visibilityCode:
         type: string
-        description: TODO
+        description: Possible values are PUBLIC and PRIVATE
+        enum: ["PUB", "PRV"]
+      logo:
+        type: string
+        format: binary
+      url:
+        type: string
   UserGroup:
     type: object
     properties:
       userId:
         type: integer
-        description: User's ID
+        description: User ID
       groupId:
         type: integer
-        description: Group's ID
+        description: Group ID
       statusCode:
         type: string
-        description: TODO
+        description: Possible values are PENDING, ACCEPTED and REJECTED
+        enum: ["P", "A", "R"]
       roleCode:
         type: string
-        description: TODO
+        description: Possible values are OWNER, ADMINISTRATOR, OPERATOR and VIEWER
+        enum: ["OWN", "ADM", "OPR", "VWR"]
   Result:
     type: object
     properties:
@@ -468,6 +491,23 @@ definitions:
         type: string
       message:
         type: string
+  ResponseUser:
+    allOf:
+    - $ref: '#/definitions/User'
+    - type: object
+      properties:
+        creation_date:
+          type: string
+          format: date-time
+  ResponseGroup:
+    allOf:
+    - $ref: '#/definitions/Group'
+    - type: object
+      properties:
+        creation_date:
+          type: string
+          format: date-time
+
 securityDefinitions:
   basicAuth:
     type: basic

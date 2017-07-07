@@ -4,6 +4,8 @@
 package org.openforis.users.jooq.tables;
 
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +36,7 @@ import org.openforis.users.jooq.tables.records.OfUserRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUser extends TableImpl<OfUserRecord> {
 
-    private static final long serialVersionUID = -245046788;
+    private static final long serialVersionUID = -1319956430;
 
     /**
      * The reference instance of <code>OF_USERS.OF_USER</code>
@@ -52,7 +54,7 @@ public class OfUser extends TableImpl<OfUserRecord> {
     /**
      * The column <code>OF_USERS.OF_USER.ID</code>.
      */
-    public final TableField<OfUserRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_FB2DEEC4_E503_4FEC_AEB2_91303673E2A5)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<OfUserRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_63783653_E845_4FD6_A038_4CA2A3E7DFFB)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>OF_USERS.OF_USER.USERNAME</code>.
@@ -68,6 +70,31 @@ public class OfUser extends TableImpl<OfUserRecord> {
      * The column <code>OF_USERS.OF_USER.ENABLED</code>.
      */
     public final TableField<OfUserRecord, Boolean> ENABLED = createField("ENABLED", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("FALSE", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>OF_USERS.OF_USER.LAT</code>.
+     */
+    public final TableField<OfUserRecord, BigDecimal> LAT = createField("LAT", org.jooq.impl.SQLDataType.DECIMAL.precision(65535, 32767), this, "");
+
+    /**
+     * The column <code>OF_USERS.OF_USER.LON</code>.
+     */
+    public final TableField<OfUserRecord, BigDecimal> LON = createField("LON", org.jooq.impl.SQLDataType.DECIMAL.precision(65535, 32767), this, "");
+
+    /**
+     * The column <code>OF_USERS.OF_USER.LOCATION</code>.
+     */
+    public final TableField<OfUserRecord, String> LOCATION = createField("LOCATION", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+
+    /**
+     * The column <code>OF_USERS.OF_USER.AFFILIATIONS</code>.
+     */
+    public final TableField<OfUserRecord, String> AFFILIATIONS = createField("AFFILIATIONS", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+
+    /**
+     * The column <code>OF_USERS.OF_USER.CREATION_DATE</code>.
+     */
+    public final TableField<OfUserRecord, Timestamp> CREATION_DATE = createField("CREATION_DATE", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
 
     /**
      * Create a <code>OF_USERS.OF_USER</code> table reference

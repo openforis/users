@@ -6,6 +6,7 @@ import org.openforis.users.manager.GroupManager.SearchParameters;
 import org.openforis.users.model.Group;
 import org.openforis.users.model.Group.Visibility;
 import org.openforis.users.web.JsonTransformer;
+import org.openforis.users.web.ResponseBody;
 
 import spark.Request;
 import spark.Response;
@@ -31,7 +32,12 @@ public class GroupController extends AbstractController {
 	public Route getGroup = (Request req, Response rsp) -> {
 		long id = getLongParam(req, "id");
 		Group group = GROUP_MANAGER.findById(id);
-		return group;
+		if (group!= null) {
+			return group;
+		} else {
+			rsp.status(404);
+			return new ResponseBody(404, "", "Group not found").toJson();
+		}
 	};
 
 	public Route addGroup = (Request req, Response rsp) -> {

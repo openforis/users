@@ -25,7 +25,7 @@ public abstract class AbstractManager<E extends IdentifiableObject, D extends DA
 	@SuppressWarnings("unchecked")
 	public E findById(Long id) {
 		Object ofItem = dao.findById(id);
-		return convertToItemType(ofItem);
+		return ofItem != null ? convertToItemType(ofItem) : null;
 	}
 
 	private E convertToItemType(Object ofItem) {

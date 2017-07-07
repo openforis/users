@@ -4,6 +4,7 @@
 package org.openforis.users.jooq.tables;
 
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +35,7 @@ import org.openforis.users.jooq.tables.records.OfGroupRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfGroup extends TableImpl<OfGroupRecord> {
 
-    private static final long serialVersionUID = 1588914553;
+    private static final long serialVersionUID = -1683519451;
 
     /**
      * The reference instance of <code>OF_USERS.OF_GROUP</code>
@@ -52,7 +53,7 @@ public class OfGroup extends TableImpl<OfGroupRecord> {
     /**
      * The column <code>OF_USERS.OF_GROUP.ID</code>.
      */
-    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_6A687DDC_44B7_4D4F_B919_015B1AB4E0C5)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_00009707_FF30_442E_80FC_307340B43A4F)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>OF_USERS.OF_GROUP.NAME</code>.
@@ -83,6 +84,21 @@ public class OfGroup extends TableImpl<OfGroupRecord> {
      * The column <code>OF_USERS.OF_GROUP.VISIBILITY_CODE</code>. PUB=Public, PRV=Private
      */
     public final TableField<OfGroupRecord, String> VISIBILITY_CODE = createField("VISIBILITY_CODE", org.jooq.impl.SQLDataType.CHAR.length(3).nullable(false).defaultValue(org.jooq.impl.DSL.field("'PUB'", org.jooq.impl.SQLDataType.CHAR)), this, "PUB=Public, PRV=Private");
+
+    /**
+     * The column <code>OF_USERS.OF_GROUP.LOGO</code>.
+     */
+    public final TableField<OfGroupRecord, byte[]> LOGO = createField("LOGO", org.jooq.impl.SQLDataType.BLOB, this, "");
+
+    /**
+     * The column <code>OF_USERS.OF_GROUP.URL</code>.
+     */
+    public final TableField<OfGroupRecord, String> URL = createField("URL", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+
+    /**
+     * The column <code>OF_USERS.OF_GROUP.CREATION_DATE</code>.
+     */
+    public final TableField<OfGroupRecord, Timestamp> CREATION_DATE = createField("CREATION_DATE", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
 
     /**
      * Create a <code>OF_USERS.OF_GROUP</code> table reference
