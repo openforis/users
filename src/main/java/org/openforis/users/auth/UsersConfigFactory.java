@@ -12,6 +12,15 @@ import org.pac4j.http.credentials.authenticator.IpRegexpAuthenticator;
 
 public class UsersConfigFactory implements ConfigFactory {
 
+	private String ipRegexp = "127\\..*";
+
+	public UsersConfigFactory() {
+	}
+
+	public UsersConfigFactory(String ipRegexp) {
+		this.ipRegexp = ipRegexp;
+	}
+
 	public Config build() {
 
 		final DirectBasicAuthClient directBasicAuthClient = new DirectBasicAuthClient();
@@ -22,7 +31,7 @@ public class UsersConfigFactory implements ConfigFactory {
 		indirectBasicAuthClient.setAuthenticator(new UsersAuthenticator());
 		indirectBasicAuthClient.setProfileCreator(new UsersProfileCreator());
 
-		final IpClient ipClient = new IpClient(new IpRegexpAuthenticator("127\\..*"));
+		final IpClient ipClient = new IpClient(new IpRegexpAuthenticator(this.ipRegexp));
 
 		Clients clients = new Clients(directBasicAuthClient, indirectBasicAuthClient, ipClient);
 
@@ -30,6 +39,7 @@ public class UsersConfigFactory implements ConfigFactory {
 		config.setMatcher(new HttpMethodMatcher(HTTP_METHOD.GET, HTTP_METHOD.POST, HTTP_METHOD.PUT, HTTP_METHOD.DELETE));
 		config.setHttpActionAdapter(new UsersHttpActionAdapter());
 		return config;
+
 	}
 
 }

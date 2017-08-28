@@ -6,7 +6,6 @@ import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.patch;
 import static spark.Spark.post;
-import static spark.Spark.staticFileLocation;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -15,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.openforis.users.auth.UsersConfigFactory;
+import org.openforis.users.exception.BadRequestException;
+import org.openforis.users.exception.NotFoundException;
 import org.openforis.users.web.controller.GroupController;
 import org.openforis.users.web.controller.UserController;
 import org.openforis.users.web.controller.UserGroupController;
@@ -59,32 +60,29 @@ public class Server implements SparkApplication {
 	}
 
 	private static void exceptionHandler() {
+		Spark.exception(BadRequestException.class, (e, req, res) -> {
+			res.status(400);
+			res.type(JSON_CONTENT_TYPE);
+			res.body((new ResponseBody(400, "400 BadRequestException", e.getMessage())).toJson());
+		});
+		Spark.exception(NotFoundException.class, (e, req, res) -> {
+			res.status(404);
+			res.type(JSON_CONTENT_TYPE);
+			res.body((new ResponseBody(404, "404 Not Found" , e.getMessage())).toJson());
+		});
 		Spark.exception(Exception.class, (e, req, res) -> {
 			final StringWriter sw = new StringWriter();
 			final PrintWriter pw = new PrintWriter(sw, true);
 			e.printStackTrace(pw);
-			System.err.println(sw.getBuffer().toString());
+			System.err.println(sw.getBuffer().toString()); //TODO logger
 			res.status(500);
 			res.type(JSON_CONTENT_TYPE);
-			res.body((new ResponseBody(500, "", "Internal server error")).toJson());
-		});
-	}
-
-	private static void errorHandler() {
-		Spark.notFound((req, res) -> {
-			res.type(JSON_CONTENT_TYPE);
-			return (new ResponseBody(404, "", "Not found")).toJson();
-		});
-		Spark.internalServerError((req, res) -> {
-			res.type(JSON_CONTENT_TYPE);
-			return (new ResponseBody(500, "", "Internal server error")).toJson();
+			res.body((new ResponseBody(500, "500 Internal Server Error", "Internal Server Error")).toJson());
 		});
 	}
 
 	@Override
 	public void init() {
-
-		staticFileLocation("/public");
 
 		jsonTransformer = new JsonTransformer();
 
@@ -94,9 +92,8 @@ public class Server implements SparkApplication {
 
 		Server.CORS();
 		Server.exceptionHandler();
-		Server.errorHandler();
 
-		final Config config = new UsersConfigFactory().build();
+		final Config config = new UsersConfigFactory("127\\..*|10\\..*").build();
 		before("/api/*", new SecurityFilter(config, "DirectBasicAuthClient, IpClient", null, "HttpMethodMatcher"));
 
 		path("/api", () -> {
@@ -104,19 +101,19 @@ public class Server implements SparkApplication {
 			post("/login", JSON_CONTENT_TYPE, userController.login, jsonTransformer);
 			post("/change-password", JSON_CONTENT_TYPE, userController.changePassword, jsonTransformer);
 
-			// GROUP
-			get("/group", groupController.findGroups, jsonTransformer);
-			get("/group/:id", groupController.getGroup, jsonTransformer);
-			post("/group", JSON_CONTENT_TYPE, groupController.addGroup, jsonTransformer);
-			patch("/group/:id", JSON_CONTENT_TYPE, groupController.editGroup, jsonTransformer);
-			delete("/group/:id", groupController.deleteGroup, jsonTransformer);
-
 			// USER
 			get("/user", userController.findUsers, jsonTransformer);
 			get("/user/:id", userController.getUser, jsonTransformer);
 			post("/user", JSON_CONTENT_TYPE, userController.addUser, jsonTransformer);
 			patch("/user/:id", JSON_CONTENT_TYPE, userController.editUser, jsonTransformer);
 			delete("/user/:id", userController.deleteUser, jsonTransformer);
+
+			// GROUP
+			get("/group", groupController.findGroups, jsonTransformer);
+			get("/group/:id", groupController.getGroup, jsonTransformer);
+			post("/group", JSON_CONTENT_TYPE, groupController.addGroup, jsonTransformer);
+			patch("/group/:id", JSON_CONTENT_TYPE, groupController.editGroup, jsonTransformer);
+			delete("/group/:id", groupController.deleteGroup, jsonTransformer);
 
 			// USER_GROUP
 			get("/user/:id/groups", userGroupController.findGroupsByUser, jsonTransformer);
@@ -128,12 +125,14 @@ public class Server implements SparkApplication {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static Map userInfo(final Request request, final Response response) {
 		final Map map = new HashMap();
 		map.put("profiles", getProfiles(request, response));
 		return map;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static List<CommonProfile> getProfiles(final Request request, final Response response) {
 		final SparkWebContext context = new SparkWebContext(request, response);
 		final ProfileManager manager = new ProfileManager(context);

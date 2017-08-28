@@ -1,12 +1,12 @@
 package org.openforis.users.web.controller;
 
+import org.openforis.users.exception.NotFoundException;
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.GroupManager;
 import org.openforis.users.manager.GroupManager.SearchParameters;
 import org.openforis.users.model.Group;
 import org.openforis.users.model.Group.Visibility;
 import org.openforis.users.web.JsonTransformer;
-import org.openforis.users.web.ResponseBody;
 
 import spark.Request;
 import spark.Response;
@@ -35,8 +35,7 @@ public class GroupController extends AbstractController {
 		if (group!= null) {
 			return group;
 		} else {
-			rsp.status(404);
-			return new ResponseBody(404, "", "Group not found").toJson();
+			throw new NotFoundException("Group not found");
 		}
 	};
 
@@ -55,17 +54,14 @@ public class GroupController extends AbstractController {
 	};
 
 	public Route deleteGroup = (Request req, Response rsp) -> {
-		boolean ret = false;
-		try {
-			long id = getLongParam(req, "id");
-			Group group = GROUP_MANAGER.findById(id);
-			if (group != null) {
-				GROUP_MANAGER.deleteById(id);
-				ret = true;
-			}
-		} catch (Exception e) {
+		long id = getLongParam(req, "id");
+		Group group = GROUP_MANAGER.findById(id);
+		if (group != null) {
+			GROUP_MANAGER.deleteById(id);
+		} else {
+			throw new NotFoundException("Group not found");
 		}
-		return ret;
+		return rsp;
 	};
 
 }

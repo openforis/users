@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.openforis.users.exception.BadRequestException;
+import org.openforis.users.exception.NotFoundException;
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserManager;
 import org.openforis.users.model.User;
@@ -42,59 +44,52 @@ public class UserController extends AbstractController {
 	public Route getUser = (Request req, Response rsp) -> {
 		long id = getLongParam(req, "id");
 		User user = USER_MANAGER.findById(id);
-		if (user!= null) {
-			return user;
-		} else {
-			rsp.status(404);
-			return new ResponseBody(404, "", "User not found").toJson();
-		}
+		if (user == null) throw new NotFoundException("User not found");
+		return user;
 	};
 
 	public Route addUser = (Request req, Response rsp) -> {
-		try {
-			String body = req.body();
-			Map<String, Object> bodyMap = jsonTransformer.parse(body);
-			//
-			String username = bodyMap.get("username").toString();
-			String password = bodyMap.get("rawPassword").toString();
-			Boolean enabled = bodyMap.containsKey("enabled") ? Boolean.valueOf(bodyMap.get("enabled").toString()) : false;
-			BigDecimal lat = bodyMap.containsKey("lat") ? new BigDecimal(bodyMap.get("lat").toString()) : null;
-			BigDecimal lon = bodyMap.containsKey("lat") ? new BigDecimal(bodyMap.get("lat").toString()) : null;
-			String location = bodyMap.containsKey("location") ? bodyMap.get("location").toString() : null;
-			String affiliations =  bodyMap.containsKey("affiliations") ? bodyMap.get("affiliations").toString() : null;
-			//
-			User user = new User();
-			user.setUsername(username);
-			user.setRawPassword(password);
-			user.setEnabled(enabled);
-			user.setLat(lat);
-			user.setLon(lon);
-			user.setLocation(location);
-			user.setAffiliations(affiliations);
-			DateTime dt = DateTime.now();
-			user.setCreationDate(new Timestamp(dt.getMillis()));
-			//
-			USER_MANAGER.save(user);
-			user.setRawPassword("");
-			return user;
-		} catch(Exception e) {
-			rsp.status(500);
-			return new ResponseBody(500, "", "").toJson();
-		}
+		Map<String, Object> body = jsonTransformer.parse(req.body());
+		if (body == null || !body.containsKey("username") || !body.containsKey("rawPassword")) throw new BadRequestException();
+		//
+		String username = body.get("username").toString();
+		String password = body.get("rawPassword").toString();
+		Boolean enabled = body.containsKey("enabled") ? Boolean.valueOf(body.get("enabled").toString()) : false;
+		BigDecimal lat = body.containsKey("lat") ? new BigDecimal(body.get("lat").toString()) : null;
+		BigDecimal lon = body.containsKey("lat") ? new BigDecimal(body.get("lat").toString()) : null;
+		String location = body.containsKey("location") ? body.get("location").toString() : null;
+		String affiliations =  body.containsKey("affiliations") ? body.get("affiliations").toString() : null;
+		//
+		User user = new User();
+		user.setUsername(username);
+		user.setRawPassword(password);
+		user.setEnabled(enabled);
+		user.setLat(lat);
+		user.setLon(lon);
+		user.setLocation(location);
+		user.setAffiliations(affiliations);
+		DateTime dt = DateTime.now();
+		user.setCreationDate(new Timestamp(dt.getMillis()));
+		//
+		USER_MANAGER.save(user);
+		user.setRawPassword(""); // hide plain password
+		return user;
 	};
 
 	public Route editUser = (Request req, Response rsp) -> {
 		long id = getLongParam(req, "id");
 		User user = USER_MANAGER.findById(id);
-		String body = req.body();
-		Map<String, Object> bodyMap = jsonTransformer.parse(body);
+		if (user == null) throw new NotFoundException("User not found");
 		//
-		String username = bodyMap.get("username").toString();
-		Boolean enabled = Boolean.valueOf(bodyMap.get("enabled").toString());
-		BigDecimal lat = bodyMap.containsKey("lat") ? new BigDecimal(bodyMap.get("lat").toString()) : null;
-		BigDecimal lon = bodyMap.containsKey("lat") ? new BigDecimal(bodyMap.get("lat").toString()) : null;
-		String location = bodyMap.containsKey("location") ? bodyMap.get("location").toString() : null;
-		String affiliations =  bodyMap.containsKey("affiliations") ? bodyMap.get("affiliations").toString() : null;
+		Map<String, Object> body = jsonTransformer.parse(req.body());
+		if (body == null) throw new BadRequestException();
+		//
+		String username = body.containsKey("username") ? body.get("username").toString() : null;
+		Boolean enabled =  body.containsKey("enabled") ? Boolean.valueOf(body.get("enabled").toString()) : null;
+		BigDecimal lat = body.containsKey("lat") ? new BigDecimal(body.get("lat").toString()) : null;
+		BigDecimal lon = body.containsKey("lat") ? new BigDecimal(body.get("lat").toString()) : null;
+		String location = body.containsKey("location") ? body.get("location").toString() : null;
+		String affiliations =  body.containsKey("affiliations") ? body.get("affiliations").toString() : null;
 		//
 		if (username == null) username = user.getUsername();
 		if (enabled == null) enabled = user.getEnabled();
@@ -110,51 +105,43 @@ public class UserController extends AbstractController {
 		user.setLon(lon);
 		user.setLocation(location);
 		user.setAffiliations(affiliations);
+		//
 		USER_MANAGER.save(user);
 		return user;
 	};
 
 	public Route deleteUser = (Request req, Response rsp) -> {
-		boolean ret = false;
-		try {
-			long id = getLongParam(req, "id");
-			User user = USER_MANAGER.findById(id);
-			if (user != null) {
-				USER_MANAGER.deleteById(id);
-				ret = true;
-			}
-		} catch (Exception e) {
-		}
-		return ret;
+		long id = getLongParam(req, "id");
+		User user = USER_MANAGER.findById(id);
+		if (user == null) throw new NotFoundException("User not found");
+		USER_MANAGER.deleteById(id);
+		return new ResponseBody(200, "", "");
 	};
 
 	public Route login = (Request req, Response rsp) -> {
-		ResponseBody result;
-		String body = req.body();
-		Map<String, Object> bodyMap = jsonTransformer.parse(body);
-		String username = bodyMap.get("username").toString();
-		String password = bodyMap.get("rawPassword").toString();
-		if (USER_MANAGER.verifyPassword(username, password)) {
-			result = new ResponseBody(200, "", "");
-		} else {
-			result = new ResponseBody(400, "", "Wrong username or password");
+		Map<String, Object> body = jsonTransformer.parse(req.body());
+		if (body == null || !body.containsKey("username") || !body.containsKey("password")) throw new BadRequestException("Missing username or password");
+		String username = body.get("username").toString();
+		String password = body.get("rawPassword").toString();
+		try {
+			USER_MANAGER.verifyPassword(username, password);
+		} catch (IllegalArgumentException e) {
+			throw new BadRequestException(e.getMessage());
 		}
-		return result;
+		return new ResponseBody(200, "", "");
 	};
 
 	public Route changePassword = (Request req, Response rsp) -> {
-		ResponseBody result;
-		String body = req.body();
-		Map<String, Object> bodyMap = jsonTransformer.parse(body);
-		String username = bodyMap.get("username").toString();
-		String newPassword = bodyMap.get("newPassword").toString();
+		Map<String, Object> body = jsonTransformer.parse(req.body());
+		if (body == null || !body.containsKey("username") || !body.containsKey("newPassword")) throw new BadRequestException("Missing username or password");
+		String username = body.get("username").toString();
+		String newPassword = body.get("newPassword").toString();
 		try {
 			USER_MANAGER.changePassword(username, newPassword);
-			result = new ResponseBody(200, "", "");
-		} catch(IllegalArgumentException e) {
-			result = new ResponseBody(400, "", e.getMessage());
+		} catch (IllegalArgumentException e) {
+			throw new BadRequestException(e.getMessage());
 		}
-		return result;
+		return new ResponseBody(200, "", "");
 	};
 
 }
