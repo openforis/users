@@ -120,11 +120,13 @@ public class UserController extends AbstractController {
 
 	public Route login = (Request req, Response rsp) -> {
 		Map<String, Object> body = jsonTransformer.parse(req.body());
-		if (body == null || !body.containsKey("username") || !body.containsKey("password")) throw new BadRequestException("Missing username or password");
+		if (body == null || !body.containsKey("username") || !body.containsKey("rawPassword")) throw new BadRequestException("Missing username or password");
 		String username = body.get("username").toString();
 		String password = body.get("rawPassword").toString();
 		try {
-			USER_MANAGER.verifyPassword(username, password);
+			if (!USER_MANAGER.verifyPassword(username, password)) {
+				throw new BadRequestException("Username and Password do not match");
+			}
 		} catch (IllegalArgumentException e) {
 			throw new BadRequestException(e.getMessage());
 		}
