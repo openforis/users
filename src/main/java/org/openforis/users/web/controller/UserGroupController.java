@@ -1,9 +1,12 @@
 package org.openforis.users.web.controller;
 
+import java.util.Map;
+
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserGroupManager;
 import org.openforis.users.model.UserGroup;
 import org.openforis.users.model.UserGroup.UserGroupRequestStatus;
+import org.openforis.users.model.UserGroup.UserGroupRole;
 import org.openforis.users.web.JsonTransformer;
 
 import spark.Request;
@@ -41,14 +44,18 @@ public class UserGroupController extends AbstractController {
 		return userGroup;
 	};
 
-	public Route updateUserGroupJoinRequest = (Request req, Response rsp) -> {
+	public Route editUserGroup = (Request req, Response rsp) -> {
 		long groupId = getLongParam(req, "groupId");
 		long userId = getLongParam(req, "userId");
-		String statusCode = req.params("status");
+		Map<String, Object> body = jsonTransformer.parse(req.body());
+		String roleCode = body.get("roleCode").toString();
+		String statusCode = body.get("statusCode").toString();
+		UserGroupRole role = UserGroupRole.fromCode(roleCode);
 		UserGroupRequestStatus status = UserGroupRequestStatus.fromCode(statusCode);
-		USER_GROUP_MANAGER.updateJoinRequest(groupId, userId, status);
+		USER_GROUP_MANAGER.editByGroupIdAndUserId(groupId, userId, role, status);
 		return true;
 	};
+
 
 	public Route deleteUserGroup = (Request req, Response rsp) -> {
 		boolean ret = false;

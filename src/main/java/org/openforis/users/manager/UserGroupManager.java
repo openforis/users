@@ -66,18 +66,6 @@ public class UserGroupManager {
 		return insertJoin(groupId, userId, role, UserGroupRequestStatus.ACCEPTED);
 	}
 
-	public void acceptJoinRequest(long groupId, long userId) {
-		updateJoinRequest(groupId, userId, UserGroupRequestStatus.ACCEPTED);
-	}
-
-	public void rejectJoinRequest(long groupId, long userId) {
-		updateJoinRequest(groupId, userId, UserGroupRequestStatus.REJECTED);
-	}
-
-	public void updateJoinRequest(long groupId, long userId, UserGroupRequestStatus status) {
-		userGroupDao.updateJoinRequestStatus(groupId, userId, status);
-	}
-
 	private UserGroup insertJoin(long groupId, long userId, UserGroupRole role, UserGroupRequestStatus status) {
 		UserGroup userGroup = new UserGroup();
 		userGroup.setUserId(userId);
@@ -102,6 +90,9 @@ public class UserGroupManager {
 		return new UserGroup(ofUserGroup, user, group);
 	}
 
+	public void editByGroupIdAndUserId(long groupId, long userId, UserGroupRole role, UserGroupRequestStatus status) {
+		userGroupDao.editByGroupIdAndUserId(groupId, userId, role, status);
+	}
 
 	public void deleteByGroupIdAndUserId(long groupId, long userId) {
 		userGroupDao.deleteByGroupIdAndUserId(groupId, userId);

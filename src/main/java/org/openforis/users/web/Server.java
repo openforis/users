@@ -118,7 +118,10 @@ public class Server implements SparkApplication {
 			// USER_GROUP
 			get("/user/:id/groups", userGroupController.findGroupsByUser, jsonTransformer);
 			get("/group/:id/users", userGroupController.findUsersByGroup, jsonTransformer);
+
+			//
 			post("/group/:groupId/user/:userId", userGroupController.addUserGroupJoinRequest, jsonTransformer);
+			patch("/group/:groupId/user/:userId", userGroupController.editUserGroup, jsonTransformer);
 			delete("/group/:groupId/user/:userId", userGroupController.deleteUserGroup, jsonTransformer);
 
 		});
