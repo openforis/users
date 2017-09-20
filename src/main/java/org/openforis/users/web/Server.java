@@ -63,7 +63,7 @@ public class Server implements SparkApplication {
 		Spark.exception(BadRequestException.class, (e, req, res) -> {
 			res.status(400);
 			res.type(JSON_CONTENT_TYPE);
-			res.body((new ResponseBody(400, "400 BadRequestException", e.getMessage())).toJson());
+			res.body((new ResponseBody(400, "400 Bad Request", e.getMessage())).toJson());
 		});
 		Spark.exception(NotFoundException.class, (e, req, res) -> {
 			res.status(404);

@@ -2,6 +2,7 @@ package org.openforis.users.web.controller;
 
 import java.util.Map;
 
+import org.openforis.users.exception.BadRequestException;
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserGroupManager;
 import org.openforis.users.model.UserGroup;
@@ -48,11 +49,15 @@ public class UserGroupController extends AbstractController {
 		long groupId = getLongParam(req, "groupId");
 		long userId = getLongParam(req, "userId");
 		Map<String, Object> body = jsonTransformer.parse(req.body());
-		String roleCode = body.get("roleCode").toString();
-		String statusCode = body.get("statusCode").toString();
-		UserGroupRole role = UserGroupRole.fromCode(roleCode);
-		UserGroupRequestStatus status = UserGroupRequestStatus.fromCode(statusCode);
-		USER_GROUP_MANAGER.editByGroupIdAndUserId(groupId, userId, role, status);
+		try {
+			String roleCode = body.get("roleCode").toString();
+			String statusCode = body.get("statusCode").toString();
+			UserGroupRole role = UserGroupRole.fromCode(roleCode);
+			UserGroupRequestStatus status = UserGroupRequestStatus.fromCode(statusCode);
+			USER_GROUP_MANAGER.editByGroupIdAndUserId(groupId, userId, role, status);
+		} catch (NullPointerException | IllegalArgumentException e) {
+			throw new BadRequestException();
+		}
 		return true;
 	};
 
