@@ -56,7 +56,7 @@ public class UserController extends AbstractController {
 		String password = body.get("rawPassword").toString();
 		Boolean enabled = body.containsKey("enabled") ? Boolean.valueOf(body.get("enabled").toString()) : false;
 		BigDecimal lat = body.containsKey("lat") ? new BigDecimal(body.get("lat").toString()) : null;
-		BigDecimal lon = body.containsKey("lat") ? new BigDecimal(body.get("lat").toString()) : null;
+		BigDecimal lon = body.containsKey("lon") ? new BigDecimal(body.get("lon").toString()) : null;
 		String location = body.containsKey("location") ? body.get("location").toString() : null;
 		String affiliations =  body.containsKey("affiliations") ? body.get("affiliations").toString() : null;
 		//
