@@ -39,6 +39,7 @@ import spark.servlet.SparkApplication;
 public class Server implements SparkApplication {
 
 	private static final String JSON_CONTENT_TYPE = "application/json";
+	private static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
 	private JsonTransformer jsonTransformer;
 
@@ -68,13 +69,13 @@ public class Server implements SparkApplication {
 		Spark.exception(NotFoundException.class, (e, req, res) -> {
 			res.status(404);
 			res.type(JSON_CONTENT_TYPE);
-			res.body((new ResponseBody(404, "404 Not Found" , e.getMessage())).toJson());
+			res.body((new ResponseBody(404, "404 Not Found", e.getMessage())).toJson());
 		});
 		Spark.exception(Exception.class, (e, req, res) -> {
 			final StringWriter sw = new StringWriter();
 			final PrintWriter pw = new PrintWriter(sw, true);
 			e.printStackTrace(pw);
-			System.err.println(sw.getBuffer().toString()); //TODO logger
+			System.err.println(sw.getBuffer().toString()); // TODO logger
 			res.status(500);
 			res.type(JSON_CONTENT_TYPE);
 			res.body((new ResponseBody(500, "500 Internal Server Error", "Internal Server Error")).toJson());
@@ -111,10 +112,10 @@ public class Server implements SparkApplication {
 			// GROUP
 			get("/group", groupController.findGroups, jsonTransformer);
 			get("/group/:id", groupController.getGroup, jsonTransformer);
-			post("/group", JSON_CONTENT_TYPE, groupController.addGroup, jsonTransformer);
-			patch("/group/:id", JSON_CONTENT_TYPE, groupController.editGroup, jsonTransformer);
+			post("/group", MULTIPART_FORM_DATA, groupController.addGroup, jsonTransformer);
+			patch("/group/:id", MULTIPART_FORM_DATA, groupController.editGroup, jsonTransformer);
 			delete("/group/:id", groupController.deleteGroup, jsonTransformer);
-
+			
 			// USER_GROUP
 			get("/user/:id/groups", userGroupController.findGroupsByUser, jsonTransformer);
 			get("/group/:id/users", userGroupController.findUsersByGroup, jsonTransformer);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/of-users" reloadable="false">
+<Context path="/of-users" reloadable="false" allowCasualMultipartParsing="true">
 
 	<ResourceLink name="jdbc/of-users-ds" 
 		type="javax.sql.DataSource"
