@@ -263,8 +263,8 @@
 		<!-- Provided by the application server -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -289,6 +289,11 @@
 			<artifactId>pac4j-http</artifactId>
 			<version>1.9.5</version>
 		</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
 	</dependencies>
 
 	<pluginRepositories>
