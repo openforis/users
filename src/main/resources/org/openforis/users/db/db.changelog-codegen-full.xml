@@ -126,4 +126,12 @@
 
 	</changeSet>
 
+    <changeSet id="5" author="admin">
+
+        <sql>
+            alter table OF_USERS.of_user add column reset_key varchar(255);
+        </sql>
+
+    </changeSet>
+
 </databaseChangeLog>

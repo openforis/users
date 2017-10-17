@@ -127,4 +127,11 @@ public class OfUserDao extends DAOImpl<OfUserRecord, org.openforis.users.jooq.ta
     public List<org.openforis.users.jooq.tables.pojos.OfUser> fetchByCreationDate(Timestamp... values) {
         return fetch(OfUser.OF_USER.CREATION_DATE, values);
     }
+
+    /**
+     * Fetch records that have <code>RESET_KEY IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfUser> fetchByResetKey(String... values) {
+        return fetch(OfUser.OF_USER.RESET_KEY, values);
+    }
 }

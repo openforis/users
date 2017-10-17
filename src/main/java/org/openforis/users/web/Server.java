@@ -101,6 +101,7 @@ public class Server implements SparkApplication {
 
 			post("/login", JSON_CONTENT_TYPE, userController.login, jsonTransformer);
 			post("/change-password", JSON_CONTENT_TYPE, userController.changePassword, jsonTransformer);
+			post("/reset-password", JSON_CONTENT_TYPE, userController.resetPassword, jsonTransformer);
 
 			// USER
 			get("/user", userController.findUsers, jsonTransformer);

@@ -36,7 +36,7 @@ import org.openforis.users.jooq.tables.records.OfUserRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUser extends TableImpl<OfUserRecord> {
 
-    private static final long serialVersionUID = -1319956430;
+    private static final long serialVersionUID = -292939301;
 
     /**
      * The reference instance of <code>OF_USERS.OF_USER</code>
@@ -54,7 +54,7 @@ public class OfUser extends TableImpl<OfUserRecord> {
     /**
      * The column <code>OF_USERS.OF_USER.ID</code>.
      */
-    public final TableField<OfUserRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_63783653_E845_4FD6_A038_4CA2A3E7DFFB)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<OfUserRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_3FBB4033_1D78_4363_9993_A87D9CBBB73D)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>OF_USERS.OF_USER.USERNAME</code>.
@@ -95,6 +95,11 @@ public class OfUser extends TableImpl<OfUserRecord> {
      * The column <code>OF_USERS.OF_USER.CREATION_DATE</code>.
      */
     public final TableField<OfUserRecord, Timestamp> CREATION_DATE = createField("CREATION_DATE", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
+
+    /**
+     * The column <code>OF_USERS.OF_USER.RESET_KEY</code>.
+     */
+    public final TableField<OfUserRecord, String> RESET_KEY = createField("RESET_KEY", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
     /**
      * Create a <code>OF_USERS.OF_USER</code> table reference
