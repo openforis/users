@@ -54,6 +54,10 @@ public class UserGroupManager {
 		return fill(ofUserGroups);
 	}
 
+	public UserGroup getJoinByGroupAndUser(long groupId, long userId) {
+		return userGroupDao.fetchByGroupIdAndUserId(groupId, userId);
+	}
+
 	public UserGroup requestJoin(long groupId, long userId) {
 		return requestJoin(groupId, userId, UserGroupRole.OPERATOR);
 	}

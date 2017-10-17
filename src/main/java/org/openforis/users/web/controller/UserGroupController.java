@@ -38,6 +38,13 @@ public class UserGroupController extends AbstractController {
 		return USER_GROUP_MANAGER.findJoinByGroup(id);
 	};
 
+	public Route getUserGroup = (Request req, Response rsp) -> {
+		long groupId = getLongParam(req, "groupId");
+		long userId = getLongParam(req, "userId");
+		UserGroup userGroup = USER_GROUP_MANAGER.getJoinByGroupAndUser(groupId, userId);
+		return userGroup;
+	};
+
 	public Route addUserGroupJoinRequest = (Request req, Response rsp) -> {
 		long groupId = getLongParam(req, "groupId");
 		long userId = getLongParam(req, "userId");
