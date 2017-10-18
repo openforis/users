@@ -70,7 +70,7 @@ public class UserGroupManager {
 		return insertJoin(groupId, userId, role, UserGroupRequestStatus.ACCEPTED);
 	}
 
-	private UserGroup insertJoin(long groupId, long userId, UserGroupRole role, UserGroupRequestStatus status) {
+	public UserGroup insertJoin(long groupId, long userId, UserGroupRole role, UserGroupRequestStatus status) {
 		UserGroup userGroup = new UserGroup();
 		userGroup.setUserId(userId);
 		userGroup.setGroupId(groupId);

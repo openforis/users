@@ -47,11 +47,20 @@ public class UserGroupController extends AbstractController {
 		return userGroup;
 	};
 
-	public Route addUserGroupJoinRequest = (Request req, Response rsp) -> {
+	public Route addUserGroup = (Request req, Response rsp) -> {
 		long groupId = getLongParam(req, "groupId");
 		long userId = getLongParam(req, "userId");
-		UserGroup userGroup = USER_GROUP_MANAGER.requestJoin(groupId, userId);
-		return userGroup;
+		Map<String, Object> body = jsonTransformer.parse(req.body());
+		try {
+			String roleCode = body.get("roleCode").toString();
+			String statusCode = body.get("statusCode").toString();
+			UserGroupRole role = UserGroupRole.fromCode(roleCode);
+			UserGroupRequestStatus status = UserGroupRequestStatus.fromCode(statusCode);
+			UserGroup userGroup = USER_GROUP_MANAGER.insertJoin(groupId, userId, role, status);
+			return userGroup;
+		} catch (NullPointerException | IllegalArgumentException e) {
+			throw new BadRequestException();
+		}
 	};
 
 	public Route editUserGroup = (Request req, Response rsp) -> {
@@ -69,7 +78,6 @@ public class UserGroupController extends AbstractController {
 		}
 		return true;
 	};
-
 
 	public Route deleteUserGroup = (Request req, Response rsp) -> {
 		boolean ret = false;
