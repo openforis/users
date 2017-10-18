@@ -68,5 +68,9 @@ public class EntityManagerFactory {
 	public UserGroupManager getUserGroupManager() {
 		return userGroupManager;
 	}
+
+	public ResourceGroupManager getResourceGroupManager() {
+		return resourceGroupManager;
+	}
 	
 }

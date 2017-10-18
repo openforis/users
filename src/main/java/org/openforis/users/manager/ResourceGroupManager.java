@@ -1,6 +1,7 @@
 package org.openforis.users.manager;
 
 import java.util.List;
+import java.util.Set;
 
 import org.openforis.users.dao.ResourceGroupDao;
 import org.openforis.users.jooq.tables.pojos.OfResourceGroup;
@@ -27,20 +28,28 @@ public class ResourceGroupManager {
 		return groupId == null ? null : groupManager.findById(groupId);
 	}
 	
-	public List<String> loadResourceIds(String resourceType, Group group) {
-		return resourceGroupDao.loadResourceIdsByGroup(resourceType, group);
+	public List<String> loadResourceIds(String resourceType, long groupId) {
+		return resourceGroupDao.loadResourceIdsByGroup(resourceType, groupId);
 	}
 
 	public int countResourcesByUserId(long userId) {
 		return resourceGroupDao.countResourcesByUser(userId);
 	}
 	
-	public void associate(Group group, String resourceType, String resourceId) {
-		resourceGroupDao.insert(new OfResourceGroup(resourceType, resourceId, group.getId()));
+	public boolean associate(long groupId, String resourceType, String resourceId) {
+		resourceGroupDao.insert(new OfResourceGroup(resourceType, resourceId, groupId));
+		return true;
 	}
 	
-	public void disassociate(Group group, String resourceType, String resourceId) {
-		resourceGroupDao.delete(new OfResourceGroup(resourceType, resourceId, group.getId()));
+	public boolean disassociate(long groupId, String resourceType, String resourceId) {
+		resourceGroupDao.delete(new OfResourceGroup(resourceType, resourceId, groupId));
+		return true;
+	}
+	
+	public boolean saveAssociations(long groupId, String resourceType, Set<String> resourceIds) {
+		resourceGroupDao.deleteByGroupAndResourceType(groupId, resourceType);
+		resourceGroupDao.insert(groupId, resourceType, resourceIds);
+		return true;
 	}
 
 }

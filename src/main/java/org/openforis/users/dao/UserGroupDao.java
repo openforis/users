@@ -6,6 +6,7 @@ import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.openforis.users.jooq.tables.daos.OfUserGroupDao;
+import org.openforis.users.model.UserGroup;
 import org.openforis.users.model.UserGroup.UserGroupRequestStatus;
 import org.openforis.users.model.UserGroup.UserGroupRole;
 
@@ -18,6 +19,13 @@ public class UserGroupDao extends OfUserGroupDao {
 
 	public UserGroupDao(Configuration configuration) {
 		super(configuration);
+	}
+	
+	public UserGroup findById(long groupId, long userId) {
+		UserGroup userGroup = dsl().selectFrom(OF_USER_GROUP)
+				.where(OF_USER_GROUP.GROUP_ID.eq(groupId).and(OF_USER_GROUP.USER_ID.eq(userId)))
+				.fetchOneInto(UserGroup.class);
+		return userGroup;
 	}
 
 	public void deleteByGroupIdAndUserId(long groupId, long userId) {

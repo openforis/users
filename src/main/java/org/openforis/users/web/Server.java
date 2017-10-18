@@ -17,6 +17,7 @@ import org.openforis.users.auth.UsersConfigFactory;
 import org.openforis.users.exception.BadRequestException;
 import org.openforis.users.exception.NotFoundException;
 import org.openforis.users.web.controller.GroupController;
+import org.openforis.users.web.controller.ResourceGroupController;
 import org.openforis.users.web.controller.UserController;
 import org.openforis.users.web.controller.UserGroupController;
 import org.pac4j.core.config.Config;
@@ -90,7 +91,8 @@ public class Server implements SparkApplication {
 		UserController userController = new UserController(jsonTransformer);
 		GroupController groupController = new GroupController(jsonTransformer);
 		UserGroupController userGroupController = new UserGroupController(jsonTransformer);
-
+		ResourceGroupController resourceGroupController = new ResourceGroupController(jsonTransformer);
+		
 		Server.CORS();
 		Server.exceptionHandler();
 
@@ -124,7 +126,12 @@ public class Server implements SparkApplication {
 			post("/group/:groupId/user/:userId", userGroupController.addUserGroupJoinRequest, jsonTransformer);
 			patch("/group/:groupId/user/:userId", userGroupController.editUserGroup, jsonTransformer);
 			delete("/group/:groupId/user/:userId", userGroupController.deleteUserGroup, jsonTransformer);
-
+			
+			// RESOURCE GROUP
+			get("/group/:groupId/resources/:resourceType", resourceGroupController.findResources, jsonTransformer);
+			post("/group/:groupId/resources/:resourceType/:resourceId", resourceGroupController.addResource, jsonTransformer);
+			delete("/group/:groupId/resources/:resourceType/:resourceId", resourceGroupController.deleteResource, jsonTransformer);
+			patch("/group/:groupId/resources/:resourceType", resourceGroupController.saveResources, jsonTransformer);
 		});
 
 	}
