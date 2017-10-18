@@ -3,6 +3,7 @@ package org.openforis.users.web.controller;
 import java.util.Map;
 
 import org.openforis.users.exception.BadRequestException;
+import org.openforis.users.exception.NotFoundException;
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserGroupManager;
 import org.openforis.users.model.UserGroup;
@@ -42,6 +43,7 @@ public class UserGroupController extends AbstractController {
 		long groupId = getLongParam(req, "groupId");
 		long userId = getLongParam(req, "userId");
 		UserGroup userGroup = USER_GROUP_MANAGER.getJoinByGroupAndUser(groupId, userId);
+		if (userGroup == null) throw new NotFoundException("User Group not found");
 		return userGroup;
 	};
 
