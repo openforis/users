@@ -37,6 +37,14 @@ public class UserGroupDao extends OfUserGroupDao {
 				.where(OF_USER_GROUP.GROUP_ID.eq(groupId).and(OF_USER_GROUP.USER_ID.eq(userId))).execute();
 	}
 
+	public UserGroup fetchByGroupIdAndUserId(long groupId, long userId) {
+		UserGroup result = dsl()
+				.selectFrom(OF_USER_GROUP)
+				.where(OF_USER_GROUP.GROUP_ID.eq(groupId).and(OF_USER_GROUP.USER_ID.eq(userId)))
+				.fetchOneInto(UserGroup.class);
+		return result;
+	}
+
 	private DSLContext dsl() {
 		return DSL.using(configuration());
 	}

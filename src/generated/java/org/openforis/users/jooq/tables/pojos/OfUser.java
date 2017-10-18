@@ -24,7 +24,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUser implements Serializable {
 
-    private static final long serialVersionUID = 366030660;
+    private static final long serialVersionUID = -1504995544;
 
     private Long       id;
     private String     username;
@@ -35,6 +35,7 @@ public class OfUser implements Serializable {
     private String     location;
     private String     affiliations;
     private Timestamp  creationDate;
+    private String     resetKey;
 
     public OfUser() {}
 
@@ -48,6 +49,7 @@ public class OfUser implements Serializable {
         this.location = value.location;
         this.affiliations = value.affiliations;
         this.creationDate = value.creationDate;
+        this.resetKey = value.resetKey;
     }
 
     public OfUser(
@@ -59,7 +61,8 @@ public class OfUser implements Serializable {
         BigDecimal lon,
         String     location,
         String     affiliations,
-        Timestamp  creationDate
+        Timestamp  creationDate,
+        String     resetKey
     ) {
         this.id = id;
         this.username = username;
@@ -70,6 +73,7 @@ public class OfUser implements Serializable {
         this.location = location;
         this.affiliations = affiliations;
         this.creationDate = creationDate;
+        this.resetKey = resetKey;
     }
 
     public Long getId() {
@@ -144,6 +148,14 @@ public class OfUser implements Serializable {
         this.creationDate = creationDate;
     }
 
+    public String getResetKey() {
+        return this.resetKey;
+    }
+
+    public void setResetKey(String resetKey) {
+        this.resetKey = resetKey;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("OfUser (");
@@ -157,6 +169,7 @@ public class OfUser implements Serializable {
         sb.append(", ").append(location);
         sb.append(", ").append(affiliations);
         sb.append(", ").append(creationDate);
+        sb.append(", ").append(resetKey);
 
         sb.append(")");
         return sb.toString();

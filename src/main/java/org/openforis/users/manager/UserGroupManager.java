@@ -54,6 +54,10 @@ public class UserGroupManager {
 		return fill(ofUserGroups);
 	}
 
+	public UserGroup getJoinByGroupAndUser(long groupId, long userId) {
+		return userGroupDao.fetchByGroupIdAndUserId(groupId, userId);
+	}
+
 	public UserGroup requestJoin(long groupId, long userId) {
 		return requestJoin(groupId, userId, UserGroupRole.OPERATOR);
 	}
@@ -66,7 +70,7 @@ public class UserGroupManager {
 		return insertJoin(groupId, userId, role, UserGroupRequestStatus.ACCEPTED);
 	}
 
-	private UserGroup insertJoin(long groupId, long userId, UserGroupRole role, UserGroupRequestStatus status) {
+	public UserGroup insertJoin(long groupId, long userId, UserGroupRole role, UserGroupRequestStatus status) {
 		UserGroup userGroup = new UserGroup();
 		userGroup.setUserId(userId);
 		userGroup.setGroupId(groupId);

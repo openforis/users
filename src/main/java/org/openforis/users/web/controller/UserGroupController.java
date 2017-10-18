@@ -3,6 +3,7 @@ package org.openforis.users.web.controller;
 import java.util.Map;
 
 import org.openforis.users.exception.BadRequestException;
+import org.openforis.users.exception.NotFoundException;
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserGroupManager;
 import org.openforis.users.model.UserGroup;
@@ -38,11 +39,28 @@ public class UserGroupController extends AbstractController {
 		return USER_GROUP_MANAGER.findJoinByGroup(id);
 	};
 
-	public Route addUserGroupJoinRequest = (Request req, Response rsp) -> {
+	public Route getUserGroup = (Request req, Response rsp) -> {
 		long groupId = getLongParam(req, "groupId");
 		long userId = getLongParam(req, "userId");
-		UserGroup userGroup = USER_GROUP_MANAGER.requestJoin(groupId, userId);
+		UserGroup userGroup = USER_GROUP_MANAGER.getJoinByGroupAndUser(groupId, userId);
+		if (userGroup == null) throw new NotFoundException("User Group not found");
 		return userGroup;
+	};
+
+	public Route addUserGroup = (Request req, Response rsp) -> {
+		long groupId = getLongParam(req, "groupId");
+		long userId = getLongParam(req, "userId");
+		Map<String, Object> body = jsonTransformer.parse(req.body());
+		try {
+			String roleCode = body.get("roleCode").toString();
+			String statusCode = body.get("statusCode").toString();
+			UserGroupRole role = UserGroupRole.fromCode(roleCode);
+			UserGroupRequestStatus status = UserGroupRequestStatus.fromCode(statusCode);
+			UserGroup userGroup = USER_GROUP_MANAGER.insertJoin(groupId, userId, role, status);
+			return userGroup;
+		} catch (NullPointerException | IllegalArgumentException e) {
+			throw new BadRequestException();
+		}
 	};
 
 	public Route editUserGroup = (Request req, Response rsp) -> {
@@ -60,7 +78,6 @@ public class UserGroupController extends AbstractController {
 		}
 		return true;
 	};
-
 
 	public Route deleteUserGroup = (Request req, Response rsp) -> {
 		boolean ret = false;

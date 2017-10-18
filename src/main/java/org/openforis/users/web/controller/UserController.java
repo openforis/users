@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
 import org.joda.time.DateTime;
 import org.openforis.users.exception.BadRequestException;
@@ -145,5 +146,38 @@ public class UserController extends AbstractController {
 		}
 		return new ResponseBody(200, "", "");
 	};
+
+	public Route resetPassword = (Request req, Response rsp) -> {
+		Map<String, Object> body = jsonTransformer.parse(req.body());
+		if (body == null || !body.containsKey("username")) throw new BadRequestException("Missing username or password");
+		String username = body.get("username").toString();
+		User user = USER_MANAGER.findByUsername(username);
+		if (user == null) throw new NotFoundException("User not found");
+		try {
+			if (!body.containsKey("resetKey")) {
+				String resetKey = this.generateResetKey();
+				user.setResetKey(resetKey);
+				USER_MANAGER.save(user);
+			} else {
+				if (!body.containsKey("newPassword")) throw new BadRequestException("Missing password");
+				String newPassword = body.get("newPassword").toString();
+				String resetKey = body.get("resetKey").toString();
+				if (!resetKey.isEmpty() && resetKey.equals(user.getResetKey())) {
+					USER_MANAGER.changePassword(username, newPassword);
+					user.setResetKey("");
+					USER_MANAGER.save(user);
+				} else {
+					throw new BadRequestException("Token key not valid");
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			throw new BadRequestException(e.getMessage());
+		}
+		return user;
+	};
+
+	private String generateResetKey() {
+		return UUID.randomUUID().toString();
+	}
 
 }
