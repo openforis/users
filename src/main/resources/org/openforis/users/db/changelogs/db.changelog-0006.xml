@@ -8,7 +8,7 @@
 	<changeSet id="6" author="admin">
 
 		<preConditions onFail="MARK_RAN">
-			<sqlCheck expectedResult="0">select count(*) from OF_USERS.of_user where username = 'admin@admin.com'</sqlCheck>
+			<sqlCheck expectedResult="0">select count(*) from OF_USERS.of_user where username = 'admin@openforis.org'</sqlCheck>
 		</preConditions>
 
 		<comment>Add admin@openforis.org administrator user</comment>
