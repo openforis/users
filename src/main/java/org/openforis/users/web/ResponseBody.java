@@ -15,6 +15,12 @@ public class ResponseBody {
 		this.message = message;
 	}
 
+	public ResponseBody(int status) {
+		this.status = status;
+		this.code = "";
+		this.message = "";
+	}
+
 	public int getStatus() {
 		return status;
 	}

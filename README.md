@@ -7,7 +7,7 @@ The [JOOQ](https://www.jooq.org/) codegen maven plugin is used to generate basic
 From command line you can run:
 
 ```bash
-mvn generate-sources -Pcode-gen
+mvn clean generate-sources -Pcode-gen
 ```
 
 ## CONFIGURATION

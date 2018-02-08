@@ -35,7 +35,7 @@ import org.openforis.users.jooq.tables.records.OfGroupRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfGroup extends TableImpl<OfGroupRecord> {
 
-    private static final long serialVersionUID = -1683519451;
+    private static final long serialVersionUID = 1955464069;
 
     /**
      * The reference instance of <code>OF_USERS.OF_GROUP</code>
@@ -53,7 +53,7 @@ public class OfGroup extends TableImpl<OfGroupRecord> {
     /**
      * The column <code>OF_USERS.OF_GROUP.ID</code>.
      */
-    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_00009707_FF30_442E_80FC_307340B43A4F)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_F0058FEC_3719_4A1E_800F_FB978C4B04B6)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>OF_USERS.OF_GROUP.NAME</code>.

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="7" author="admin">
+
+		<createTable tableName="of_user_token">
+			<column name="user_id" type="bigint">
+				<constraints foreignKeyName="of_user_token_user_fk"
+					referencedTableName="of_user" referencedColumnNames="id" nullable="false" />
+			</column>
+			<column name="token" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="token_datetime" type="datetime" />
+		</createTable>
+
+		<addPrimaryKey tableName="of_user_token" columnNames="user_id,token"
+			constraintName="of_user_token_pk" />
+
+	</changeSet>
+
+</databaseChangeLog>
