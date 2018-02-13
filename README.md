@@ -14,7 +14,7 @@ mvn clean generate-sources -Pcode-gen
 
 ### Tomcat
 
-1. Add the following library inside its lib path: [h2-1.4.193.jar](http://repo2.maven.org/maven2/com/h2database/h2/1.4.193/h2-1.4.193.jar)
+1. Add the following library inside its lib path: [h2-1.4.196.jar](http://repo1.maven.org/maven2/com/h2database/h2/1.4.196/h2-1.4.196.jar)
 
 2. Add the following line inside the tag GlobalNamingResources of its server.xml:
 
