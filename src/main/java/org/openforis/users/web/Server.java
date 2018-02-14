@@ -104,10 +104,11 @@ public class Server implements SparkApplication {
 			post("/login", JSON_CONTENT_TYPE, userController.login, jsonTransformer);
 			post("/change-password", JSON_CONTENT_TYPE, userController.changePassword, jsonTransformer);
 			post("/reset-password", JSON_CONTENT_TYPE, userController.resetPassword, jsonTransformer);
+			post("/logout", JSON_CONTENT_TYPE, userController.logout, jsonTransformer);
 
 			// USER
 			get("/user", userController.findUsers, jsonTransformer);
-			get("/user/:id", userController.getUser, jsonTransformer);
+			get("/user/:idOrToken", userController.getUser, jsonTransformer);
 			post("/user", JSON_CONTENT_TYPE, userController.addUser, jsonTransformer);
 			patch("/user/:id", JSON_CONTENT_TYPE, userController.editUser, jsonTransformer);
 			delete("/user/:id", userController.deleteUser, jsonTransformer);
@@ -121,6 +122,8 @@ public class Server implements SparkApplication {
 			delete("/group/:id", groupController.deleteGroup, jsonTransformer);
 			get("/group/:id/users", userGroupController.findUsersByGroup, jsonTransformer);
 
+	         get("/group/logo/:id", groupController.getGroupLogo);
+			
 			// USER_GROUP
 			get("/group/:groupId/user/:userId", userGroupController.getUserGroup, jsonTransformer);
 			post("/group/:groupId/user/:userId", userGroupController.addUserGroup, jsonTransformer);

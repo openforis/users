@@ -18,6 +18,7 @@ import org.openforis.users.jooq.tables.OfGroup;
 import org.openforis.users.jooq.tables.OfResourceGroup;
 import org.openforis.users.jooq.tables.OfUser;
 import org.openforis.users.jooq.tables.OfUserGroup;
+import org.openforis.users.jooq.tables.OfUserToken;
 
 
 /**
@@ -33,7 +34,7 @@ import org.openforis.users.jooq.tables.OfUserGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfUsers extends SchemaImpl {
 
-    private static final long serialVersionUID = 70107029;
+    private static final long serialVersionUID = 817844812;
 
     /**
      * The reference instance of <code>OF_USERS</code>
@@ -46,11 +47,6 @@ public class OfUsers extends SchemaImpl {
     public final OfUser OF_USER = org.openforis.users.jooq.tables.OfUser.OF_USER;
 
     /**
-     * The table <code>OF_USERS.OF_GROUP</code>.
-     */
-    public final OfGroup OF_GROUP = org.openforis.users.jooq.tables.OfGroup.OF_GROUP;
-
-    /**
      * The table <code>OF_USERS.OF_USER_GROUP</code>.
      */
     public final OfUserGroup OF_USER_GROUP = org.openforis.users.jooq.tables.OfUserGroup.OF_USER_GROUP;
@@ -59,6 +55,16 @@ public class OfUsers extends SchemaImpl {
      * The table <code>OF_USERS.OF_RESOURCE_GROUP</code>.
      */
     public final OfResourceGroup OF_RESOURCE_GROUP = org.openforis.users.jooq.tables.OfResourceGroup.OF_RESOURCE_GROUP;
+
+    /**
+     * The table <code>OF_USERS.OF_USER_TOKEN</code>.
+     */
+    public final OfUserToken OF_USER_TOKEN = org.openforis.users.jooq.tables.OfUserToken.OF_USER_TOKEN;
+
+    /**
+     * The table <code>OF_USERS.OF_GROUP</code>.
+     */
+    public final OfGroup OF_GROUP = org.openforis.users.jooq.tables.OfGroup.OF_GROUP;
 
     /**
      * No further instances allowed
@@ -85,8 +91,8 @@ public class OfUsers extends SchemaImpl {
 
     private final List<Sequence<?>> getSequences0() {
         return Arrays.<Sequence<?>>asList(
-            Sequences.SYSTEM_SEQUENCE_6A687DDC_44B7_4D4F_B919_015B1AB4E0C5,
-            Sequences.SYSTEM_SEQUENCE_FB2DEEC4_E503_4FEC_AEB2_91303673E2A5);
+            Sequences.SYSTEM_SEQUENCE_0FE72C1A_7ECC_44D7_BE87_EDF659EB248F,
+            Sequences.SYSTEM_SEQUENCE_BBE1D471_57C1_45C6_A7C3_7368FBA2E135);
     }
 
     @Override
@@ -99,8 +105,9 @@ public class OfUsers extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             OfUser.OF_USER,
-            OfGroup.OF_GROUP,
             OfUserGroup.OF_USER_GROUP,
-            OfResourceGroup.OF_RESOURCE_GROUP);
+            OfResourceGroup.OF_RESOURCE_GROUP,
+            OfUserToken.OF_USER_TOKEN,
+            OfGroup.OF_GROUP);
     }
 }

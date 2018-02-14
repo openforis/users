@@ -126,4 +126,11 @@ public class OfGroupDao extends DAOImpl<OfGroupRecord, org.openforis.users.jooq.
     public List<org.openforis.users.jooq.tables.pojos.OfGroup> fetchByCreationDate(Timestamp... values) {
         return fetch(OfGroup.OF_GROUP.CREATION_DATE, values);
     }
+
+    /**
+     * Fetch records that have <code>LOGO_CONTENT_TYPE IN (values)</code>
+     */
+    public List<org.openforis.users.jooq.tables.pojos.OfGroup> fetchByLogoContentType(String... values) {
+        return fetch(OfGroup.OF_GROUP.LOGO_CONTENT_TYPE, values);
+    }
 }

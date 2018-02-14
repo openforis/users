@@ -1,8 +1,10 @@
 package org.openforis.users.web.controller;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
@@ -49,6 +51,19 @@ public class GroupController extends AbstractController {
 		}
 	};
 
+    public Route getGroupLogo = (Request req, Response rsp) -> {
+        long id = getLongParam(req, "id");
+        Group group = GROUP_MANAGER.findById(id);
+        String logoContentType = group.getLogoContentType();
+        rsp.raw().setContentType(logoContentType);
+        byte[] logo = group.getLogo();
+        rsp.raw().setContentLength(logo.length);
+        ByteArrayInputStream in = new ByteArrayInputStream(logo);
+        OutputStream out = rsp.raw().getOutputStream();
+        IOUtils.copy(in, out);
+        return null;
+    };
+
 	public Route addGroup = (Request req, Response rsp) -> {
 
 		MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/tmp");
@@ -73,9 +88,11 @@ public class GroupController extends AbstractController {
 		if (enabled != null) group.setEnabled(Boolean.parseBoolean(partToString(enabled))); else group.setEnabled(true);
 
         Part logo = req.raw().getPart("logo");
-        InputStream input = logo.getInputStream();
-        byte[] result = IOUtils.toByteArray(input);
+        InputStream in = logo.getInputStream();
+        byte[] result = IOUtils.toByteArray(in);
         group.setLogo(result);
+        Part logoContentType = req.raw().getPart("contentType");
+        group.setLogoContentType(partToString(logoContentType));
 
 		GROUP_MANAGER.save(group);
 		return group;

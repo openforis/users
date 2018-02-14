@@ -1,9 +1,11 @@
 package org.openforis.users.web.controller;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,7 +14,9 @@ import org.openforis.users.exception.BadRequestException;
 import org.openforis.users.exception.NotFoundException;
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserManager;
+import org.openforis.users.manager.UserTokenManager;
 import org.openforis.users.model.User;
+import org.openforis.users.model.UserToken;
 import org.openforis.users.web.JsonTransformer;
 import org.openforis.users.web.ResponseBody;
 
@@ -22,7 +26,10 @@ import spark.Route;
 
 public class UserController extends AbstractController {
 
+	protected static SecureRandom random = new SecureRandom();
+
 	public UserManager USER_MANAGER = EntityManagerFactory.getInstance().getUserManager();
+	public UserTokenManager USER_TOKEN_MANAGER = EntityManagerFactory.getInstance().getUserTokenManager();
 
 	public UserController(JsonTransformer jsonTransformer) {
 		super(jsonTransformer);
@@ -43,8 +50,13 @@ public class UserController extends AbstractController {
 	};
 
 	public Route getUser = (Request req, Response rsp) -> {
-		long id = getLongParam(req, "id");
-		User user = USER_MANAGER.findById(id);
+		String idOrToken = getStringParam(req, "idOrToken");
+		User user = null;
+		if (idOrToken.matches("[0-9]+")) {
+			user = USER_MANAGER.findById(Long.parseLong(idOrToken));
+		} else {
+			user = USER_TOKEN_MANAGER.findUserByToken(idOrToken);
+		}
 		if (user == null) throw new NotFoundException("User not found");
 		return user;
 	};
@@ -116,7 +128,7 @@ public class UserController extends AbstractController {
 		User user = USER_MANAGER.findById(id);
 		if (user == null) throw new NotFoundException("User not found");
 		USER_MANAGER.deleteById(id);
-		return new ResponseBody(200, "", "");
+		return new ResponseBody(200);
 	};
 
 	public Route login = (Request req, Response rsp) -> {
@@ -127,11 +139,34 @@ public class UserController extends AbstractController {
 		try {
 			if (!USER_MANAGER.verifyPassword(username, password)) {
 				throw new BadRequestException("Username and Password do not match");
+			} else {
+				User user = USER_MANAGER.findByUsername(username);
+				long userId = user.getId();
+				String token = generateToken(username);
+				USER_TOKEN_MANAGER.insert(userId, token);
+				Map<String, Object> userToken = new HashMap<String, Object>();
+				userToken.put("userId", userId);
+				userToken.put("token", token);
+				return userToken;
 			}
 		} catch (IllegalArgumentException e) {
 			throw new BadRequestException(e.getMessage());
 		}
-		return new ResponseBody(200, "", "");
+	};
+
+	public Route logout = (Request req, Response rsp) -> {
+		Map<String, Object> body = jsonTransformer.parse(req.body());
+		if (body == null || !body.containsKey("username") || !body.containsKey("token")) throw new BadRequestException("Missing username or token");
+		String username = body.get("username").toString();
+		String token = body.get("token").toString();
+		try {
+			User user = USER_MANAGER.findByUsername(username);
+			long userId = user.getId();
+			USER_TOKEN_MANAGER.deleteByUserIdAndToken(userId, token);
+		} catch (IllegalArgumentException e) {
+			throw new BadRequestException(e.getMessage());
+		}
+		return new ResponseBody(200);
 	};
 
 	public Route changePassword = (Request req, Response rsp) -> {
@@ -144,7 +179,7 @@ public class UserController extends AbstractController {
 		} catch (IllegalArgumentException e) {
 			throw new BadRequestException(e.getMessage());
 		}
-		return new ResponseBody(200, "", "");
+		return new ResponseBody(200);
 	};
 
 	public Route resetPassword = (Request req, Response rsp) -> {
@@ -179,5 +214,11 @@ public class UserController extends AbstractController {
 	private String generateResetKey() {
 		return UUID.randomUUID().toString();
 	}
+
+	public synchronized String generateToken(String username) {
+		long longToken = Math.abs(random.nextLong());
+		return Long.toString(longToken, 16);
+	}
+	
 
 }

@@ -134,4 +134,30 @@
 
     </changeSet>
 
+    <changeSet id="7" author="admin">
+
+        <createTable tableName="of_user_token">
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="of_user_token_user_fk"
+                    referencedTableName="of_user" referencedColumnNames="id" nullable="false" />
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="token_datetime" type="datetime" />
+        </createTable>
+
+        <addPrimaryKey tableName="of_user_token" columnNames="user_id,token"
+            constraintName="of_user_token_pk" />
+
+    </changeSet>
+
+    <changeSet id="8" author="admin">
+
+        <sql>
+            alter table OF_USERS.of_group add column logo_content_type varchar(255);
+        </sql>
+
+    </changeSet>
+
 </databaseChangeLog>
