@@ -27,11 +27,6 @@ import org.openforis.users.jooq.tables.OfUserToken;
 public class Tables {
 
     /**
-     * The table <code>OF_USERS.OF_GROUP</code>.
-     */
-    public static final OfGroup OF_GROUP = org.openforis.users.jooq.tables.OfGroup.OF_GROUP;
-
-    /**
      * The table <code>OF_USERS.OF_USER</code>.
      */
     public static final OfUser OF_USER = org.openforis.users.jooq.tables.OfUser.OF_USER;
@@ -50,4 +45,9 @@ public class Tables {
      * The table <code>OF_USERS.OF_USER_TOKEN</code>.
      */
     public static final OfUserToken OF_USER_TOKEN = org.openforis.users.jooq.tables.OfUserToken.OF_USER_TOKEN;
+
+    /**
+     * The table <code>OF_USERS.OF_GROUP</code>.
+     */
+    public static final OfGroup OF_GROUP = org.openforis.users.jooq.tables.OfGroup.OF_GROUP;
 }

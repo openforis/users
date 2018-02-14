@@ -35,7 +35,7 @@ import org.openforis.users.jooq.tables.records.OfGroupRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfGroup extends TableImpl<OfGroupRecord> {
 
-    private static final long serialVersionUID = 1955464069;
+    private static final long serialVersionUID = -180565655;
 
     /**
      * The reference instance of <code>OF_USERS.OF_GROUP</code>
@@ -53,7 +53,7 @@ public class OfGroup extends TableImpl<OfGroupRecord> {
     /**
      * The column <code>OF_USERS.OF_GROUP.ID</code>.
      */
-    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_F0058FEC_3719_4A1E_800F_FB978C4B04B6)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_BBE1D471_57C1_45C6_A7C3_7368FBA2E135)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>OF_USERS.OF_GROUP.NAME</code>.
@@ -99,6 +99,11 @@ public class OfGroup extends TableImpl<OfGroupRecord> {
      * The column <code>OF_USERS.OF_GROUP.CREATION_DATE</code>.
      */
     public final TableField<OfGroupRecord, Timestamp> CREATION_DATE = createField("CREATION_DATE", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
+
+    /**
+     * The column <code>OF_USERS.OF_GROUP.LOGO_CONTENT_TYPE</code>.
+     */
+    public final TableField<OfGroupRecord, String> LOGO_CONTENT_TYPE = createField("LOGO_CONTENT_TYPE", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
     /**
      * Create a <code>OF_USERS.OF_GROUP</code> table reference

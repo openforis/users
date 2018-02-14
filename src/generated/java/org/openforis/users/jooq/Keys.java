@@ -40,19 +40,19 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
-    public static final Identity<OfGroupRecord, Long> IDENTITY_OF_GROUP = Identities0.IDENTITY_OF_GROUP;
     public static final Identity<OfUserRecord, Long> IDENTITY_OF_USER = Identities0.IDENTITY_OF_USER;
+    public static final Identity<OfGroupRecord, Long> IDENTITY_OF_GROUP = Identities0.IDENTITY_OF_GROUP;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<OfGroupRecord> PK_OF_GROUP = UniqueKeys0.PK_OF_GROUP;
     public static final UniqueKey<OfUserRecord> PK_OF_USER = UniqueKeys0.PK_OF_USER;
     public static final UniqueKey<OfUserRecord> OF_UNIQUE_USERNAME = UniqueKeys0.OF_UNIQUE_USERNAME;
     public static final UniqueKey<OfUserGroupRecord> OF_USER_GROUP_PK = UniqueKeys0.OF_USER_GROUP_PK;
     public static final UniqueKey<OfResourceGroupRecord> OF_RESOURCE_GROUP_PK = UniqueKeys0.OF_RESOURCE_GROUP_PK;
     public static final UniqueKey<OfUserTokenRecord> OF_USER_TOKEN_PK = UniqueKeys0.OF_USER_TOKEN_PK;
+    public static final UniqueKey<OfGroupRecord> PK_OF_GROUP = UniqueKeys0.PK_OF_GROUP;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -68,17 +68,17 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     private static class Identities0 extends AbstractKeys {
-        public static Identity<OfGroupRecord, Long> IDENTITY_OF_GROUP = createIdentity(OfGroup.OF_GROUP, OfGroup.OF_GROUP.ID);
         public static Identity<OfUserRecord, Long> IDENTITY_OF_USER = createIdentity(OfUser.OF_USER, OfUser.OF_USER.ID);
+        public static Identity<OfGroupRecord, Long> IDENTITY_OF_GROUP = createIdentity(OfGroup.OF_GROUP, OfGroup.OF_GROUP.ID);
     }
 
     private static class UniqueKeys0 extends AbstractKeys {
-        public static final UniqueKey<OfGroupRecord> PK_OF_GROUP = createUniqueKey(OfGroup.OF_GROUP, "PK_OF_GROUP", OfGroup.OF_GROUP.ID);
         public static final UniqueKey<OfUserRecord> PK_OF_USER = createUniqueKey(OfUser.OF_USER, "PK_OF_USER", OfUser.OF_USER.ID);
         public static final UniqueKey<OfUserRecord> OF_UNIQUE_USERNAME = createUniqueKey(OfUser.OF_USER, "OF_UNIQUE_USERNAME", OfUser.OF_USER.USERNAME);
         public static final UniqueKey<OfUserGroupRecord> OF_USER_GROUP_PK = createUniqueKey(OfUserGroup.OF_USER_GROUP, "OF_USER_GROUP_PK", OfUserGroup.OF_USER_GROUP.USER_ID, OfUserGroup.OF_USER_GROUP.GROUP_ID);
         public static final UniqueKey<OfResourceGroupRecord> OF_RESOURCE_GROUP_PK = createUniqueKey(OfResourceGroup.OF_RESOURCE_GROUP, "OF_RESOURCE_GROUP_PK", OfResourceGroup.OF_RESOURCE_GROUP.RESOURCE_TYPE, OfResourceGroup.OF_RESOURCE_GROUP.RESOURCE_ID, OfResourceGroup.OF_RESOURCE_GROUP.GROUP_ID);
         public static final UniqueKey<OfUserTokenRecord> OF_USER_TOKEN_PK = createUniqueKey(OfUserToken.OF_USER_TOKEN, "OF_USER_TOKEN_PK", OfUserToken.OF_USER_TOKEN.USER_ID, OfUserToken.OF_USER_TOKEN.TOKEN);
+        public static final UniqueKey<OfGroupRecord> PK_OF_GROUP = createUniqueKey(OfGroup.OF_GROUP, "PK_OF_GROUP", OfGroup.OF_GROUP.ID);
     }
 
     private static class ForeignKeys0 extends AbstractKeys {

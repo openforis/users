@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfGroup implements Serializable {
 
-    private static final long serialVersionUID = -1717665794;
+    private static final long serialVersionUID = -1177923040;
 
     private Long      id;
     private String    name;
@@ -35,6 +35,7 @@ public class OfGroup implements Serializable {
     private byte[]    logo;
     private String    url;
     private Timestamp creationDate;
+    private String    logoContentType;
 
     public OfGroup() {}
 
@@ -49,6 +50,7 @@ public class OfGroup implements Serializable {
         this.logo = value.logo;
         this.url = value.url;
         this.creationDate = value.creationDate;
+        this.logoContentType = value.logoContentType;
     }
 
     public OfGroup(
@@ -61,7 +63,8 @@ public class OfGroup implements Serializable {
         String    visibilityCode,
         byte[]    logo,
         String    url,
-        Timestamp creationDate
+        Timestamp creationDate,
+        String    logoContentType
     ) {
         this.id = id;
         this.name = name;
@@ -73,6 +76,7 @@ public class OfGroup implements Serializable {
         this.logo = logo;
         this.url = url;
         this.creationDate = creationDate;
+        this.logoContentType = logoContentType;
     }
 
     public Long getId() {
@@ -155,6 +159,14 @@ public class OfGroup implements Serializable {
         this.creationDate = creationDate;
     }
 
+    public String getLogoContentType() {
+        return this.logoContentType;
+    }
+
+    public void setLogoContentType(String logoContentType) {
+        this.logoContentType = logoContentType;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("OfGroup (");
@@ -169,6 +181,7 @@ public class OfGroup implements Serializable {
         sb.append(", ").append("[binary...]");
         sb.append(", ").append(url);
         sb.append(", ").append(creationDate);
+        sb.append(", ").append(logoContentType);
 
         sb.append(")");
         return sb.toString();

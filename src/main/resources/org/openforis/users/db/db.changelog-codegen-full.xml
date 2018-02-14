@@ -152,4 +152,12 @@
 
     </changeSet>
 
+    <changeSet id="8" author="admin">
+
+        <sql>
+            alter table OF_USERS.of_group add column logo_content_type varchar(255);
+        </sql>
+
+    </changeSet>
+
 </databaseChangeLog>
