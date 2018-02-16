@@ -5,7 +5,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import javax.servlet.MultipartConfigElement;
@@ -51,47 +50,52 @@ public class GroupController extends AbstractController {
 		}
 	};
 
-    public Route getGroupLogo = (Request req, Response rsp) -> {
-        long id = getLongParam(req, "id");
-        Group group = GROUP_MANAGER.findById(id);
-        String logoContentType = group.getLogoContentType();
-        rsp.raw().setContentType(logoContentType);
-        byte[] logo = group.getLogo();
-        rsp.raw().setContentLength(logo.length);
-        ByteArrayInputStream in = new ByteArrayInputStream(logo);
-        OutputStream out = rsp.raw().getOutputStream();
-        IOUtils.copy(in, out);
-        return null;
-    };
+	public Route getGroupLogo = (Request req, Response rsp) -> {
+		long id = getLongParam(req, "id");
+		Group group = GROUP_MANAGER.findById(id);
+		String logoContentType = group.getLogoContentType();
+		rsp.raw().setContentType(logoContentType);
+		byte[] logo = group.getLogo();
+		rsp.raw().setContentLength(logo.length);
+		ByteArrayInputStream in = new ByteArrayInputStream(logo);
+		OutputStream out = rsp.raw().getOutputStream();
+		IOUtils.copy(in, out);
+		return null;
+	};
 
 	public Route addGroup = (Request req, Response rsp) -> {
-		MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/tmp");
-		if (req.raw().getAttribute("org.eclipse.jetty.multipartConfig") == null) {
-			req.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
-		}
-		Part name = req.raw().getPart("name");
-		Part url = req.raw().getPart("url");
-		Part description = req.raw().getPart("description");
-		Part systemDefined = req.raw().getPart("systemDefined");
-		Part visibilityCode = req.raw().getPart("visibilityCode");
-		Part enabled = req.raw().getPart("enabled");
-		//
 		Group group = new Group();
-		group.setName(partToString(name));
-		group.setLabel(partToString(name)); // TODO
-		group.setUrl(partToString(url));
-		group.setDescription(partToString(description));
-		if (systemDefined != null) group.setSystemDefined(Boolean.parseBoolean(partToString(systemDefined)));
-		if (visibilityCode != null) group.setVisibilityCode(partToString(visibilityCode));
-		if (enabled != null) group.setEnabled(Boolean.parseBoolean(partToString(enabled))); else group.setEnabled(true);
-		//
-		Part logo = req.raw().getPart("logo");
-		InputStream in = logo.getInputStream();
-		byte[] result = IOUtils.toByteArray(in);
-		group.setLogo(result);
-		Part logoContentType = req.raw().getPart("contentType");
-		group.setLogoContentType(partToString(logoContentType));
-		//
+		if (req.contentType() != null && req.contentType().toLowerCase().indexOf("multipart/form-data") > -1) {
+			MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/tmp");
+			if (req.raw().getAttribute("org.eclipse.jetty.multipartConfig") == null) {
+				req.raw().setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
+			}
+			Part name = req.raw().getPart("name");
+			Part url = req.raw().getPart("url");
+			Part description = req.raw().getPart("description");
+			Part systemDefined = req.raw().getPart("systemDefined");
+			Part visibilityCode = req.raw().getPart("visibilityCode");
+			Part enabled = req.raw().getPart("enabled");
+			//
+			group.setName(partToString(name));
+			group.setLabel(partToString(name)); // TODO
+			group.setUrl(partToString(url));
+			group.setDescription(partToString(description));
+			if (systemDefined != null) group.setSystemDefined(Boolean.parseBoolean(partToString(systemDefined)));
+			if (visibilityCode != null) group.setVisibilityCode(partToString(visibilityCode));
+			if (enabled != null) group.setEnabled(Boolean.parseBoolean(partToString(enabled))); else group.setEnabled(true);
+			//
+			Part logo = req.raw().getPart("logo");
+			if (logo != null) {
+				InputStream in = logo.getInputStream();
+				byte[] result = IOUtils.toByteArray(in);
+				group.setLogo(result);
+				Part logoContentType = req.raw().getPart("contentType");
+				group.setLogoContentType(partToString(logoContentType));
+			}
+		} else {
+			setNotNullParams(req, group);
+		}
 		GROUP_MANAGER.save(group);
 		return group;
 	};
@@ -118,6 +122,15 @@ public class GroupController extends AbstractController {
 			if (systemDefined != null) group.setSystemDefined(Boolean.parseBoolean(partToString(systemDefined)));
 			if (visibilityCode != null) group.setVisibilityCode(partToString(visibilityCode));
 			if (enabled != null) group.setEnabled(Boolean.parseBoolean(partToString(enabled))); else group.setEnabled(true);
+			//
+			Part logo = req.raw().getPart("logo");
+			if (logo != null) {
+				InputStream in = logo.getInputStream();
+				byte[] result = IOUtils.toByteArray(in);
+				group.setLogo(result);
+				Part logoContentType = req.raw().getPart("contentType");
+				group.setLogoContentType(partToString(logoContentType));
+			}
 			//
 		} else {
 			setNotNullParams(req, group);
