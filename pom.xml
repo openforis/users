@@ -7,6 +7,7 @@
 	<packaging>war</packaging>
 
 	<properties>
+        <sparkjava.version>2.7.1</sparkjava.version>
 		<jooq.version>3.9.0</jooq.version>
 		<h2.version>1.4.196</h2.version>
 		<liquibase.version>3.5.3</liquibase.version>
@@ -177,53 +178,7 @@
 		<dependency>
 			<groupId>com.sparkjava</groupId>
 			<artifactId>spark-core</artifactId>
-			<version>2.5.4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-http</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-io</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-server</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-servlet</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-webapp</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-xml</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-util</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty.websocket</groupId>
-					<artifactId>websocket-servlet</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty.websocket</groupId>
-					<artifactId>websocket-common</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty.websocket</groupId>
-					<artifactId>websocket-client</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty.websocket</groupId>
-					<artifactId>websocket-api</artifactId>
-				</exclusion>
-			</exclusions>
+			<version>${sparkjava.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jooq</groupId>
