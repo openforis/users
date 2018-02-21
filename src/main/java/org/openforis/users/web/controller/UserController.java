@@ -16,7 +16,6 @@ import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.UserManager;
 import org.openforis.users.manager.UserTokenManager;
 import org.openforis.users.model.User;
-import org.openforis.users.model.UserToken;
 import org.openforis.users.web.JsonTransformer;
 import org.openforis.users.web.ResponseBody;
 
@@ -104,30 +103,28 @@ public class UserController extends AbstractController {
 		String location = body.containsKey("location") ? body.get("location").toString() : null;
 		String affiliations =  body.containsKey("affiliations") ? body.get("affiliations").toString() : null;
 		//
-		if (username == null) username = user.getUsername();
-		if (enabled == null) enabled = user.getEnabled();
-		if (lat == null) lat = user.getLat();
-		if (lon == null) lon = user.getLon();
-		if (location == null) location = user.getLocation();
-		if (affiliations == null) affiliations = user.getAffiliations();
+		if (username != null) user.setUsername(username);
+		if (enabled != null) user.setEnabled(enabled);
+		if (lat != null) user.setLat(lat);
+		if (lon != null) user.setLon(lon);
+		if (location != null) user.setLocation(location);
+		if (affiliations != null) user.setAffiliations(affiliations);
 		//
-		user.setUsername(username);
 		user.setRawPassword(null); // do not overwrite password
-		user.setEnabled(enabled);
-		user.setLat(lat);
-		user.setLon(lon);
-		user.setLocation(location);
-		user.setAffiliations(affiliations);
 		//
 		USER_MANAGER.save(user);
 		return user;
 	};
 
 	public Route deleteUser = (Request req, Response rsp) -> {
-		long id = getLongParam(req, "id");
-		User user = USER_MANAGER.findById(id);
-		if (user == null) throw new NotFoundException("User not found");
-		USER_MANAGER.deleteById(id);
+		try {
+			long id = getLongParam(req, "id");
+			User user = USER_MANAGER.findById(id);
+			if (user == null) throw new NotFoundException("User not found");
+			USER_MANAGER.deleteById(id);
+		} catch (IllegalArgumentException e) {
+			throw new BadRequestException(e.getMessage());
+		}
 		return new ResponseBody(200);
 	};
 

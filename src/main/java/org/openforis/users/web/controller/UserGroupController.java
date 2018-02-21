@@ -10,6 +10,7 @@ import org.openforis.users.model.UserGroup;
 import org.openforis.users.model.UserGroup.UserGroupRequestStatus;
 import org.openforis.users.model.UserGroup.UserGroupRole;
 import org.openforis.users.web.JsonTransformer;
+import org.openforis.users.web.ResponseBody;
 
 import spark.Request;
 import spark.Response;
@@ -80,16 +81,14 @@ public class UserGroupController extends AbstractController {
 	};
 
 	public Route deleteUserGroup = (Request req, Response rsp) -> {
-		boolean ret = false;
-		long groupId = getLongParam(req, "groupId");
-		long userId = getLongParam(req, "userId");
 		try {
+			long groupId = getLongParam(req, "groupId");
+			long userId = getLongParam(req, "userId");
 			USER_GROUP_MANAGER.deleteByGroupIdAndUserId(groupId, userId);
-			ret = true;
-		} catch (Exception e) {
-			System.out.println(1);
+		} catch (IllegalArgumentException e) {
+			throw new BadRequestException(e.getMessage());
 		}
-		return ret;
+		return new ResponseBody(200);
 	};
 
 }

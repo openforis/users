@@ -2,6 +2,7 @@ package org.openforis.users.web;
 
 import static spark.Spark.path;
 import static spark.Spark.before;
+import static spark.Spark.after;
 import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.patch;
@@ -134,6 +135,10 @@ public class Server implements SparkApplication {
 			post("/group/:groupId/resources/:resourceType/:resourceId", resourceGroupController.addResource, jsonTransformer);
 			delete("/group/:groupId/resources/:resourceType/:resourceId", resourceGroupController.deleteResource, jsonTransformer);
 
+		});
+
+		after("/api/*", (req, res) -> {
+			res.type(JSON_CONTENT_TYPE);
 		});
 
 	}

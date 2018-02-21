@@ -11,6 +11,7 @@ import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
 
 import org.apache.commons.io.IOUtils;
+import org.openforis.users.exception.BadRequestException;
 import org.openforis.users.exception.NotFoundException;
 import org.openforis.users.manager.EntityManagerFactory;
 import org.openforis.users.manager.GroupManager;
@@ -18,6 +19,7 @@ import org.openforis.users.manager.GroupManager.SearchParameters;
 import org.openforis.users.model.Group;
 import org.openforis.users.model.Group.Visibility;
 import org.openforis.users.web.JsonTransformer;
+import org.openforis.users.web.ResponseBody;
 
 import spark.Request;
 import spark.Response;
@@ -140,14 +142,15 @@ public class GroupController extends AbstractController {
 	};
 
 	public Route deleteGroup = (Request req, Response rsp) -> {
-		long id = getLongParam(req, "id");
-		Group group = GROUP_MANAGER.findById(id);
-		if (group != null) {
+		try {
+			long id = getLongParam(req, "id");
+			Group group = GROUP_MANAGER.findById(id);
+			if (group == null) throw new NotFoundException("Group not found");
 			GROUP_MANAGER.deleteById(id);
-		} else {
-			throw new NotFoundException("Group not found");
+		} catch (IllegalArgumentException e) {
+			throw new BadRequestException(e.getMessage());
 		}
-		return rsp;
+		return new ResponseBody(200);
 	};
 
 	private static String partToString(Part part) {
