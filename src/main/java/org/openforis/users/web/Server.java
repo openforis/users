@@ -121,20 +121,19 @@ public class Server implements SparkApplication {
 			patch("/group/:id", MULTIPART_FORM_DATA, groupController.editGroup, jsonTransformer);
 			delete("/group/:id", groupController.deleteGroup, jsonTransformer);
 			get("/group/:id/users", userGroupController.findUsersByGroup, jsonTransformer);
+			get("/group/logo/:id", groupController.getGroupLogo);
 
-	         get("/group/logo/:id", groupController.getGroupLogo);
-			
-			// USER_GROUP
+			// ASSOCIATION (USER GROUP)
 			get("/group/:groupId/user/:userId", userGroupController.getUserGroup, jsonTransformer);
 			post("/group/:groupId/user/:userId", userGroupController.addUserGroup, jsonTransformer);
 			patch("/group/:groupId/user/:userId", userGroupController.editUserGroup, jsonTransformer);
 			delete("/group/:groupId/user/:userId", userGroupController.deleteUserGroup, jsonTransformer);
-			
-			// RESOURCE GROUP
+
+			// ASSOCIATION (GROUP RESOURCE)
 			get("/group/:groupId/resources/:resourceType", resourceGroupController.findResources, jsonTransformer);
 			post("/group/:groupId/resources/:resourceType/:resourceId", resourceGroupController.addResource, jsonTransformer);
 			delete("/group/:groupId/resources/:resourceType/:resourceId", resourceGroupController.deleteResource, jsonTransformer);
-			patch("/group/:groupId/resources/:resourceType", resourceGroupController.saveResources, jsonTransformer);
+
 		});
 
 	}
