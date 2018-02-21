@@ -5,12 +5,14 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.sql.Timestamp;
 import java.util.stream.Collectors;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
 
 import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
 import org.openforis.users.exception.BadRequestException;
 import org.openforis.users.exception.NotFoundException;
 import org.openforis.users.manager.EntityManagerFactory;
@@ -98,6 +100,8 @@ public class GroupController extends AbstractController {
 		} else {
 			setNotNullParams(req, group);
 		}
+		DateTime dt = DateTime.now();
+		group.setCreationDate(new Timestamp(dt.getMillis()));
 		GROUP_MANAGER.save(group);
 		return group;
 	};
