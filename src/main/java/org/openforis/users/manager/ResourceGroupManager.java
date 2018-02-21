@@ -3,6 +3,7 @@ package org.openforis.users.manager;
 import java.util.List;
 
 import org.openforis.users.dao.ResourceGroupDao;
+import org.openforis.users.exception.BadRequestException;
 import org.openforis.users.jooq.tables.pojos.OfResourceGroup;
 import org.openforis.users.model.Group;
 
@@ -35,9 +36,14 @@ public class ResourceGroupManager {
 		return resourceGroupDao.countResourcesByUser(userId);
 	}
 
-	public OfResourceGroup associate(String resourceType, String resourceId, long groupId) {
-		OfResourceGroup resourceGroup = new OfResourceGroup(resourceType, resourceId, groupId);
-		resourceGroupDao.insert(resourceGroup);
+	public OfResourceGroup associate(String resourceType, String resourceId, long groupId) throws BadRequestException {
+		OfResourceGroup resourceGroup = resourceGroupDao.fetchOne(resourceType, resourceId, groupId);
+		if (resourceGroup != null) {
+			throw new BadRequestException();
+		} else {
+			resourceGroup = new OfResourceGroup(resourceType, resourceId, groupId);
+			resourceGroupDao.insert(resourceGroup);
+		}
 		return resourceGroup;
 	}
 

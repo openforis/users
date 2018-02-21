@@ -50,6 +50,14 @@ public class ResourceGroupDao extends OfResourceGroupDao {
 		});
 	}
 
+	public OfResourceGroup fetchOne(String resourceType, String resourceId, long groupId) {
+		return dsl().selectFrom(OF_RESOURCE_GROUP)
+				.where(OF_RESOURCE_GROUP.RESOURCE_TYPE.eq(resourceType))
+				.and(OF_RESOURCE_GROUP.RESOURCE_ID.eq(resourceId))
+				.and(OF_RESOURCE_GROUP.GROUP_ID.eq(groupId))
+				.fetchOneInto(OfResourceGroup.class);
+	}
+
 	public List<String> loadResourceIdsByGroup(String resourceType, long groupId) {
 		String[] result = dsl().select(OF_RESOURCE_GROUP.RESOURCE_ID)
 			.from(OF_RESOURCE_GROUP)
