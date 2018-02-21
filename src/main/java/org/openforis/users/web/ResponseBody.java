@@ -1,5 +1,7 @@
 package org.openforis.users.web;
 
+import com.google.gson.JsonObject;
+
 public class ResponseBody {
 
 	private int status = 500;
@@ -46,7 +48,11 @@ public class ResponseBody {
 	}
 
 	public String toJson() {
-		return String.format("{\"status\": %d, \"code\": \"%s\", \"message\": \"%s\"}", this.status, this.code, this.message);
+		JsonObject json = new JsonObject();
+		json.addProperty("status", this.status);
+		json.addProperty("code", this.code);
+		json.addProperty("message", this.message);
+		return json.toString();
 	}
 
 }
