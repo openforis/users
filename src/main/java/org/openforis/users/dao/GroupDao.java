@@ -10,7 +10,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
-import org.jooq.Record7;
+import org.jooq.Record8;
 import org.jooq.SelectJoinStep;
 import org.jooq.impl.DSL;
 import org.openforis.users.jooq.tables.daos.OfGroupDao;
@@ -30,8 +30,8 @@ public class GroupDao extends OfGroupDao {
 	}
 
 	public List<Group> loadAll(SearchParameters params) {
-		SelectJoinStep<Record7<String, String, String, Boolean, Boolean, String, Timestamp>> query = dsl()
-				.select(OF_GROUP.NAME, OF_GROUP.LABEL, OF_GROUP.DESCRIPTION,
+		SelectJoinStep<Record8<Long, String, String, String, Boolean, Boolean, String, Timestamp>> query = dsl()
+				.select(OF_GROUP.ID, OF_GROUP.NAME, OF_GROUP.LABEL, OF_GROUP.DESCRIPTION,
 						OF_GROUP.ENABLED, OF_GROUP.SYSTEM_DEFINED,
 						OF_GROUP.VISIBILITY_CODE, OF_GROUP.CREATION_DATE)
 				.from(OF_GROUP);
