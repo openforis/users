@@ -160,4 +160,12 @@
 
     </changeSet>
 
+    <changeSet id="9" author="admin">
+
+        <sql>
+            alter table OF_USERS.of_group alter column description varchar(1000);
+        </sql>
+
+    </changeSet>
+
 </databaseChangeLog>
