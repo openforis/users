@@ -57,13 +57,17 @@ public class GroupController extends AbstractController {
 	public Route getGroupLogo = (Request req, Response rsp) -> {
 		long id = getLongParam(req, "id");
 		Group group = GROUP_MANAGER.findById(id);
-		String logoContentType = group.getLogoContentType();
-		rsp.raw().setContentType(logoContentType);
-		byte[] logo = group.getLogo();
-		rsp.raw().setContentLength(logo.length);
-		ByteArrayInputStream in = new ByteArrayInputStream(logo);
-		OutputStream out = rsp.raw().getOutputStream();
-		IOUtils.copy(in, out);
+		if (group != null) {
+			String logoContentType = group.getLogoContentType();
+			rsp.raw().setContentType(logoContentType);
+			byte[] logo = group.getLogo();
+			rsp.raw().setContentLength(logo.length);
+			ByteArrayInputStream in = new ByteArrayInputStream(logo);
+			OutputStream out = rsp.raw().getOutputStream();
+			IOUtils.copy(in, out);
+		} else {
+			throw new NotFoundException("Group logo not found");
+		}
 		return null;
 	};
 
