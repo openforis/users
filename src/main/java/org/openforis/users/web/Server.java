@@ -40,7 +40,7 @@ import spark.servlet.SparkApplication;
  */
 public class Server implements SparkApplication {
 
-	private static final String JSON_CONTENT_TYPE = "application/json";
+	private static final String JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 	private static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
 	private JsonTransformer jsonTransformer;
