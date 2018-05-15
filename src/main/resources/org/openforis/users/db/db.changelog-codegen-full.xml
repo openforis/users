@@ -168,4 +168,12 @@
 
     </changeSet>
 
+    <changeSet id="10" author="admin">
+
+        <sql>
+            alter table OF_USERS.of_group alter column name varchar(255);
+        </sql>
+
+    </changeSet>
+
 </databaseChangeLog>

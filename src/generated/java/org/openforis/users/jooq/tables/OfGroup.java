@@ -53,12 +53,12 @@ public class OfGroup extends TableImpl<OfGroupRecord> {
     /**
      * The column <code>OF_USERS.OF_GROUP.ID</code>.
      */
-    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_BBE1D471_57C1_45C6_A7C3_7368FBA2E135)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<OfGroupRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("(NEXT VALUE FOR OF_USERS.SYSTEM_SEQUENCE_4825A3E2_7F19_413F_9FA1_CC095355F412)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>OF_USERS.OF_GROUP.NAME</code>.
      */
-    public final TableField<OfGroupRecord, String> NAME = createField("NAME", org.jooq.impl.SQLDataType.VARCHAR.length(64).nullable(false), this, "");
+    public final TableField<OfGroupRecord, String> NAME = createField("NAME", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
     /**
      * The column <code>OF_USERS.OF_GROUP.LABEL</code>.
@@ -68,7 +68,7 @@ public class OfGroup extends TableImpl<OfGroupRecord> {
     /**
      * The column <code>OF_USERS.OF_GROUP.DESCRIPTION</code>.
      */
-    public final TableField<OfGroupRecord, String> DESCRIPTION = createField("DESCRIPTION", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+    public final TableField<OfGroupRecord, String> DESCRIPTION = createField("DESCRIPTION", org.jooq.impl.SQLDataType.VARCHAR.length(1000), this, "");
 
     /**
      * The column <code>OF_USERS.OF_GROUP.ENABLED</code>.
